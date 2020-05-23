@@ -1,8 +1,9 @@
 package main
 
 import (
+	"cloudknox/terraform-provider-cloudknox/cloudknox"
+
 	"github.com/hashicorp/terraform-plugin-sdk/plugin"
-	"github.com/sakethkollu/terraform-provider-cloudknox/cloudknox"
 )
 
 func main() {
