@@ -1,9 +1,0 @@
-api:
-  Hostname: "http://localhost:9096"
-client:
-  serviceAccountID: "101010" 
-  resource:
-
-    accessKey: "000000"  #Client ID Here
-    secretKey: "111111"  #Client Secret Here
-
