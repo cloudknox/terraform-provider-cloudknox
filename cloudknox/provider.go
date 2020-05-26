@@ -62,7 +62,6 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	}
 
 	common.SetConfiguration(parameters)
-
 	return common.GetClient()
 }
 

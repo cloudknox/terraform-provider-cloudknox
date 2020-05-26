@@ -1,6 +1,8 @@
 package cloudknox
 
 import (
+	"cloudknox/terraform-provider-cloudknox/common"
+
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
@@ -21,6 +23,17 @@ func resourcePolicy() *schema.Resource {
 }
 
 func resourcePolicyCreate(d *schema.ResourceData, m interface{}) error {
+	client := m.(*common.Client)
+	err := common.ValidateClient(client)
+	log := common.GetLogger()
+
+	if err != nil {
+		log.Info(err)
+		return err
+	}
+	log.Info("Creating New Policy")
+	log.Info("Dummy resource property test " + d.Get("address").(string))
+
 	return nil
 }
 
