@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 )
@@ -17,30 +16,42 @@ type ClientParameters struct {
 	Profile               string
 }
 
+type Credentials struct {
+	ServiceAccountID string `json:"serviceAccountId"`
+	AccessKey        string `json:"accessKey"`
+	SecretKey        string `json:"secretKey"`
+}
+
 type Client struct {
 	AccessToken string
 }
 
 /* Private Variables */
+var credentials *Credentials
+
 var client *Client
 var clientErr error
 
+func credentialsToJSON(credentials *Credentials) []byte {
+	c, _ := json.Marshal(credentials)
+	return c
+}
+
 /* Private Functions */
-func buildClient(sai string, ak string, sk string, configurationType string) {
+func buildClient(credentials *Credentials, configurationType string) {
 	log := GetLogger()
 	log.Info("Using " + configurationType + " to request API Access Token")
 
 	// Make POST Request for API Token
 
 	// Setup HTTP Request
-	url := "https://olympus.aws-staging.cloudknox.io/api/v2/service-account/authenticate"
-	var jsonStr = []byte(fmt.Sprintf(`{
-		"serviceAccountId": "%s",
-		"accessKey": "%s",
-		"secretKey": "%s"
-	  }`, sai, ak, sk))
 
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+	// Parameters
+	url := "https://olympus.aws-staging.cloudknox.io/api/v2/service-account/authenticate"
+	var jsonBytes = credentialsToJSON(credentials)
+
+	// Request Configuration
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonBytes))
 	req.Header.Set("Content-Type", "application/json")
 
 	// Setup Client and Make Request
@@ -49,13 +60,20 @@ func buildClient(sai string, ak string, sk string, configurationType string) {
 	if err != nil {
 		log.Info(err)
 		client = nil
-		clientErr = errors.New("Client Error")
+		clientErr = errors.New("Unable to make HTTP Client Request")
 		return
 	}
 	defer resp.Body.Close()
 
 	// Get Response
 	log.Println("response Status:", resp.Status)
+	if resp.StatusCode != http.StatusOK {
+		log.Info(resp.Status)
+		client = nil
+		clientErr = errors.New("Invalid Credentials")
+		log.Info("Please Check Credentials")
+		return
+	}
 	body, _ := ioutil.ReadAll(resp.Body)
 	jsonBody := string(body)
 
@@ -66,7 +84,7 @@ func buildClient(sai string, ak string, sk string, configurationType string) {
 	if err != nil {
 		log.Info(err)
 		client = nil
-		clientErr = errors.New("Client Error")
+		clientErr = errors.New("Unable to read HTTP Response")
 		return
 	}
 
@@ -75,8 +93,6 @@ func buildClient(sai string, ak string, sk string, configurationType string) {
 	client = &Client{
 		AccessToken: accessToken,
 	}
-
-	log.Println("Access Token:", client.AccessToken)
 
 	return
 }

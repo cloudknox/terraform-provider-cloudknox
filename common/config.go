@@ -2,14 +2,20 @@ package common
 
 import (
 	"cloudknox/terraform-provider-cloudknox/utils"
+	"errors"
+	"io/ioutil"
+	"os"
+	"strings"
 	"sync"
 
+	"github.com/go-akka/configuration"
 	"github.com/mitchellh/go-homedir"
 )
 
 /* Private Variables */
 
 var configOnce sync.Once
+var creds *Credentials
 
 func setConfiguration(parameters *ClientParameters) (*Client, error) {
 	configOnce.Do(
@@ -17,7 +23,7 @@ func setConfiguration(parameters *ClientParameters) (*Client, error) {
 			/* Initialize Configuration */
 
 			var configurationType string
-
+			creds = new(Credentials)
 			log := GetLogger()
 
 			// log.Info(parameters.ServiceAccountID)
@@ -37,30 +43,8 @@ func setConfiguration(parameters *ClientParameters) (*Client, error) {
 
 			homedir, _ := homedir.Dir()
 
-			defaultCredentialspath := homedir + "/.cnx/credentials"
-
-			if parameters.Profile == "" {
-				parameters.Profile = "Default"
-			}
-
-			if parameters.SharedCredentialsFile == "" {
-				log.Info("Custom Shared Credentials File not provided")
-			} else {
-				log.Info("Searching for Shared Credentials File at" + parameters.SharedCredentialsFile)
-
-				if utils.CheckIfPathExists(parameters.SharedCredentialsFile) {
-					log.Info("Shared Credentials File located")
-					log.Info("Checking " + parameters.Profile + " Profile")
-					/*
-						If success
-						configurationType = "SharedCredentialsFile"
-						else
-						continue
-
-					*/
-				}
-			}
-
+			defaultCredentialsPath := homedir + "//.cnx//creds.conf"
+			// Check Static Credentials
 			if parameters.ServiceAccountID == "" || parameters.AccessKey == "" || parameters.SecretKey == "" {
 				log.Info("Static Credentials not provided or incomplete")
 				if configurationType != "" {
@@ -77,39 +61,84 @@ func setConfiguration(parameters *ClientParameters) (*Client, error) {
 
 				configurationType = "Static Credentials"
 
-				buildClient(parameters.ServiceAccountID, parameters.AccessKey, parameters.SecretKey, configurationType)
+				creds.ServiceAccountID = parameters.ServiceAccountID
+				creds.AccessKey = parameters.AccessKey
+				creds.SecretKey = parameters.SecretKey
+
+				buildClient(creds, configurationType)
 
 				return
 
 			}
 
+			// Set Default Value for Profile if not provided
+			if parameters.Profile == "" {
+				parameters.Profile = "default"
+			} else {
+				parameters.Profile = strings.ToLower(parameters.Profile)
+			}
+
+			// Check Shared Credentials File
+			if parameters.SharedCredentialsFile == "" {
+				log.Info("Custom Shared Credentials File not provided")
+			} else {
+				log.Info("Searching for Shared Credentials File at" + parameters.SharedCredentialsFile)
+
+				if utils.CheckIfPathExists(parameters.SharedCredentialsFile) {
+					log.Info("Shared Credentials File located")
+					log.Info("Checking " + parameters.Profile + " Profile")
+
+					err := readHOCON(parameters.SharedCredentialsFile, parameters.Profile)
+
+					if err == nil {
+						configurationType = "Shared Credentials File"
+						buildClient(creds, configurationType)
+						return
+					} else {
+						log.Info(err)
+					}
+				}
+			}
+
 			//Check Default Path
-			if utils.CheckIfPathExists(defaultCredentialspath) {
-				log.Info("Credentials file found at " + defaultCredentialspath)
+
+			if utils.CheckIfPathExists(defaultCredentialsPath) {
+				log.Info("Default Credentials File located")
 				log.Info("Checking " + parameters.Profile + " Profile")
-				/*
-					If success
-					configurationType = "DefaultCredentialsFile"
+
+				err := readHOCON(defaultCredentialsPath, parameters.Profile)
+
+				if err == nil {
+					configurationType = "Default Credentials File"
+					buildClient(creds, configurationType)
 					return
-					else
-					continue
+				} else {
+					log.Info(err)
+				}
+			} else {
+				log.Info("Default Credentials File not provided at ~/.cnx/creds.conf")
+				log.Info("Checking Environment Variables")
+			}
 
-				*/
-
+			if os.Getenv("CNX_SERVICE_ACCOUNT_ID") == "" || os.Getenv("CNX_ACCESS_KEY") == "" || os.Getenv("CNX_SECRET_KEY") == "" {
+				log.Info("All Environment Variables not set")
+				log.Info("No Credentials Exist")
+				client = nil
+				clientErr = errors.New("No Credentials Found")
 				return
 			} else {
-				log.Info("Checking Environment Variables")
+				log.Info("Environment Variables Located")
 
-				/*
-					If success
-					configurationType = "DefaultCredentialsFile"
-					return
-					else
-					error
+				creds.ServiceAccountID = os.Getenv("CNX_SERVICE_ACCOUNT_ID")
+				creds.AccessKey = os.Getenv("CNX_ACCESS_KEY")
+				creds.SecretKey = os.Getenv("CNX_SECRET_KEY")
 
-				*/
+				configurationType = "Environment Variables"
+
+				buildClient(creds, configurationType)
 
 				return
+
 			}
 
 			return
@@ -117,6 +146,30 @@ func setConfiguration(parameters *ClientParameters) (*Client, error) {
 	)
 
 	return client, clientErr
+}
+
+func readHOCON(path string, profile string) error {
+	log := GetLogger()
+	content, err := ioutil.ReadFile(path)
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+
+	// Convert []byte to string and print to screen
+	text := string(content)
+
+	conf := configuration.ParseString(text)
+
+	creds.ServiceAccountID = conf.GetString("profiles." + profile + ".service_account_id")
+	creds.AccessKey = conf.GetString("profiles." + profile + ".access_key")
+	creds.SecretKey = conf.GetString("profiles." + profile + ".secret_key")
+
+	if creds.ServiceAccountID == "" || creds.AccessKey == "" || creds.SecretKey == "" {
+		return errors.New("Malformed HOCON File")
+	}
+
+	return nil
 }
 
 /* Public Variables */
