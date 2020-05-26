@@ -43,9 +43,27 @@ func Provider() terraform.ResourceProvider {
 		ResourcesMap: map[string]*schema.Resource{
 			"cloudknox_policy": resourcePolicy(),
 		},
+
+		ConfigureFunc: providerConfigure,
 	}
 
 	return provider
+}
+
+func providerConfigure(d *schema.ResourceData) (interface{}, error) {
+	log := common.GetLogger()
+	log.Info("Setting up client parameters")
+	parameters := &common.ClientParameters{
+		ServiceAccountId:      d.Get("service_account_id").(string),
+		AccessKey:             d.Get("access_key").(string),
+		SecretKey:             d.Get("secret_key").(string),
+		SharedCredentialsFile: d.Get("shared_credentials_file").(string),
+		Profile:               d.Get("profile").(string),
+	}
+
+	common.SetConfiguration(parameters)
+
+	return common.GetClient()
 }
 
 var descriptions map[string]string
