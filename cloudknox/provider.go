@@ -9,6 +9,8 @@ import (
 
 // Provider creates and returns a Terraform Provider with populated Schema
 func Provider() terraform.ResourceProvider {
+	log := common.GetLogger()
+	log.Info("Building Provider")
 	provider := &schema.Provider{
 		Schema: map[string]*schema.Schema{
 			"service_account_id": {
@@ -52,23 +54,27 @@ func Provider() terraform.ResourceProvider {
 
 func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	log := common.GetLogger()
-	log.Info("Setting up client parameters")
+	log.Info("Configuring Provider")
+
 	parameters := &common.ClientParameters{
-		ServiceAccountId:      d.Get("service_account_id").(string),
+		ServiceAccountID:      d.Get("service_account_id").(string),
 		AccessKey:             d.Get("access_key").(string),
 		SecretKey:             d.Get("secret_key").(string),
 		SharedCredentialsFile: d.Get("shared_credentials_file").(string),
 		Profile:               d.Get("profile").(string),
 	}
 
-	common.SetConfiguration(parameters)
-	return common.GetClient()
+	common.SetConfiguration(parameters) //Build Client Struct using parameters
+	return common.GetClient()           //Return the Client Struct and the Error
 }
 
 var descriptions map[string]string
 
 func init() {
 
+	log := common.GetLogger()
+
+	log.Info("Building Descriptions")
 	descriptions = map[string]string{
 		"service_account_id": "Cloudknox Service Account ID",
 
@@ -80,12 +86,4 @@ func init() {
 
 		"profile": "Profile for accessKey/secretKey pair you would like to use.",
 	}
-
-	Log := common.GetLogger()
-	Log.Info("we here")
-
-	//Set the configuration for the provider based on given paramaters.
-
-	//figure out how to read the terraform provider properties then pass this map into configurator
-	//also figure out the type of provider to use based on given stuff
 }
