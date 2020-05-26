@@ -44,32 +44,6 @@ func setConfiguration(parameters *ClientParameters) (*Client, error) {
 			homedir, _ := homedir.Dir()
 
 			defaultCredentialsPath := homedir + "//.cnx//creds.conf"
-			// Check Static Credentials
-			if parameters.ServiceAccountID == "" || parameters.AccessKey == "" || parameters.SecretKey == "" {
-				log.Info("Static Credentials not provided or incomplete")
-				if configurationType != "" {
-					log.Info("Continuing to use " + configurationType)
-				}
-			} else {
-
-				if configurationType == "" {
-					log.Info("Static Credentials provided")
-
-				} else {
-					log.Info("Static Credentials provided, overriding " + configurationType)
-				}
-
-				configurationType = "Static Credentials"
-
-				creds.ServiceAccountID = parameters.ServiceAccountID
-				creds.AccessKey = parameters.AccessKey
-				creds.SecretKey = parameters.SecretKey
-
-				buildClient(creds, configurationType)
-
-				return
-
-			}
 
 			// Set Default Value for Profile if not provided
 			if parameters.Profile == "" {

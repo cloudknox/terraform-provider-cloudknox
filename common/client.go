@@ -9,9 +9,6 @@ import (
 )
 
 type ClientParameters struct {
-	ServiceAccountID      string
-	AccessKey             string
-	SecretKey             string
 	SharedCredentialsFile string
 	Profile               string
 }
