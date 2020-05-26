@@ -20,12 +20,12 @@ func getLogger() *log.Logger {
 		func() {
 			/* Initialize Logger */
 			logger = log.New()
-			// formatter := &log.TextFormatter{
-			// 	DisableColors: false,
-			// 	FullTimestamp: true,
-			// }
-			logger.SetFormatter(&log.JSONFormatter{})
-			//ogger.SetLevel(log.DebugLevel)
+			formatter := &log.TextFormatter{
+				DisableColors:   true,
+				TimestampFormat: "2006-01-02 15:04:05",
+				FullTimestamp:   true,
+			}
+			logger.SetFormatter(formatter)
 
 			err := os.Remove(output)
 
