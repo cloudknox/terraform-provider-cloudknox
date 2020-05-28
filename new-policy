@@ -1,0 +1,84 @@
+{
+	"Statement": [
+		{
+			"Action": [
+				"iam:CreatePolicy"
+			],
+			"Effect": "Allow",
+			"Resource": [
+				"arn:aws:iam::377596131774:*"
+			],
+			"Sid": "iamCreateActions"
+		},
+		{
+			"Action": [
+				"s3:GetBucketAcl"
+			],
+			"Effect": "Allow",
+			"Resource": [
+				"arn:aws:s3:::*"
+			],
+			"Sid": "s3ReadActions"
+		},
+		{
+			"Action": [
+				"iam:DeletePolicyVersion",
+				"iam:DeletePolicy"
+			],
+			"Effect": "Allow",
+			"Resource": [
+				"arn:aws:iam::377596131774:*"
+			],
+			"Sid": "iamDeleteActions"
+		},
+		{
+			"Action": [
+				"rds:ListTagsForResource"
+			],
+			"Effect": "Allow",
+			"Resource": [
+				"arn:aws:rds::377596131774:*"
+			],
+			"Sid": "rdsReadActions"
+		},
+		{
+			"Action": [
+				"iam:AttachUserPolicy",
+				"iam:AttachRolePolicy",
+				"iam:DetachRolePolicy",
+				"iam:DetachUserPolicy"
+			],
+			"Effect": "Allow",
+			"Resource": [
+				"arn:aws:iam::377596131774:*"
+			],
+			"Sid": "iamPermissionsActions"
+		},
+		{
+			"Action": [
+				"iam:ListAttachedUserPolicies",
+				"iam:ListMFADevices",
+				"iam:GetLoginProfile",
+				"iam:GetUser",
+				"iam:ListRolePolicies",
+				"iam:ListEntitiesForPolicy",
+				"iam:GetPolicyVersion",
+				"iam:ListPolicyVersions",
+				"iam:GetUserPolicy",
+				"iam:GetPolicy",
+				"iam:ListAccessKeys",
+				"iam:ListGroupsForUser",
+				"iam:ListAttachedRolePolicies",
+				"iam:ListUserPolicies",
+				"iam:GetRole",
+				"iam:ListSSHPublicKeys"
+			],
+			"Effect": "Allow",
+			"Resource": [
+				"arn:aws:iam::377596131774:*"
+			],
+			"Sid": "iamReadActions"
+		}
+	],
+	"Version": "2012-10-17"
+}

@@ -1,6 +1,7 @@
 package cloudknox
 
 import (
+	"cloudknox/terraform-provider-cloudknox/apiHandler"
 	"cloudknox/terraform-provider-cloudknox/common"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -14,25 +15,98 @@ func resourcePolicy() *schema.Resource {
 		Delete: resourcePolicyDelete,
 
 		Schema: map[string]*schema.Schema{
-			"address": &schema.Schema{
+
+			"name": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
+			},
+
+			"output_path": &schema.Schema{
+				Type:     schema.TypeString,
+				Required: true,
+			},
+			"auth_system_info": &schema.Schema{
+				Type: schema.TypeMap,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+					//id -> string
+					//resource -> string ie AWS GCP ETC
+				},
+				Required: true,
+			},
+			"identity_type": &schema.Schema{
+				Type:     schema.TypeString,
+				Required: true,
+			},
+			"identity_ids": &schema.Schema{
+				Type: schema.TypeList,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+				Required: true,
+			},
+			"filter_history_days": &schema.Schema{
+				Type:     schema.TypeInt,
+				Optional: true,
+			},
+			"filter_preserve_reads": &schema.Schema{
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+			"filter_history_start_time_millis": &schema.Schema{
+				Type:     schema.TypeInt,
+				Optional: true,
+			},
+			"filter_history_end_time_millis": &schema.Schema{
+				Type:     schema.TypeInt,
+				Optional: true,
+			},
+			"request_params_scope": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"request_params_resource": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"request_params_resources": &schema.Schema{
+				Type: schema.TypeList,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+				Optional: true,
+			},
+			"request_params_condition": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
 			},
 		},
 	}
 }
 
 func resourcePolicyCreate(d *schema.ResourceData, m interface{}) error {
-	client := m.(*common.Client)
-	err := common.ValidateClient(client)
 	log := common.GetLogger()
 
-	if err != nil {
-		log.Info(err)
-		return err
-	}
-	log.Info("Creating New Policy")
-	log.Info("Dummy resource property test " + d.Get("address").(string))
+	log.Info("Building Policy Payload")
+	var payload apiHandler.PolicyData
+
+	log.Info("Reading Resource Attributes")
+	payload.AuthSystemInfo.ID = d.Get("auth_system_info").(map[string]interface{})["id"].(string)
+	payload.AuthSystemInfo.Type = d.Get("auth_system_info").(map[string]interface{})["type"].(string)
+	payload.IdentityType = d.Get("identity_type").(string)
+	payload.IdentityIds = d.Get("identity_ids")
+	payload.Filter.HistoryDays = d.Get("filter_history_days").(int)
+	payload.Filter.PreserveReads = d.Get("filter_preserve_reads").(bool)
+	payload.Filter.HistoryDuration.StartTime = d.Get("filter_history_start_time_millis").(int)
+	payload.Filter.HistoryDuration.EndTime = d.Get("filter_history_end_time_millis").(int)
+
+	payload.RequestParams.Scope = d.Get("request_params_scope").(string)
+	payload.RequestParams.Resource = d.Get("request_params_resource").(string)
+	payload.RequestParams.Resources = d.Get("request_params_resources")
+	payload.RequestParams.Condition = d.Get("request_params_condition").(string)
+
+	log.Info("Policy Payload Built")
+	_ = apiHandler.NewPolicy(d.Get("name").(string), d.Get("output_path").(string), &payload)
 
 	return nil
 }

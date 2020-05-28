@@ -13,11 +13,10 @@ import (
 )
 
 /* Private Variables */
-
 var configOnce sync.Once
 var creds *Credentials
 
-func setConfiguration(parameters *ClientParameters) (*Client, error) {
+func setConfiguration(parameters *ClientParameters) {
 	configOnce.Do(
 		func() {
 			/* Initialize Configuration */
@@ -25,12 +24,6 @@ func setConfiguration(parameters *ClientParameters) (*Client, error) {
 			var configurationType string
 			creds = new(Credentials)
 			log := GetLogger()
-
-			// log.Info(parameters.ServiceAccountID)
-			// log.Info(parameters.AccessKey)
-			// log.Info(parameters.SecretKey)
-			// log.Info(parameters.SharedCredentialsFile)
-			// log.Info(parameters.Profile)
 
 			// === Configuration Hierarchy ===
 			// Static Credentials
@@ -40,10 +33,6 @@ func setConfiguration(parameters *ClientParameters) (*Client, error) {
 			// Default Path Credentials File (Default)
 			// Environment Variables
 			// No Credentials Provided Panic
-
-			homedir, _ := homedir.Dir()
-
-			defaultCredentialsPath := homedir + "//.cnx//creds.conf"
 
 			// Set Default Value for Profile if not provided
 			if parameters.Profile == "" {
@@ -74,7 +63,9 @@ func setConfiguration(parameters *ClientParameters) (*Client, error) {
 				}
 			}
 
-			//Check Default Path
+			// Check Default Path
+			homedir, _ := homedir.Dir()
+			defaultCredentialsPath := homedir + "//.cnx//creds.conf"
 
 			if utils.CheckIfPathExists(defaultCredentialsPath) {
 				log.Info("Default Credentials File located")
@@ -94,6 +85,7 @@ func setConfiguration(parameters *ClientParameters) (*Client, error) {
 				log.Info("Checking Environment Variables")
 			}
 
+			// Check Environment Variables
 			if os.Getenv("CNX_SERVICE_ACCOUNT_ID") == "" || os.Getenv("CNX_ACCESS_KEY") == "" || os.Getenv("CNX_SECRET_KEY") == "" {
 				log.Info("All Environment Variables not set")
 				log.Info("No Credentials Exist")
@@ -119,7 +111,7 @@ func setConfiguration(parameters *ClientParameters) (*Client, error) {
 		},
 	)
 
-	return client, clientErr
+	return
 }
 
 func readHOCON(path string, profile string) error {

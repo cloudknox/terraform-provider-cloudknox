@@ -5,22 +5,21 @@ import (
 	"sync"
 
 	"github.com/sirupsen/logrus"
-	log "github.com/sirupsen/logrus"
 )
 
-var logger *log.Logger
+var logger *logrus.Logger
 var loggerOnce sync.Once
 
 const (
 	output = "info.log"
 )
 
-func getLogger() *log.Logger {
+func getLogger() *logrus.Logger {
 	loggerOnce.Do(
 		func() {
 			/* Initialize Logger */
-			logger = log.New()
-			formatter := &log.TextFormatter{
+			logger = logrus.New()
+			formatter := &logrus.TextFormatter{
 				DisableColors:   true,
 				TimestampFormat: "2006-01-02 15:04:05",
 				FullTimestamp:   true,
@@ -38,7 +37,6 @@ func getLogger() *log.Logger {
 
 			logger.Info("Successfully Created Logger Instance!")
 
-			defer file.Close()
 		},
 	)
 	return logger
@@ -47,10 +45,10 @@ func getLogger() *log.Logger {
 func GetLogger() *logrus.Logger {
 	logger := getLogger()
 
-	file, err := os.OpenFile(output, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
-	if err != nil {
-		logger.Fatal(err)
-	}
-	logger.SetOutput(file)
+	// file, err := os.OpenFile(output, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+	// if err != nil {
+	// 	logger.Fatal(err)
+	// }
+	// logger.SetOutput(file)
 	return logger
 }

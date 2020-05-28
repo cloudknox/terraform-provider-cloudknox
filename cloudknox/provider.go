@@ -57,8 +57,8 @@ func init() {
 	log.Info("Building Descriptions")
 	descriptions = map[string]string{
 
-		"shared_credentials_file": "Filename of the HOCON credentials file including path.",
+		"shared_credentials_file": "Path/Filename of the HOCON credentials file.",
 
-		"profile": "Profile for accessKey/secretKey pair you would like to use.",
+		"profile": "Profile for (SERVICE_ACCOUNT_ID, ACCESS_KEY, SECRET_KEY) triplet you would like to use.",
 	}
 }

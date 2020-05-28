@@ -25,9 +25,14 @@ type Client struct {
 
 /* Private Variables */
 var credentials *Credentials
+var configType string
 
 var client *Client
 var clientErr error
+
+const (
+	AuthURL = "https://olympus.aws-staging.cloudknox.io/api/v2/service-account/authenticate"
+)
 
 func credentialsToJSON(credentials *Credentials) []byte {
 	c, _ := json.Marshal(credentials)
@@ -39,16 +44,17 @@ func buildClient(credentials *Credentials, configurationType string) {
 	log := GetLogger()
 	log.Info("Using " + configurationType + " to request API Access Token")
 
+	configType = configurationType
+
 	// Make POST Request for API Token
 
 	// Setup HTTP Request
 
 	// Parameters
-	url := "https://olympus.aws-staging.cloudknox.io/api/v2/service-account/authenticate"
 	var jsonBytes = credentialsToJSON(credentials)
 
 	// Request Configuration
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonBytes))
+	req, err := http.NewRequest("POST", AuthURL, bytes.NewBuffer(jsonBytes))
 	req.Header.Set("Content-Type", "application/json")
 
 	// Setup Client and Make Request
@@ -100,17 +106,15 @@ func buildClient(credentials *Credentials, configurationType string) {
 
 /* Public Functions */
 func GetClient() (*Client, error) {
-	return client, clientErr
-}
 
-func ValidateClient(client *Client) error {
-	if client != nil {
-		if client.AccessToken != "" {
-			return nil
+	if clientErr == nil {
+		if client != nil {
+			return client, nil
+		} else {
+			return nil, errors.New("Unexpected Error")
 		}
-
-		return errors.New("No Access Token")
+	} else {
+		return nil, errors.New(clientErr.Error() + " | ConfigType: " + configType)
 	}
 
-	return errors.New("No Valid Client")
 }
