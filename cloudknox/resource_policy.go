@@ -106,7 +106,13 @@ func resourcePolicyCreate(d *schema.ResourceData, m interface{}) error {
 	payload.RequestParams.Condition = d.Get("request_params_condition").(string)
 
 	log.Info("Policy Payload Built")
-	_ = apiHandler.NewPolicy(d.Get("name").(string), d.Get("output_path").(string), &payload)
+	err := apiHandler.NewPolicy(d.Get("name").(string), d.Get("output_path").(string), &payload)
+
+	if err != nil {
+		return err
+	}
+
+	d.SetId(d.Get("name").(string))
 
 	return nil
 }
