@@ -4,6 +4,8 @@ import (
 	"cloudknox/terraform-provider-cloudknox/common"
 	"encoding/json"
 	"io/ioutil"
+
+	"github.com/go-kit/kit/log/level"
 )
 
 type PolicyData struct {
@@ -34,27 +36,32 @@ const (
 )
 
 func NewPolicy(name string, outputPath string, payload *PolicyData) error {
-	log := common.GetLogger()
-	log.Info("apiHandler is getting client")
+	logger := common.GetLogger()
+
+	level.Info(logger).Log("msg", "Creating New Policy", "name", name, "output_path", outputPath)
+
 	client, err := common.GetClient()
 	if err != nil {
-		log.Info(err)
+		level.Error(logger).Log("msg", "Unable to Get Client Access Token", "client_error", err.Error())
 		return err
 	}
-	log.Info("Payload pre marshall")
+	level.Debug(logger).Log("msg", "Payload pre-marshal")
 	payload_bytes, _ := json.Marshal(payload)
-	log.Info(string(payload_bytes))
-	log.Info("Payload has been marshalled")
+	level.Debug(logger).Log("msg", "Payload post-marshal", "payload", string(payload_bytes))
 
 	policy, err := MakePOSTRequest(client.AccessToken, NewPolicyURL, payload_bytes)
 	if err != nil {
-		log.Info(err)
+		level.Error(logger).Log("msg", "Unable to make POST Request", "post_error", err.Error())
 		return err
+	} else {
+		level.Info(logger).Log("msg", "Post Request Successful", "post_error")
 	}
-	log.Info(policy)
+
+	level.Info(logger).Log("msg", "Writing Policy", "filename", outputPath)
 	err = writePolicy(name, outputPath, policy)
 
 	if err != nil {
+		level.Error(logger).Log("msg", "Unable to Write Policy", "write_error", err.Error())
 		return err
 	}
 

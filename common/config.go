@@ -9,6 +9,7 @@ import (
 	"sync"
 
 	"github.com/go-akka/configuration"
+	"github.com/go-kit/kit/log/level"
 	"github.com/mitchellh/go-homedir"
 )
 
@@ -23,8 +24,8 @@ func setConfiguration(parameters *ClientParameters) {
 
 			var configurationType string
 			creds = new(Credentials)
-			log := GetLogger()
-
+			logger := GetLogger()
+			level.Info(logger).Log("msg", "Identifying Configuration Type")
 			// === Configuration Hierarchy ===
 			// Static Credentials
 			// Shared Credentials File (Profile)
@@ -43,13 +44,13 @@ func setConfiguration(parameters *ClientParameters) {
 
 			// Check Shared Credentials File
 			if parameters.SharedCredentialsFile == "" {
-				log.Info("Custom Shared Credentials File not provided")
+				level.Warn(logger).Log("msg", "Shared Credentials File Not Provided")
 			} else {
-				log.Info("Searching for Shared Credentials File at" + parameters.SharedCredentialsFile)
+				level.Info(logger).Log("msg", "Searching for Shared Credentials File", "path", parameters.SharedCredentialsFile)
 
 				if utils.CheckIfPathExists(parameters.SharedCredentialsFile) {
-					log.Info("Shared Credentials File located")
-					log.Info("Checking " + parameters.Profile + " Profile")
+					level.Info(logger).Log("msg", "Shared Credentials File exists")
+					level.Info(logger).Log("msg", "Checking Profile", "profile", parameters.Profile)
 
 					err := readHOCON(parameters.SharedCredentialsFile, parameters.Profile)
 
@@ -58,7 +59,7 @@ func setConfiguration(parameters *ClientParameters) {
 						buildClient(creds, configurationType)
 						return
 					} else {
-						log.Info(err)
+						level.Error(logger).Log("msg", "Unable to Read HOCON File", "hocon_parse_error", err.Error())
 					}
 				}
 			}
@@ -68,8 +69,8 @@ func setConfiguration(parameters *ClientParameters) {
 			defaultCredentialsPath := homedir + "//.cnx//creds.conf"
 
 			if utils.CheckIfPathExists(defaultCredentialsPath) {
-				log.Info("Default Credentials File located")
-				log.Info("Checking " + parameters.Profile + " Profile")
+				level.Info(logger).Log("msg", "Default Credentials File Exists", "path", defaultCredentialsPath)
+				level.Info(logger).Log("msg", "Checking Profile", "profile", parameters.Profile)
 
 				err := readHOCON(defaultCredentialsPath, parameters.Profile)
 
@@ -78,22 +79,22 @@ func setConfiguration(parameters *ClientParameters) {
 					buildClient(creds, configurationType)
 					return
 				} else {
-					log.Info(err)
+					level.Error(logger).Log("msg", "Unable to Read HOCON File", "hocon_parse_error", err.Error())
 				}
 			} else {
-				log.Info("Default Credentials File not provided at ~/.cnx/creds.conf")
-				log.Info("Checking Environment Variables")
+				level.Warn(logger).Log("msg", "Default Credentials File Not Provided")
+				level.Info(logger).Log("msg", "Checking Environment Variables")
 			}
 
 			// Check Environment Variables
 			if os.Getenv("CNX_SERVICE_ACCOUNT_ID") == "" || os.Getenv("CNX_ACCESS_KEY") == "" || os.Getenv("CNX_SECRET_KEY") == "" {
-				log.Info("All Environment Variables not set")
-				log.Info("No Credentials Exist")
+				level.Warn(logger).Log("msg", "All Enviornment Variables Not Correctly Set")
+				level.Error(logger).Log("msg", "No Credentials Exist")
 				client = nil
 				clientErr = errors.New("No Credentials Found")
 				return
 			} else {
-				log.Info("Environment Variables Located")
+				level.Info(logger).Log("msg", "Environment Variables Located")
 
 				creds.ServiceAccountID = os.Getenv("CNX_SERVICE_ACCOUNT_ID")
 				creds.AccessKey = os.Getenv("CNX_ACCESS_KEY")
@@ -115,10 +116,8 @@ func setConfiguration(parameters *ClientParameters) {
 }
 
 func readHOCON(path string, profile string) error {
-	log := GetLogger()
 	content, err := ioutil.ReadFile(path)
 	if err != nil {
-		log.Fatal(err)
 		return err
 	}
 

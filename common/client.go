@@ -6,6 +6,8 @@ import (
 	"errors"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/go-kit/kit/log/level"
 )
 
 type ClientParameters struct {
@@ -41,8 +43,8 @@ func credentialsToJSON(credentials *Credentials) []byte {
 
 /* Private Functions */
 func buildClient(credentials *Credentials, configurationType string) {
-	log := GetLogger()
-	log.Info("Using " + configurationType + " to request API Access Token")
+	logger := GetLogger()
+	level.Info(logger).Log("msg", "Building Client", "config_type", configurationType)
 
 	configType = configurationType
 
@@ -61,7 +63,7 @@ func buildClient(credentials *Credentials, configurationType string) {
 	hclient := &http.Client{}
 	resp, err := hclient.Do(req)
 	if err != nil {
-		log.Info(err)
+		level.Error(logger).Log("resp", resp, "http_error", err.Error())
 		client = nil
 		clientErr = errors.New("Unable to make HTTP Client Request")
 		return
@@ -69,13 +71,14 @@ func buildClient(credentials *Credentials, configurationType string) {
 	defer resp.Body.Close()
 
 	// Get Response
-	log.Println("response Status:", resp.Status)
+	level.Info(logger).Log("msg", "Got HTTP Response")
 	if resp.StatusCode != http.StatusOK {
-		log.Info(resp.Status)
+		level.Error(logger).Log("msg", "HTTP Response status != 200 OK", "resp", resp.Status, "credentials", "invalid")
 		client = nil
 		clientErr = errors.New("Invalid Credentials")
-		log.Info("Please Check Credentials")
 		return
+	} else {
+		level.Info(logger).Log("msg", "HTTP Response status == 200 OK", "resp", resp.Status, "credentials", "valid")
 	}
 	body, _ := ioutil.ReadAll(resp.Body)
 	jsonBody := string(body)
@@ -85,7 +88,7 @@ func buildClient(credentials *Credentials, configurationType string) {
 	err = json.Unmarshal([]byte(jsonBody), &responseMap)
 
 	if err != nil {
-		log.Info(err)
+		level.Error(logger).Log("msg", "Unable to extract response from body", "unmarshal_error", err)
 		client = nil
 		clientErr = errors.New("Unable to read HTTP Response")
 		return

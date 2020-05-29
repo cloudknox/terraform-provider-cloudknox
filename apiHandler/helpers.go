@@ -7,11 +7,13 @@ import (
 	"errors"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/go-kit/kit/log/level"
 )
 
 func MakePOSTRequest(accessToken string, url string, payload []byte) (map[string]interface{}, error) {
-	log := common.GetLogger()
-
+	logger := common.GetLogger()
+	level.Info(logger).Log("msg", "Making API POST Request", "url", url)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(payload))
 	req.Header.Set("X-CloudKnox-Access-Token", accessToken)
 	req.Header.Set("Content-Type", "application/json")
@@ -19,15 +21,16 @@ func MakePOSTRequest(accessToken string, url string, payload []byte) (map[string
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Info(err)
+		level.Error(logger).Log("resp", resp, "http_error", err.Error())
 		return nil, errors.New("Unable to make HTTP Client Request")
 	}
 	defer resp.Body.Close()
 
-	log.Println("response Status:", resp.Status)
 	if resp.StatusCode != http.StatusOK {
-		log.Info(resp.Status)
-		return nil, errors.New("Invalid Response")
+		level.Error(logger).Log("msg", "HTTP Response status != 200 OK", "resp", resp.Status, "resource_attributes", "invalid")
+		return nil, errors.New("Invalid API Response | Please Check Resource Attributes")
+	} else {
+		level.Info(logger).Log("msg", "HTTP Response status == 200 OK", "resp", resp.Status, "resource_attributes", "valid")
 	}
 	body, _ := ioutil.ReadAll(resp.Body)
 	jsonBody := string(body)

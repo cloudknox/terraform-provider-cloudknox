@@ -2,12 +2,10 @@ package cloudknox
 
 import (
 	"testing"
-
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
 func init() {
-	testProvider = Provider().(*schema.Provider)
+	//testProvider = Provider().(*schema.Provider)
 }
 
 func TestProvider(t *testing.T) {

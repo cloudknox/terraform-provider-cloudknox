@@ -4,6 +4,7 @@ import (
 	"cloudknox/terraform-provider-cloudknox/apiHandler"
 	"cloudknox/terraform-provider-cloudknox/common"
 
+	"github.com/go-kit/kit/log/level"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
@@ -16,16 +17,16 @@ func resourcePolicy() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 
-			"name": &schema.Schema{
+			"name": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
 
-			"output_path": &schema.Schema{
+			"output_path": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"auth_system_info": &schema.Schema{
+			"auth_system_info": {
 				Type: schema.TypeMap,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
@@ -34,49 +35,49 @@ func resourcePolicy() *schema.Resource {
 				},
 				Required: true,
 			},
-			"identity_type": &schema.Schema{
+			"identity_type": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"identity_ids": &schema.Schema{
+			"identity_ids": {
 				Type: schema.TypeList,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
 				Required: true,
 			},
-			"filter_history_days": &schema.Schema{
+			"filter_history_days": {
 				Type:     schema.TypeInt,
 				Optional: true,
 			},
-			"filter_preserve_reads": &schema.Schema{
+			"filter_preserve_reads": {
 				Type:     schema.TypeBool,
 				Optional: true,
 			},
-			"filter_history_start_time_millis": &schema.Schema{
+			"filter_history_start_time_millis": {
 				Type:     schema.TypeInt,
 				Optional: true,
 			},
-			"filter_history_end_time_millis": &schema.Schema{
+			"filter_history_end_time_millis": {
 				Type:     schema.TypeInt,
 				Optional: true,
 			},
-			"request_params_scope": &schema.Schema{
+			"request_params_scope": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"request_params_resource": &schema.Schema{
+			"request_params_resource": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"request_params_resources": &schema.Schema{
+			"request_params_resources": {
 				Type: schema.TypeList,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
 				Optional: true,
 			},
-			"request_params_condition": &schema.Schema{
+			"request_params_condition": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
@@ -85,12 +86,12 @@ func resourcePolicy() *schema.Resource {
 }
 
 func resourcePolicyCreate(d *schema.ResourceData, m interface{}) error {
-	log := common.GetLogger()
+	logger := common.GetLogger()
+	level.Info(logger).Log("msg", "Building Policy Payload")
 
-	log.Info("Building Policy Payload")
 	var payload apiHandler.PolicyData
 
-	log.Info("Reading Resource Attributes")
+	level.Info(logger).Log("msg", "Reading Resource Data")
 	payload.AuthSystemInfo.ID = d.Get("auth_system_info").(map[string]interface{})["id"].(string)
 	payload.AuthSystemInfo.Type = d.Get("auth_system_info").(map[string]interface{})["type"].(string)
 	payload.IdentityType = d.Get("identity_type").(string)
@@ -105,7 +106,7 @@ func resourcePolicyCreate(d *schema.ResourceData, m interface{}) error {
 	payload.RequestParams.Resources = d.Get("request_params_resources")
 	payload.RequestParams.Condition = d.Get("request_params_condition").(string)
 
-	log.Info("Policy Payload Built")
+	level.Info(logger).Log("msg", "Payload Successfully Built")
 	err := apiHandler.NewPolicy(d.Get("name").(string), d.Get("output_path").(string), &payload)
 
 	if err != nil {

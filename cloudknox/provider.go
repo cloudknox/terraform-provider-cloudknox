@@ -3,14 +3,15 @@ package cloudknox
 import (
 	"cloudknox/terraform-provider-cloudknox/common"
 
+	"github.com/go-kit/kit/log/level"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 )
 
 // Provider creates and returns a Terraform Provider with populated Schema
 func Provider() terraform.ResourceProvider {
-	log := common.GetLogger()
-	log.Info("Building Provider")
+	logger := common.GetLogger()
+	level.Info(logger).Log("msg", "Building Cloudknox Terraform Provider")
 	provider := &schema.Provider{
 		Schema: map[string]*schema.Schema{
 
@@ -36,8 +37,8 @@ func Provider() terraform.ResourceProvider {
 }
 
 func providerConfigure(d *schema.ResourceData) (interface{}, error) {
-	log := common.GetLogger()
-	log.Info("Configuring Provider")
+	logger := common.GetLogger()
+	level.Info(logger).Log("msg", "Configuring Cloudknox Terraform Provider")
 
 	parameters := &common.ClientParameters{
 		SharedCredentialsFile: d.Get("shared_credentials_file").(string),
@@ -52,9 +53,8 @@ var descriptions map[string]string
 
 func init() {
 
-	log := common.GetLogger()
-
-	log.Info("Building Descriptions")
+	logger := common.GetLogger()
+	level.Debug(logger).Log("msg", "Running Initialization Function")
 	descriptions = map[string]string{
 
 		"shared_credentials_file": "Path/Filename of the HOCON credentials file.",
