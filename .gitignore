@@ -2,5 +2,5 @@
 *.log
 *.tfstate
 *.tf
-.terraform
+.terraform/
 *.exe
