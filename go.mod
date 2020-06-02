@@ -12,4 +12,6 @@ require (
 	github.com/sebest/logrusly v0.0.0-20180315190218-3235eccb8edc
 	github.com/segmentio/go-loggly v0.5.0 // indirect
 	github.com/sirupsen/logrus v1.2.0
+	github.com/spf13/viper v1.7.0
+	gopkg.in/yaml.v2 v2.2.4
 )

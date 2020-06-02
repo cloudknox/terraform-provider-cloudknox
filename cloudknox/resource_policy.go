@@ -4,7 +4,6 @@ import (
 	"cloudknox/terraform-provider-cloudknox/apiHandler"
 	"cloudknox/terraform-provider-cloudknox/common"
 
-	"github.com/go-kit/kit/log/level"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
@@ -87,11 +86,11 @@ func resourcePolicy() *schema.Resource {
 
 func resourcePolicyCreate(d *schema.ResourceData, m interface{}) error {
 	logger := common.GetLogger()
-	level.Info(logger).Log("msg", "Building Policy Payload")
+	logger.Info("msg", "Building Policy Payload")
 
 	var payload apiHandler.PolicyData
 
-	level.Info(logger).Log("msg", "Reading Resource Data")
+	logger.Info("msg", "Reading Resource Data")
 	payload.AuthSystemInfo.ID = d.Get("auth_system_info").(map[string]interface{})["id"].(string)
 	payload.AuthSystemInfo.Type = d.Get("auth_system_info").(map[string]interface{})["type"].(string)
 	payload.IdentityType = d.Get("identity_type").(string)
@@ -106,7 +105,7 @@ func resourcePolicyCreate(d *schema.ResourceData, m interface{}) error {
 	payload.RequestParams.Resources = d.Get("request_params_resources")
 	payload.RequestParams.Condition = d.Get("request_params_condition").(string)
 
-	level.Info(logger).Log("msg", "Payload Successfully Built")
+	logger.Info("msg", "Payload Successfully Built")
 	err := apiHandler.NewPolicy(d.Get("name").(string), d.Get("output_path").(string), &payload)
 
 	if err != nil {

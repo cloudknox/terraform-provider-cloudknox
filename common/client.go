@@ -6,8 +6,6 @@ import (
 	"errors"
 	"io/ioutil"
 	"net/http"
-
-	"github.com/go-kit/kit/log/level"
 )
 
 type ClientParameters struct {
@@ -30,11 +28,7 @@ var credentials *Credentials
 var configType string
 
 var client *Client
-var clientErr error
-
-const (
-	AuthURL = "https://olympus.aws-staging.cloudknox.io/api/v2/service-account/authenticate"
-)
+var clientErr = errors.New("Credentials Error")
 
 func credentialsToJSON(credentials *Credentials) []byte {
 	c, _ := json.Marshal(credentials)
@@ -44,7 +38,7 @@ func credentialsToJSON(credentials *Credentials) []byte {
 /* Private Functions */
 func buildClient(credentials *Credentials, configurationType string) {
 	logger := GetLogger()
-	level.Info(logger).Log("msg", "Building Client", "config_type", configurationType)
+	logger.Info("msg", "Building Client", "config_type", configurationType)
 
 	configType = configurationType
 
@@ -56,14 +50,14 @@ func buildClient(credentials *Credentials, configurationType string) {
 	var jsonBytes = credentialsToJSON(credentials)
 
 	// Request Configuration
-	req, err := http.NewRequest("POST", AuthURL, bytes.NewBuffer(jsonBytes))
+	req, err := http.NewRequest("POST", AUTH(), bytes.NewBuffer(jsonBytes))
 	req.Header.Set("Content-Type", "application/json")
 
 	// Setup Client and Make Request
 	hclient := &http.Client{}
 	resp, err := hclient.Do(req)
 	if err != nil {
-		level.Error(logger).Log("resp", resp, "http_error", err.Error())
+		logger.Error("resp", resp, "http_error", err.Error())
 		client = nil
 		clientErr = errors.New("Unable to make HTTP Client Request")
 		return
@@ -71,14 +65,14 @@ func buildClient(credentials *Credentials, configurationType string) {
 	defer resp.Body.Close()
 
 	// Get Response
-	level.Info(logger).Log("msg", "Got HTTP Response")
+	logger.Info("msg", "Got HTTP Response")
 	if resp.StatusCode != http.StatusOK {
-		level.Error(logger).Log("msg", "HTTP Response status != 200 OK", "resp", resp.Status, "credentials", "invalid")
+		logger.Error("msg", "HTTP Response status != 200 OK", "resp", resp.Status, "credentials", "invalid")
 		client = nil
 		clientErr = errors.New("Invalid Credentials")
 		return
 	} else {
-		level.Info(logger).Log("msg", "HTTP Response status == 200 OK", "resp", resp.Status, "credentials", "valid")
+		logger.Info("msg", "HTTP Response status == 200 OK", "resp", resp.Status, "credentials", "valid")
 	}
 	body, _ := ioutil.ReadAll(resp.Body)
 	jsonBody := string(body)
@@ -88,7 +82,7 @@ func buildClient(credentials *Credentials, configurationType string) {
 	err = json.Unmarshal([]byte(jsonBody), &responseMap)
 
 	if err != nil {
-		level.Error(logger).Log("msg", "Unable to extract response from body", "unmarshal_error", err)
+		logger.Error("msg", "Unable to extract response from body", "unmarshal_error", err)
 		client = nil
 		clientErr = errors.New("Unable to read HTTP Response")
 		return
@@ -99,6 +93,7 @@ func buildClient(credentials *Credentials, configurationType string) {
 	client = &Client{
 		AccessToken: accessToken,
 	}
+	clientErr = nil
 
 	return
 }
@@ -120,4 +115,35 @@ func GetClient() (*Client, error) {
 		return nil, errors.New(clientErr.Error() + " | ConfigType: " + configType)
 	}
 
+}
+
+func (c *Client) POST(url string, payload []byte) (map[string]interface{}, error) {
+	logger := GetLogger()
+	logger.Info("msg", "Making API POST Request", "url", url)
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(payload))
+	req.Header.Set("X-CloudKnox-Access-Token", c.AccessToken)
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		logger.Error("resp", resp, "http_error", err.Error())
+		return nil, errors.New("Unable to make HTTP Client Request")
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		logger.Error("msg", "HTTP Response status != 200 OK", "resp", resp.Status, "resource_attributes", "invalid")
+		return nil, errors.New("Invalid API Response | Please Check Resource Attributes")
+	} else {
+		logger.Info("msg", "HTTP Response status == 200 OK", "resp", resp.Status, "resource_attributes", "valid")
+	}
+	body, _ := ioutil.ReadAll(resp.Body)
+	jsonBody := string(body)
+
+	// Create Map from Body of Response
+	responseMap := make(map[string]interface{})
+	err = json.Unmarshal([]byte(jsonBody), &responseMap)
+
+	return responseMap, err
 }

@@ -9,14 +9,14 @@ import (
 	"github.com/go-kit/kit/log/level"
 )
 
-var logger log.Logger
+var customLogger CustomLogger
 var loggerOnce sync.Once
 
 const (
 	output = "info.log"
 )
 
-func getLogger() log.Logger {
+func getLogger() CustomLogger {
 	loggerOnce.Do(
 		func() {
 			/* Initialize Logger */
@@ -25,20 +25,20 @@ func getLogger() log.Logger {
 
 			file, err := os.OpenFile(output, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
 			if err == nil {
-				logger = log.NewLogfmtLogger(file)
-				logger = level.NewFilter(logger, level.AllowInfo())
-				logger = log.With(logger, "ts", log.DefaultTimestampUTC)
-				level.Info(logger).Log("msg", "Successfully Created Logger Instance!")
+				customLogger.logger = log.NewLogfmtLogger(file)
+				customLogger.logger = level.NewFilter(customLogger.logger, level.AllowAll())
+				customLogger.logger = log.With(customLogger.logger, "time", log.DefaultTimestampUTC)
+				customLogger.Info("msg", "Successfully Created Logger Instance!")
 			} else {
 				fmt.Println("Unable to begin logging")
 			}
 
 		},
 	)
-	return logger
+	return customLogger
 }
 
-func GetLogger() log.Logger {
+func GetLogger() CustomLogger {
 	logger := getLogger()
 
 	// file, err := os.OpenFile(output, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
@@ -47,4 +47,24 @@ func GetLogger() log.Logger {
 	// }
 	// logger.SetOutput(file)
 	return logger
+}
+
+type CustomLogger struct {
+	logger log.Logger
+}
+
+func (clog CustomLogger) Info(args ...interface{}) {
+	level.Info(clog.logger).Log(args...)
+}
+
+func (clog CustomLogger) Debug(args ...interface{}) {
+	level.Debug(clog.logger).Log(args...)
+}
+
+func (clog CustomLogger) Warn(args ...interface{}) {
+	level.Warn(clog.logger).Log(args...)
+}
+
+func (clog CustomLogger) Error(args ...interface{}) {
+	level.Error(clog.logger).Log(args)
 }
