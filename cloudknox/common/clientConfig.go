@@ -1,7 +1,7 @@
 package common
 
 import (
-	"cloudknox/terraform-provider-cloudknox/utils"
+	"cloudknox/terraform-provider-cloudknox/cloudknox/utils"
 	"errors"
 	"io/ioutil"
 	"os"
@@ -17,7 +17,7 @@ var clientConfigOnce sync.Once
 var creds *Credentials
 
 const (
-	RESOURCE_PATH = "./config/resources.yaml"
+	RESOURCE_PATH = "./cloudknox/config/resources.yaml"
 )
 
 func setClientConfiguration(parameters *ClientParameters) {

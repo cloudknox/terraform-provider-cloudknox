@@ -1,21 +1,22 @@
 package common
 
 import (
+	"io/ioutil"
 	"sync"
-	"gopkg.in/yaml.v2"
-    "io/ioutil"
 
+	"gopkg.in/yaml.v2"
 )
+
 /* Private Variables */
 
 type Constants struct {
 	BaseURL string `yaml:"base_url"`
-	Routes struct {
-		Auth string `yaml:"authentication"`
+	Routes  struct {
+		Auth   string `yaml:"authentication"`
 		Policy struct {
 			Create string `yaml:"create"`
 		} `yaml:"policy"`
-	}`yaml:"routes"`
+	} `yaml:"routes"`
 }
 
 var constants Constants
@@ -29,7 +30,6 @@ func SetConstantsConfiguration(resource_path string) {
 			logger := GetLogger()
 			logger.Debug("msg", "Setting Constants")
 
-			
 			yamlFile, err := ioutil.ReadFile(resource_path)
 			if err != nil {
 				logger.Debug("msg", "Error Reading Configuration File", "file_read_error", err)
