@@ -2,8 +2,9 @@ package apiHandler
 
 import (
 	"cloudknox/terraform-provider-cloudknox/cloudknox/common"
+	"cloudknox/terraform-provider-cloudknox/cloudknox/sink"
 	"encoding/json"
-	"io/ioutil"
+	"time"
 )
 
 type PolicyData struct {
@@ -29,7 +30,7 @@ type PolicyData struct {
 	}
 }
 
-func NewPolicy(name string, outputPath string, payload *PolicyData) error {
+func NewPolicy(platform string, name string, outputPath string, payload *PolicyData) error {
 	logger := common.GetLogger()
 
 	logger.Info("msg", "Creating New Policy", "name", name, "output_path", outputPath)
@@ -52,7 +53,7 @@ func NewPolicy(name string, outputPath string, payload *PolicyData) error {
 	}
 
 	logger.Info("msg", "Writing Policy to Disk", "filename", outputPath+name)
-	err = writePolicy(name, outputPath, policy)
+	err = writePolicy(platform, name, outputPath, policy)
 
 	if err != nil {
 		logger.Error("msg", "Unable to Write Policy", "write_error", err.Error())
@@ -62,17 +63,35 @@ func NewPolicy(name string, outputPath string, payload *PolicyData) error {
 	return nil
 }
 
-func writePolicy(name string, outputPath string, policy map[string]interface{}) error {
-	jsonString, err := json.MarshalIndent(policy["data"], "", "\t")
+func writePolicy(platform string, name string, outputPath string, policy map[string]interface{}) error {
+
+	logger := common.GetLogger()
+
+	jsonString, err := json.MarshalIndent(policy["data"], "\t", "\t")
 
 	if err != nil {
-		return err
+		logger.Error("msg", "JSON Marshaling Error while Preparing Policy", "json_error", err)
 	}
 
-	err = ioutil.WriteFile(outputPath+name, []byte(jsonString), 0644)
+	args := map[string]string{
+		"name":        name,
+		"description": "Cloudknox Generated IAM Policy for " + platform + " at " + time.Now().String(),
+		"output_path": outputPath,
+		"aws_path":    "/",
+		"policy":      string(jsonString),
+	}
+
+	contract, err := sink.BuildContract(platform, args)
 
 	if err != nil {
-		return err
+		logger.Error("msg", "Error while Building Contract", "contract_error", err)
 	}
+
+	err = contract.WritePolicy()
+
+	if err != nil {
+		logger.Error("msg", "Error while Writing Policy", "fileio_error", err)
+	}
+
 	return nil
 }

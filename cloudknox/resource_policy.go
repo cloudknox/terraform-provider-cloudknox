@@ -91,6 +91,9 @@ func resourcePolicyCreate(d *schema.ResourceData, m interface{}) error {
 	var payload apiHandler.PolicyData
 
 	logger.Info("msg", "Reading Resource Data")
+
+	name := d.Get("name").(string)
+
 	payload.AuthSystemInfo.ID = d.Get("auth_system_info").(map[string]interface{})["id"].(string)
 	payload.AuthSystemInfo.Type = d.Get("auth_system_info").(map[string]interface{})["type"].(string)
 	payload.IdentityType = d.Get("identity_type").(string)
@@ -106,13 +109,13 @@ func resourcePolicyCreate(d *schema.ResourceData, m interface{}) error {
 	payload.RequestParams.Condition = d.Get("request_params_condition").(string)
 
 	logger.Info("msg", "Payload Successfully Built")
-	err := apiHandler.NewPolicy(d.Get("name").(string), d.Get("output_path").(string), &payload)
+	err := apiHandler.NewPolicy(payload.AuthSystemInfo.Type, name, d.Get("output_path").(string), &payload)
 
 	if err != nil {
 		return err
 	}
 
-	d.SetId(d.Get("name").(string))
+	d.SetId(name)
 
 	return nil
 }
