@@ -66,5 +66,5 @@ func (clog CustomLogger) Warn(args ...interface{}) {
 }
 
 func (clog CustomLogger) Error(args ...interface{}) {
-	level.Error(clog.logger).Log(args)
+	level.Error(clog.logger).Log(args...)
 }

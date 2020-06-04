@@ -6,6 +6,7 @@ import (
 	"errors"
 	"io/ioutil"
 	"net/http"
+	"net/http/httputil"
 )
 
 type ClientParameters struct {
@@ -83,6 +84,7 @@ func buildClient(credentials *Credentials, configurationType string) {
 
 	if err != nil {
 		logger.Error("msg", "Unable to extract response from body", "unmarshal_error", err)
+		logger.Error("body", body)
 		client = nil
 		clientErr = errors.New("Unable to read HTTP Response")
 		return
@@ -126,6 +128,10 @@ func (c *Client) POST(url string, payload []byte) (map[string]interface{}, error
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
+
+	response_dump, _ := httputil.DumpResponse(resp, true)
+	logger.Debug("dump", response_dump)
+
 	if err != nil {
 		logger.Error("resp", resp, "http_error", err.Error())
 		return nil, errors.New("Unable to make HTTP Client Request")
@@ -138,6 +144,7 @@ func (c *Client) POST(url string, payload []byte) (map[string]interface{}, error
 	} else {
 		logger.Info("msg", "HTTP Response status == 200 OK", "resp", resp.Status, "resource_attributes", "valid")
 	}
+
 	body, _ := ioutil.ReadAll(resp.Body)
 	jsonBody := string(body)
 

@@ -33,7 +33,7 @@ type PolicyData struct {
 func NewPolicy(platform string, name string, outputPath string, payload *PolicyData) error {
 	logger := common.GetLogger()
 
-	logger.Info("msg", "Creating New Policy", "name", name, "output_path", outputPath)
+	logger.Info("msg", "Creating New Policy", "name", "cloudknox-"+platform+"-"+name+".tf", "output_path", outputPath)
 
 	client, err := common.GetClient()
 	if err != nil {
@@ -46,13 +46,13 @@ func NewPolicy(platform string, name string, outputPath string, payload *PolicyD
 
 	policy, err := client.POST(common.NEW_POLICY(), payload_bytes)
 	if err != nil {
-		logger.Error("msg", "Unable to make POST Request", "post_error", err.Error())
+		logger.Error("msg", "Unable to complete POST Request", "error", err.Error())
 		return err
 	} else {
 		logger.Info("msg", "Post Request Successful")
 	}
 
-	logger.Info("msg", "Writing Policy to Disk", "filename", outputPath+name)
+	logger.Info("msg", "Begin Write Sequence")
 	err = writePolicy(platform, name, outputPath, policy)
 
 	if err != nil {

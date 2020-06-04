@@ -23,10 +23,10 @@ func (aws ContractWriter) WritePolicy() error {
 	    name        = "%s"
 		path        = "%s"
 		description = "%s"
-		policy = <<POLICY
+		policy = <<EOF
 		%s'`, aws.Name, aws.Name, aws.AWSPath, aws.Description, aws.Policy)
 
-	suffix := "\nPOLICY\n}"
+	suffix := "\nEOF\n}"
 
 	err := ioutil.WriteFile(aws.OutputPath+"cloudknox-aws-"+aws.Name+".tf", []byte(template+suffix), 0644)
 
