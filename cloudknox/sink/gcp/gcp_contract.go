@@ -19,6 +19,7 @@ func (gcp ContractWriter) WritePolicy() error {
 	logger := common.GetLogger()
 	logger.Info("msg", "Writing GCP Policy")
 
+	//Turn the given policy into a map so that we can extract even more fields
 	policy := make(map[string]interface{})
 
 	err := json.Unmarshal([]byte(gcp.Policy), &policy)
@@ -29,15 +30,19 @@ func (gcp ContractWriter) WritePolicy() error {
 		return err
 	}
 
+	//Extract the permissions from the policy map
 	permissions := policy["role"].(map[string]interface{})["includedPermissions"]
 
+	//Convert permissions to an array
 	permissions_arr := make([]string, 0)
 	for _, v := range permissions.([]interface{}) {
 		permissions_arr = append(permissions_arr, v.(string))
 	}
 
+	//Format the permissions array into a string with new lines after every permission
 	permissions_str := linePrint(permissions_arr)
 
+	//Create the template for the resource
 	template := fmt.Sprintf(
 		`resource "google_project_iam_custom_role" "%s" {
 		role_id     = "%s"
@@ -48,6 +53,7 @@ func (gcp ContractWriter) WritePolicy() error {
 
 	suffix := "]\r}"
 
+	//Write the template to file after filling out the fields
 	err = ioutil.WriteFile(gcp.OutputPath+"cloudknox-gcp-"+gcp.Name+".tf", []byte(template+suffix), 0644)
 
 	if err != nil {

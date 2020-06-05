@@ -95,13 +95,11 @@ func buildClient(credentials *Credentials, configurationType string) {
 		AccessToken: accessToken,
 	}
 	clientErr = nil
-	//logger.Debug("access_token", accessToken)
+
+	// logger.Debug("access_token", accessToken)
+
 	return
 }
-
-// func authorize() {
-// 	TODO
-// }
 
 /* Public Functions */
 func GetClient() (*Client, error) {

@@ -19,17 +19,19 @@ type PolicyData struct {
 		PreserveReads   bool `json:"preserveReads"`
 		HistoryDuration *HD  `json:"historyDuration, omitempty"`
 	} `json:"filter"`
-	RequestParams struct {
-		Scope     string      `json:"scope"`
-		Resource  string      `json:"resource"`
-		Resources interface{} `json:"resources"`
-		Condition string      `json:"condition"`
-	}
+	RequestParams *RP `json:"requestParams, omitempty"`
 }
 
 type HD struct {
 	StartTime int `json:"startTime"`
 	EndTime   int `json:"endTime"`
+}
+
+type RP struct {
+	Scope     interface{} `json:"scope, omitempty"`
+	Resource  interface{} `json:"resource, omitempty"`
+	Resources interface{} `json:"resources, omitempty"`
+	Condition interface{} `json:"condition, omitempty"`
 }
 
 func NewPolicy(platform string, name string, outputPath string, payload *PolicyData) error {
@@ -61,6 +63,8 @@ func NewPolicy(platform string, name string, outputPath string, payload *PolicyD
 		logger.Error("msg", "Unable to Write Policy", "write_error", err.Error())
 		return err
 	}
+
+	logger.Info("msg", "Write Sequence Completed Successfully")
 
 	return nil
 }

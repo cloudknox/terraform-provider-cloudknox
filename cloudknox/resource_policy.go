@@ -68,10 +68,12 @@ func resourcePolicy() *schema.Resource {
 			"request_params_scope": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Default:  nil,
 			},
 			"request_params_resource": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Default:  nil,
 			},
 			"request_params_resources": {
 				Type: schema.TypeList,
@@ -79,10 +81,12 @@ func resourcePolicy() *schema.Resource {
 					Type: schema.TypeString,
 				},
 				Optional: true,
+				Default:  nil,
 			},
 			"request_params_condition": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Default:  nil,
 			},
 		},
 	}
@@ -122,10 +126,42 @@ func resourcePolicyCreate(d *schema.ResourceData, m interface{}) error {
 
 	payload.Filter.PreserveReads = d.Get("filter_preserve_reads").(bool)
 
-	payload.RequestParams.Scope = d.Get("request_params_scope").(string)
-	payload.RequestParams.Resource = d.Get("request_params_resource").(string)
-	payload.RequestParams.Resources = d.Get("request_params_resources")
-	payload.RequestParams.Condition = d.Get("request_params_condition").(string)
+	var scope interface{} = d.Get("request_params_scope")
+	var resource interface{} = d.Get("request_params_resource")
+	var resources interface{} = d.Get("request_params_resources")
+	var condition interface{} = d.Get("request_params_condition")
+
+	logger.Debug("scope", scope.(string), "resource", resource.(string), "resources", resources, "condition", condition.(string))
+
+	if scope == "" && resource == "" && resources == nil && condition == "" {
+		logger.Debug("msg", "No Request Params Given")
+	} else {
+		logger.Debug("msg", "Request Params Given")
+
+		var requestParams apiHandler.RP
+
+		if scope.(string) == "" {
+			requestParams.Scope = nil
+		} else {
+			requestParams.Scope = scope.(string)
+		}
+
+		if resource.(string) == "" {
+			requestParams.Resource = nil
+		} else {
+			requestParams.Resource = resource.(string)
+		}
+
+		requestParams.Resources = resources
+
+		if condition.(string) == "" {
+			requestParams.Condition = nil
+		} else {
+			requestParams.Condition = condition.(string)
+		}
+
+		payload.RequestParams = &requestParams
+	}
 
 	logger.Info("msg", "Payload Successfully Built")
 	err := apiHandler.NewPolicy(payload.AuthSystemInfo.Type, name, d.Get("output_path").(string), &payload)

@@ -3,6 +3,7 @@ package sink
 import (
 	"cloudknox/terraform-provider-cloudknox/cloudknox/common"
 	"cloudknox/terraform-provider-cloudknox/cloudknox/sink/aws"
+	"cloudknox/terraform-provider-cloudknox/cloudknox/sink/azure"
 	"cloudknox/terraform-provider-cloudknox/cloudknox/sink/gcp"
 	"errors"
 	"strings"
@@ -28,7 +29,13 @@ func BuildContract(platform string, args map[string]string) (ContractWriter, err
 		return acw, nil
 	case "azure":
 		logger.Info("platform", "azure")
-		return nil, nil
+		azure := azure.ContractWriter{
+			Name:        args["name"],
+			OutputPath:  args["output_path"],
+			Description: args["description"],
+			Policy:      args["policy"],
+		}
+		return azure, nil
 	case "gcp":
 		logger.Info("platform", "gcp")
 		gcp := gcp.ContractWriter{
