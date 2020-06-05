@@ -51,7 +51,7 @@ func (gcp ContractWriter) WritePolicy() error {
 		permissions = [%s
 		`, gcp.Name, policy["roleId"], gcp.Name, gcp.Description, permissions_str)
 
-	suffix := "]\r}"
+	suffix := "]\r\n}"
 
 	//Write the template to file after filling out the fields
 	err = ioutil.WriteFile(gcp.OutputPath+"cloudknox-gcp-"+gcp.Name+".tf", []byte(template+suffix), 0644)

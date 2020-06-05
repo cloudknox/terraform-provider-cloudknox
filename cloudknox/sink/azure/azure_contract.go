@@ -29,15 +29,29 @@ func (azure ContractWriter) WritePolicy() error {
 		return err
 	}
 
-	actions := policy["Actions"]
+	var actions_str, not_actions_str string
 
-	//Convert actions to an array
-	actions_arr := make([]string, 0)
-	for _, v := range actions.([]interface{}) {
-		actions_arr = append(actions_arr, v.(string))
+	if policy["Actions"] != nil {
+		actions := policy["Actions"]
+
+		//Convert actions to an array
+		actions_arr := make([]string, 0)
+		for _, v := range actions.([]interface{}) {
+			actions_arr = append(actions_arr, v.(string))
+		}
+		actions_str = linePrint(actions_arr)
 	}
 
-	actions_str := linePrint(actions_arr)
+	if policy["NotActions"] != nil {
+		not_actions := policy["NotActions"]
+
+		//Convert NotActions to an array
+		not_actions_arr := make([]string, 0)
+		for _, v := range not_actions.([]interface{}) {
+			not_actions_arr = append(not_actions_arr, v.(string))
+		}
+		not_actions_str = linePrint(not_actions_arr)
+	}
 
 	scopes := policy["AssignableScopes"]
 
@@ -60,14 +74,14 @@ func (azure ContractWriter) WritePolicy() error {
 		  
 			permissions {
 			  actions     = [%s
-
 			  ]
-			  not_actions = []
+			  not_actions = [%s
+			  ]
 			}
 		  
 			assignable_scopes = [%s
 			]
-		`, azure.Name, name, scopes_arr[0], azure.Description, actions_str, scopes_str)
+		`, azure.Name, name, scopes_arr[0], azure.Description, actions_str, not_actions_str, scopes_str)
 
 	suffix := "\r\n}"
 
