@@ -6,7 +6,6 @@ import (
 	"errors"
 	"io/ioutil"
 	"net/http"
-	"net/http/httputil"
 )
 
 type ClientParameters struct {
@@ -96,7 +95,7 @@ func buildClient(credentials *Credentials, configurationType string) {
 		AccessToken: accessToken,
 	}
 	clientErr = nil
-
+	//logger.Debug("access_token", accessToken)
 	return
 }
 
@@ -126,11 +125,14 @@ func (c *Client) POST(url string, payload []byte) (map[string]interface{}, error
 	req.Header.Set("X-CloudKnox-Access-Token", c.AccessToken)
 	req.Header.Set("Content-Type", "application/json")
 
+	// req_dump, _ := httputil.DumpRequest(req, true)
+	// logger.Debug("req_dump", req_dump)
+
 	client := &http.Client{}
 	resp, err := client.Do(req)
 
-	response_dump, _ := httputil.DumpResponse(resp, true)
-	logger.Debug("dump", response_dump)
+	// response_dump, _ := httputil.DumpResponse(resp, true)
+	// logger.Debug("response_dump", response_dump)
 
 	if err != nil {
 		logger.Error("resp", resp, "http_error", err.Error())

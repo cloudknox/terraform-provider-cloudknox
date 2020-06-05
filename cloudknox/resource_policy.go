@@ -48,18 +48,22 @@ func resourcePolicy() *schema.Resource {
 			"filter_history_days": {
 				Type:     schema.TypeInt,
 				Optional: true,
+				Default:  nil,
 			},
 			"filter_preserve_reads": {
 				Type:     schema.TypeBool,
 				Optional: true,
+				Default:  nil,
 			},
 			"filter_history_start_time_millis": {
 				Type:     schema.TypeInt,
 				Optional: true,
+				Default:  nil,
 			},
 			"filter_history_end_time_millis": {
 				Type:     schema.TypeInt,
 				Optional: true,
+				Default:  nil,
 			},
 			"request_params_scope": {
 				Type:     schema.TypeString,
@@ -98,10 +102,25 @@ func resourcePolicyCreate(d *schema.ResourceData, m interface{}) error {
 	payload.AuthSystemInfo.Type = d.Get("auth_system_info").(map[string]interface{})["type"].(string)
 	payload.IdentityType = d.Get("identity_type").(string)
 	payload.IdentityIds = d.Get("identity_ids")
-	payload.Filter.HistoryDays = d.Get("filter_history_days").(int)
+
+	var days = d.Get("filter_history_days").(int)
+	var start int = d.Get("filter_history_start_time_millis").(int)
+	var end int = d.Get("filter_history_end_time_millis").(int)
+
+	if days != 0 {
+		logger.Debug("msg", "Filter History Days Given", "days", days)
+		payload.Filter.HistoryDays = days
+	}
+
+	if start != 0 && end != 0 {
+		logger.Debug("msg", "Filter History Bounds Given")
+		payload.Filter.HistoryDuration = &apiHandler.HD{
+			StartTime: start,
+			EndTime:   end,
+		}
+	}
+
 	payload.Filter.PreserveReads = d.Get("filter_preserve_reads").(bool)
-	payload.Filter.HistoryDuration.StartTime = d.Get("filter_history_start_time_millis").(int)
-	payload.Filter.HistoryDuration.EndTime = d.Get("filter_history_end_time_millis").(int)
 
 	payload.RequestParams.Scope = d.Get("request_params_scope").(string)
 	payload.RequestParams.Resource = d.Get("request_params_resource").(string)
