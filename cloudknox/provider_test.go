@@ -22,6 +22,6 @@ func TestGoodCredentials(t *testing.T) {
 
 }
 
-func TestBadCredentials(t *tessting.T) {
+func TestBadCredentials(t *testing.T) {
 
 }

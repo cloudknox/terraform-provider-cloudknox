@@ -108,8 +108,6 @@ func setClientConfiguration(parameters *ClientParameters) {
 				return
 
 			}
-
-			return
 		},
 	)
 
