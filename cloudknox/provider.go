@@ -58,6 +58,6 @@ func init() {
 
 		"shared_credentials_file": "Path/Filename of the HOCON credentials file.",
 
-		"profile": "Profile for (SERVICE_ACCOUNT_ID, ACCESS_KEY, SECRET_KEY) triplet you would like to use.",
+		"profile": "Profile for (SERVICE_ACCOUNT_ID, ACCESS_KEY, SECRET_KEY) triplet you would like to use in a HOCON credentials file.",
 	}
 }
