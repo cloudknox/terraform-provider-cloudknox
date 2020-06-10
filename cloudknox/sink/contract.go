@@ -23,26 +23,34 @@ func BuildContractWriter(resource string, platform string, args map[string]strin
 	switch resource {
 	case "cloudknox_policy":
 		logger.Info("resource", "cloudknox_policy")
-		switch platform {
-		case "aws":
-			logger.Info("platform", "aws")
-			var aws = aws.PolicyContractWriter{Args: args}
-			return aws, nil
-		case "azure":
-			logger.Info("platform", "azure")
-			var azure = azure.PolicyContractWriter{Args: args}
-			return azure, nil
-		case "gcp":
-			logger.Info("platform", "gcp")
-			var gcp = gcp.PolicyContractWriter{Args: args}
-			return gcp, nil
-		case "vcenter":
-			logger.Info("platform", "vcenter")
-			return nil, nil
-		}
+		return getPolicyContract(platform, args)
 	default:
 		logger.Error("msg", "Invalid Resource", "resource", "default")
 	}
 
 	return nil, errors.New("Invalid Platform")
+}
+
+func getPolicyContract(platform string, args map[string]string) (ContractWriter, error) {
+	logger := common.GetLogger()
+	logger.Debug("msg", "Getting contract associated with platform for policy resource")
+	switch platform {
+	case "aws":
+		logger.Info("platform", "aws")
+		var aws = aws.PolicyContractWriter{Args: args}
+		return aws, nil
+	case "azure":
+		logger.Info("platform", "azure")
+		var azure = azure.PolicyContractWriter{Args: args}
+		return azure, nil
+	case "gcp":
+		logger.Info("platform", "gcp")
+		var gcp = gcp.PolicyContractWriter{Args: args}
+		return gcp, nil
+	case "vcenter":
+		logger.Info("platform", "vcenter")
+		return nil, nil
+	}
+
+	return nil, nil
 }

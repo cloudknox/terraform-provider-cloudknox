@@ -9,16 +9,6 @@ import (
 
 /* Private Variables */
 
-type Constants struct {
-	BaseURL string `yaml:"base_url"`
-	Routes  struct {
-		Auth   string `yaml:"authentication"`
-		Policy struct {
-			Create string `yaml:"create"`
-		} `yaml:"policy"`
-	} `yaml:"routes"`
-}
-
 var constants Constants
 var constantConfigOnce sync.Once
 

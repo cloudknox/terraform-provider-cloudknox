@@ -8,19 +8,19 @@ type PolicyData struct {
 	IdentityType string      `json:"identityType"`
 	IdentityIds  interface{} `json:"identityIds"`
 	Filter       struct {
-		HistoryDays     int  `json:"historyDays"`
-		PreserveReads   bool `json:"preserveReads"`
-		HistoryDuration *HD  `json:"historyDuration, omitempty"`
+		HistoryDays     int              `json:"historyDays"`
+		PreserveReads   bool             `json:"preserveReads"`
+		HistoryDuration *HistoryDuration `json:"historyDuration, omitempty"`
 	} `json:"filter"`
-	RequestParams *RP `json:"requestParams, omitempty"`
+	RequestParams *RequestParams `json:"requestParams, omitempty"`
 }
 
-type HD struct {
+type HistoryDuration struct {
 	StartTime int `json:"startTime"`
 	EndTime   int `json:"endTime"`
 }
 
-type RP struct {
+type RequestParams struct {
 	Scope     interface{} `json:"scope, omitempty"`
 	Resource  interface{} `json:"resource, omitempty"`
 	Resources interface{} `json:"resources, omitempty"`

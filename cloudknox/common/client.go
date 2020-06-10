@@ -8,21 +8,6 @@ import (
 	"net/http"
 )
 
-type ClientParameters struct {
-	SharedCredentialsFile string
-	Profile               string
-}
-
-type Credentials struct {
-	ServiceAccountID string `json:"serviceAccountId"`
-	AccessKey        string `json:"accessKey"`
-	SecretKey        string `json:"secretKey"`
-}
-
-type Client struct {
-	AccessToken string
-}
-
 /* Private Variables */
 var credentials *Credentials
 var configType string
