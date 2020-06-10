@@ -2,10 +2,11 @@ package vcenter
 
 import "cloudknox/terraform-provider-cloudknox/cloudknox/common"
 
-type ContractWriter struct {
+type PolicyContractWriter struct {
+	Args map[string]string
 }
 
-func (vCenter ContractWriter) WritePolicy() error {
+func (vCenter PolicyContractWriter) Write() error {
 	logger := common.GetLogger()
 	logger.Info("msg", "Writing vCenter Policy")
 	return nil

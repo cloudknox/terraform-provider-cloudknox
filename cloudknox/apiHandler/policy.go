@@ -2,37 +2,9 @@ package apiHandler
 
 import (
 	"cloudknox/terraform-provider-cloudknox/cloudknox/common"
-	"cloudknox/terraform-provider-cloudknox/cloudknox/sink"
 	"encoding/json"
 	"time"
 )
-
-type PolicyData struct {
-	AuthSystemInfo struct {
-		ID   string `json:"id"`
-		Type string `json:"type"`
-	} `json:"authSystemInfo"`
-	IdentityType string      `json:"identityType"`
-	IdentityIds  interface{} `json:"identityIds"`
-	Filter       struct {
-		HistoryDays     int  `json:"historyDays"`
-		PreserveReads   bool `json:"preserveReads"`
-		HistoryDuration *HD  `json:"historyDuration, omitempty"`
-	} `json:"filter"`
-	RequestParams *RP `json:"requestParams, omitempty"`
-}
-
-type HD struct {
-	StartTime int `json:"startTime"`
-	EndTime   int `json:"endTime"`
-}
-
-type RP struct {
-	Scope     interface{} `json:"scope, omitempty"`
-	Resource  interface{} `json:"resource, omitempty"`
-	Resources interface{} `json:"resources, omitempty"`
-	Condition interface{} `json:"condition, omitempty"`
-}
 
 func NewPolicy(platform string, name string, outputPath string, payload *PolicyData) error {
 	logger := common.GetLogger()
@@ -56,29 +28,12 @@ func NewPolicy(platform string, name string, outputPath string, payload *PolicyD
 		logger.Info("msg", "Post Request Successful")
 	}
 
-	logger.Info("msg", "Begin Write Sequence")
-	err = writePolicy(platform, name, outputPath, policy)
-
-	if err != nil {
-		logger.Error("msg", "Unable to Write Policy", "write_error", err.Error())
-		return err
-	}
-
-	logger.Info("msg", "Write Sequence Completed Successfully")
-
-	return nil
-}
-
-func writePolicy(platform string, name string, outputPath string, policy map[string]interface{}) error {
-
-	logger := common.GetLogger()
-
-	jsonString, err := json.MarshalIndent(policy["data"], "\t", "\t")
+	policyJsonString, err := json.MarshalIndent(policy["data"], "\t", "\t")
 
 	// logger.Debug("payload", jsonString)
 
 	if err != nil {
-		logger.Error("msg", "JSON Marshaling Error while Preparing Policy", "json_error", err)
+		logger.Error("msg", "JSON Marshaling Error While Preparing Data", "json_error", err)
 	}
 
 	args := map[string]string{
@@ -86,20 +41,18 @@ func writePolicy(platform string, name string, outputPath string, policy map[str
 		"description": "Cloudknox Generated IAM Policy for " + platform + " at " + time.Now().String(),
 		"output_path": outputPath,
 		"aws_path":    "/",
-		"policy":      string(jsonString),
+		"data":        string(policyJsonString),
 	}
 
-	contract, err := sink.BuildContract(platform, args)
+	logger.Info("msg", "Begin Write Sequence")
+	err = writeResource("cloudknox_policy", platform, args)
 
 	if err != nil {
-		logger.Error("msg", "Error while Building Contract", "contract_error", err)
+		logger.Error("msg", "Unable to Write Policy", "write_error", err.Error())
+		return err
 	}
 
-	err = contract.WritePolicy()
-
-	if err != nil {
-		logger.Error("msg", "Error while Writing Policy", "fileio_error", err)
-	}
+	logger.Info("msg", "Write Sequence Completed Successfully")
 
 	return nil
 }

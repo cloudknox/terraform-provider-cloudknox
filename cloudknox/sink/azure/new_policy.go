@@ -7,25 +7,22 @@ import (
 	"io/ioutil"
 )
 
-type ContractWriter struct {
-	Name        string
-	OutputPath  string
-	Description string
-	Policy      string
+type PolicyContractWriter struct {
+	Args map[string]string
 }
 
-func (azure ContractWriter) WritePolicy() error {
+func (azure PolicyContractWriter) Write() error {
 	logger := common.GetLogger()
 	logger.Info("msg", "Writing Azure Policy")
 
 	//Turn the given policy into a map so that we can extract even more fields
 	policy := make(map[string]interface{})
 
-	err := json.Unmarshal([]byte(azure.Policy), &policy)
+	err := json.Unmarshal([]byte(azure.Args["data"]), &policy)
 
 	if err != nil {
 		logger.Error("msg", "Unable to extract response from body", "unmarshal_error", err)
-		logger.Error("policy", azure.Policy)
+		logger.Error("policy", azure.Args["data"])
 		return err
 	}
 
@@ -63,7 +60,7 @@ func (azure ContractWriter) WritePolicy() error {
 
 	scopes_str := linePrint(scopes_arr)
 
-	name := policy["Name"]
+	policy_name := policy["Name"]
 
 	//We set the resource scope to the first available scope, reccomended by AZURE terraform provider
 	template := fmt.Sprintf(
@@ -81,12 +78,14 @@ func (azure ContractWriter) WritePolicy() error {
 		  
 			assignable_scopes = [%s
 			]
-		`, azure.Name, name, scopes_arr[0], azure.Description, actions_str, not_actions_str, scopes_str)
+		`, azure.Args["name"], policy_name, scopes_arr[0], azure.Args["description"], actions_str, not_actions_str, scopes_str)
 
 	suffix := "\r\n}"
 
 	//Write the template to file after filling out the fields
-	err = ioutil.WriteFile(azure.OutputPath+"cloudknox-azure-"+azure.Name+".tf", []byte(template+suffix), 0644)
+
+	filename := fmt.Sprintf("%scloudknox-azure-%s.tf", azure.Args["output_path"], azure.Args["name"])
+	err = ioutil.WriteFile(filename, []byte(template+suffix), 0644)
 
 	if err != nil {
 		logger.Error("msg", "FileIO Error", "file_error", err)
