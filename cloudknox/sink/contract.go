@@ -10,44 +10,38 @@ import (
 )
 
 type ContractWriter interface {
-	WritePolicy() error
+	Write() error
 }
 
-func BuildContract(platform string, args map[string]string) (ContractWriter, error) {
+func BuildContractWriter(resource string, platform string, args map[string]string) (ContractWriter, error) {
 	logger := common.GetLogger()
 	logger.Info("msg", "Getting Contract")
-	switch strings.ToLower(platform) {
-	case "aws":
-		logger.Info("platform", "aws")
-		acw := aws.ContractWriter{
-			Name:        args["name"],
-			OutputPath:  args["output_path"],
-			AWSPath:     args["aws_path"],
-			Description: args["description"],
-			Policy:      args["policy"],
+
+	resource = strings.ToLower(resource)
+	platform = strings.ToLower(platform)
+
+	switch resource {
+	case "cloudknox_policy":
+		logger.Info("resource", "cloudknox_policy")
+		switch platform {
+		case "aws":
+			logger.Info("platform", "aws")
+			var aws = aws.PolicyContractWriter{Args: args}
+			return aws, nil
+		case "azure":
+			logger.Info("platform", "azure")
+			var azure = azure.PolicyContractWriter{Args: args}
+			return azure, nil
+		case "gcp":
+			logger.Info("platform", "gcp")
+			var gcp = gcp.PolicyContractWriter{Args: args}
+			return gcp, nil
+		case "vcenter":
+			logger.Info("platform", "vcenter")
+			return nil, nil
 		}
-		return acw, nil
-	case "azure":
-		logger.Info("platform", "azure")
-		azure := azure.ContractWriter{
-			Name:        args["name"],
-			OutputPath:  args["output_path"],
-			Description: args["description"],
-			Policy:      args["policy"],
-		}
-		return azure, nil
-	case "gcp":
-		logger.Info("platform", "gcp")
-		gcp := gcp.ContractWriter{
-			Name:        args["name"],
-			OutputPath:  args["output_path"],
-			Description: args["description"],
-			Policy:      args["policy"],
-		}
-		return gcp, nil
-	case "vcenter":
-		logger.Info("platform", "vcenter")
-		return nil, nil
+	default:
+		logger.Error("msg", "Invalid Resource", "resource", "default")
 	}
 
 	return nil, errors.New("Invalid Platform")

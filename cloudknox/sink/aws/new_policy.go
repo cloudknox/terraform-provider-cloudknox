@@ -6,15 +6,11 @@ import (
 	"io/ioutil"
 )
 
-type ContractWriter struct {
-	Name        string
-	OutputPath  string
-	AWSPath     string
-	Description string
-	Policy      string
+type PolicyContractWriter struct {
+	Args map[string]string
 }
 
-func (aws ContractWriter) WritePolicy() error {
+func (aws PolicyContractWriter) Write() error {
 	logger := common.GetLogger()
 	logger.Info("msg", "Writing AWS Policy")
 
@@ -24,11 +20,13 @@ func (aws ContractWriter) WritePolicy() error {
 		path        = "%s"
 		description = "%s"
 		policy = <<EOF
-		%s'`, aws.Name, aws.Name, aws.AWSPath, aws.Description, aws.Policy)
+		%s'`, aws.Args["name"], aws.Args["name"], aws.Args["aws_path"], aws.Args["description"], aws.Args["data"])
 
 	suffix := "\nEOF\n}"
 
-	err := ioutil.WriteFile(aws.OutputPath+"cloudknox-aws-"+aws.Name+".tf", []byte(template+suffix), 0644)
+	filename := fmt.Sprintf("%scloudknox-aws-%s.tf", aws.Args["output_path"], aws.Args["name"])
+
+	err := ioutil.WriteFile(filename, []byte(template+suffix), 0644)
 
 	if err != nil {
 		logger.Error("msg", "FileIO Error", "file_error", err)

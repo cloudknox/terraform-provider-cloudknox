@@ -7,14 +7,11 @@ import (
 	"io/ioutil"
 )
 
-type ContractWriter struct {
-	Name        string
-	OutputPath  string
-	Description string
-	Policy      string
+type PolicyContractWriter struct {
+	Args map[string]string
 }
 
-func (gcp ContractWriter) WritePolicy() error {
+func (gcp PolicyContractWriter) Write() error {
 
 	logger := common.GetLogger()
 	logger.Info("msg", "Writing GCP Policy")
@@ -22,11 +19,11 @@ func (gcp ContractWriter) WritePolicy() error {
 	//Turn the given policy into a map so that we can extract even more fields
 	policy := make(map[string]interface{})
 
-	err := json.Unmarshal([]byte(gcp.Policy), &policy)
+	err := json.Unmarshal([]byte(gcp.Args["data"]), &policy)
 
 	if err != nil {
 		logger.Error("msg", "Unable to extract response from body", "unmarshal_error", err)
-		logger.Error("policy", gcp.Policy)
+		logger.Error("policy", gcp.Args["data"])
 		return err
 	}
 
@@ -49,12 +46,15 @@ func (gcp ContractWriter) WritePolicy() error {
 		title		= "%s"
 		description = "%s"
 		permissions = [%s
-		`, gcp.Name, policy["roleId"], gcp.Name, gcp.Description, permissions_str)
+		`, gcp.Args["name"], policy["roleId"], gcp.Args["name"], gcp.Args["description"], permissions_str)
 
 	suffix := "]\r\n}"
 
 	//Write the template to file after filling out the fields
-	err = ioutil.WriteFile(gcp.OutputPath+"cloudknox-gcp-"+gcp.Name+".tf", []byte(template+suffix), 0644)
+
+	filename := fmt.Sprintf("%scloudknox-gcp-%s.tf", gcp.Args["output_path"], gcp.Args["name"])
+
+	err = ioutil.WriteFile(filename, []byte(template+suffix), 0644)
 
 	if err != nil {
 		logger.Error("msg", "FileIO Error", "file_error", err)
