@@ -1,13 +1,20 @@
-# base_url: "https://olympus.aws-staging.cloudknox.io"
+base_url: "https://olympus.aws-staging.cloudknox.io"
+
+routes:
+  authentication: "/api/v2/service-account/authenticate"
+  policy:
+    create: "/api/v2/role-policy/new"
+
+# base_url: "http://localhost:8081"
 
 # routes:
 #   authentication: "/api/v2/service-account/authenticate"
 #   policy:
 #     create: "/api/v2/role-policy/new"
 
-base_url: "http://localhost:8081"
+# base_url: "http://localhost:8080"
 
-routes:
-  authentication: "/api/v2/service-account/authenticate"
-  policy:
-    create: "/api/v2/role-policy/new"
+# routes:
+#   authentication: "/authenticate"
+#   policy:
+#     create: "/new-role-policy"
