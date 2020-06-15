@@ -26,7 +26,7 @@ func Provider() terraform.ResourceProvider {
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"cloudknox_policy": resourcePolicy(),
+			common.NewPolicy: resourcePolicy(),
 		},
 
 		ConfigureFunc: providerConfigure,

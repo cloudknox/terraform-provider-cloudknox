@@ -15,7 +15,7 @@ type Client struct {
 	AccessToken string
 }
 
-type Constants struct {
+type Configuration struct {
 	BaseURL string `yaml:"base_url"`
 	Routes  struct {
 		Auth   string `yaml:"authentication"`

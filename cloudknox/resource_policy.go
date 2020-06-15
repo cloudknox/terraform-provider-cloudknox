@@ -118,7 +118,7 @@ func resourcePolicyCreate(d *schema.ResourceData, m interface{}) error {
 
 	if start != 0 && end != 0 {
 		logger.Debug("msg", "Filter History Bounds Given")
-		payload.Filter.HistoryDuration = &apiHandler.HD{
+		payload.Filter.HistoryDuration = &apiHandler.HistoryDuration{
 			StartTime: start,
 			EndTime:   end,
 		}
@@ -138,7 +138,7 @@ func resourcePolicyCreate(d *schema.ResourceData, m interface{}) error {
 	} else {
 		logger.Debug("msg", "Request Params Given")
 
-		var requestParams apiHandler.RP
+		var requestParams apiHandler.RequestParams
 
 		if scope.(string) == "" {
 			requestParams.Scope = nil

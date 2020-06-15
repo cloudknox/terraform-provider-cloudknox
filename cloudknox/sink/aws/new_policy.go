@@ -14,13 +14,17 @@ func (aws PolicyContractWriter) Write() error {
 	logger := common.GetLogger()
 	logger.Info("msg", "Writing AWS Policy")
 
+	policy := aws.Args["data"]
+
+	logger.Debug("msg", "Policy Character Count", "count", len(policy))
+
 	template := fmt.Sprintf(
 		`resource "aws_iam_policy" "%s" {
 	    name        = "%s"
 		path        = "%s"
 		description = "%s"
 		policy = <<EOF
-		%s'`, aws.Args["name"], aws.Args["name"], aws.Args["aws_path"], aws.Args["description"], aws.Args["data"])
+		%s'`, aws.Args["name"], aws.Args["name"], aws.Args["aws_path"], aws.Args["description"], policy)
 
 	suffix := "\nEOF\n}"
 

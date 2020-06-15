@@ -8,7 +8,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/go-akka/configuration"
+	config "github.com/go-akka/configuration"
 	"github.com/mitchellh/go-homedir"
 )
 
@@ -123,7 +123,7 @@ func readHOCON(path string, profile string) error {
 	// Convert []byte to string and print to screen
 	text := string(content)
 
-	conf := configuration.ParseString(text)
+	conf := config.ParseString(text)
 
 	creds.ServiceAccountID = conf.GetString("profiles." + profile + ".service_account_id")
 	creds.AccessKey = conf.GetString("profiles." + profile + ".access_key")

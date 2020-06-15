@@ -9,13 +9,19 @@ import (
 
 /* Private Variables */
 
-var constants Constants
-var constantConfigOnce sync.Once
+var configuration Configuration
+var configOnce sync.Once
+
+/* Public Variables */
+
+const (
+	NewPolicy string = "cloudknox_policy"
+)
 
 /* Public Functions */
 
-func SetConstantsConfiguration(resource_path string) {
-	constantConfigOnce.Do(
+func setConfiguration(resource_path string) {
+	configOnce.Do(
 		func() {
 			logger := GetLogger()
 			logger.Debug("msg", "Setting Constants")
@@ -24,7 +30,7 @@ func SetConstantsConfiguration(resource_path string) {
 			if err != nil {
 				logger.Debug("msg", "Error Reading Configuration File", "file_read_error", err)
 			}
-			err = yaml.Unmarshal(yamlFile, &constants)
+			err = yaml.Unmarshal(yamlFile, &configuration)
 			if err != nil {
 				logger.Debug("msg", "Unable to Decode Into Struct", "yaml_decode_error", err)
 			}
@@ -41,13 +47,13 @@ func SetConstantsConfiguration(resource_path string) {
 }
 
 func BASE_URL() string {
-	return constants.BaseURL
+	return configuration.BaseURL
 }
 
 func AUTH() string {
-	return BASE_URL() + constants.Routes.Auth
+	return BASE_URL() + configuration.Routes.Auth
 }
 
 func NEW_POLICY() string {
-	return BASE_URL() + constants.Routes.Policy.Create
+	return BASE_URL() + configuration.Routes.Policy.Create
 }
