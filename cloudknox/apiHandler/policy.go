@@ -20,7 +20,9 @@ func NewPolicy(platform string, name string, outputPath string, payload *PolicyD
 	payload_bytes, _ := json.Marshal(payload)
 	// logger.Debug("msg", "Payload post-marshal", "payload", string(payload_bytes))
 
-	policy, err := client.POST(common.NEW_POLICY(), payload_bytes)
+	url := common.GetConfiguration().BaseURL + common.GetConfiguration().Routes.Policy.Create
+
+	policy, err := client.POST(url, payload_bytes)
 	if err != nil {
 		logger.Error("msg", "Unable to complete POST Request", "error", err.Error())
 		return err

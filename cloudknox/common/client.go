@@ -34,8 +34,10 @@ func buildClient(credentials *Credentials, configurationType string) {
 	// Parameters
 	var jsonBytes = credentialsToJSON(credentials)
 
+	url := GetConfiguration().BaseURL + GetConfiguration().Routes.Auth
+
 	// Request Configuration
-	req, err := http.NewRequest("POST", AUTH(), bytes.NewBuffer(jsonBytes))
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonBytes))
 	req.Header.Set("Content-Type", "application/json")
 
 	// Setup Client and Make Request

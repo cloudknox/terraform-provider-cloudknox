@@ -7,6 +7,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 )
 
+const (
+	resourcePath = "./cloudknox/config/resources.yaml"
+)
+
 // Provider creates and returns a Terraform Provider with populated Schema
 func Provider() terraform.ResourceProvider {
 	logger := common.GetLogger()
@@ -44,8 +48,9 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 		Profile:               d.Get("profile").(string),
 	}
 
-	common.SetConfiguration(parameters) //Build Client Struct using parameters
-	return common.GetClient()           //Return the Client Struct and the Error
+	common.SetConfiguration(resourcePath)
+	common.SetClientConfiguration(parameters) //Build Client Struct using parameters
+	return common.GetClient()                 //Return the Client Struct and the Error
 }
 
 var descriptions map[string]string

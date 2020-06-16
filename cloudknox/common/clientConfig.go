@@ -16,10 +16,6 @@ import (
 var clientConfigOnce sync.Once
 var creds *Credentials
 
-const (
-	RESOURCE_PATH = "./cloudknox/config/resources.yaml"
-)
-
 func setClientConfiguration(parameters *ClientParameters) {
 	clientConfigOnce.Do(
 		func() {
@@ -140,7 +136,6 @@ func readHOCON(path string, profile string) error {
 
 /* Public Functions */
 
-func SetConfiguration(parameters *ClientParameters) {
-	SetConstantsConfiguration(RESOURCE_PATH)
+func SetClientConfiguration(parameters *ClientParameters) {
 	setClientConfiguration(parameters)
 }
