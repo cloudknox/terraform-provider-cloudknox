@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 )
@@ -53,15 +54,15 @@ func buildClient(credentials *Credentials, configurationType string) {
 
 	// Get Response
 	logger.Info("msg", "Got HTTP Response")
+	body, _ := ioutil.ReadAll(resp.Body)
 	if resp.StatusCode != http.StatusOK {
 		logger.Error("msg", "HTTP Response status != 200 OK", "resp", resp.Status, "credentials", "invalid")
 		client = nil
-		clientErr = errors.New("Invalid Credentials")
+		clientErr = fmt.Errorf("Error During Authentication, Server Responded With %s", resp.Status)
 		return
 	} else {
 		logger.Info("msg", "HTTP Response status == 200 OK", "resp", resp.Status, "credentials", "valid")
 	}
-	body, _ := ioutil.ReadAll(resp.Body)
 	jsonBody := string(body)
 
 	// Create Map from Body of Response

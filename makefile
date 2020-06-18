@@ -6,7 +6,7 @@ build: main.go
 test: terraform-provider-cloudknox.exe main.tf ./cloudknox/config/resources.yaml
 	find ./ -name "*.tf*" -not -name "main.tf" -exec rm {} \;
 	terraform init
-	terraform apply -input=false -auto-approve
+	terraform apply -input=false -auto-approve -parallelism=10
 
 clean:
 	find ./ -name "*.tf" -not -name "main.tf" -exec rm {} \;
