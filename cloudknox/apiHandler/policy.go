@@ -2,6 +2,7 @@ package apiHandler
 
 import (
 	"cloudknox/terraform-provider-cloudknox/cloudknox/common"
+	"cloudknox/terraform-provider-cloudknox/cloudknox/utils"
 	"encoding/json"
 	"time"
 )
@@ -30,9 +31,10 @@ func NewPolicy(platform string, name string, outputPath string, payload *PolicyD
 		logger.Info("msg", "Post Request Successful")
 	}
 
-	policyJsonString, err := json.MarshalIndent(policy["data"], "\t", "\t")
+	policyJsonBytes, err := json.Marshal(policy["data"])
+	policyJsonString := string(policyJsonBytes)
 
-	// logger.Debug("payload", jsonString)
+	logger.Debug("policyJsonString", utils.Truncate(policyJsonString, 30))
 
 	if err != nil {
 		logger.Error("msg", "JSON Marshaling Error While Preparing Data", "json_error", err)
@@ -43,7 +45,7 @@ func NewPolicy(platform string, name string, outputPath string, payload *PolicyD
 		"description": "Cloudknox Generated IAM Policy for " + platform + " at " + time.Now().String(),
 		"output_path": outputPath,
 		"aws_path":    "/",
-		"data":        string(policyJsonString),
+		"data":        policyJsonString,
 	}
 
 	logger.Info("msg", "Begin Write Sequence")

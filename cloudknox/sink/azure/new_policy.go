@@ -84,7 +84,7 @@ func (azure PolicyContractWriter) Write() error {
 
 	//Write the template to file after filling out the fields
 
-	filename := fmt.Sprintf("%scloudknox-azure-%s.tf", azure.Args["output_path"], azure.Args["name"])
+	filename := fmt.Sprintf("%s%s.tf", azure.Args["output_path"], azure.Args["name"])
 	err = ioutil.WriteFile(filename, []byte(template+suffix), 0644)
 
 	if err != nil {

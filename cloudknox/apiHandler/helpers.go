@@ -13,12 +13,14 @@ func writeResource(resource string, platform string, args map[string]string) err
 
 	if err != nil {
 		logger.Error("msg", "Error while Building Contract", "contract_error", err)
+		return err
 	}
 
 	err = contract.Write()
 
 	if err != nil {
 		logger.Error("msg", "Error while Writing Policy", "fileio_error", err)
+		return err
 	}
 
 	return nil

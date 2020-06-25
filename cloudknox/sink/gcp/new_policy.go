@@ -52,7 +52,7 @@ func (gcp PolicyContractWriter) Write() error {
 
 	//Write the template to file after filling out the fields
 
-	filename := fmt.Sprintf("%scloudknox-gcp-%s.tf", gcp.Args["output_path"], gcp.Args["name"])
+	filename := fmt.Sprintf("%s%s.tf", gcp.Args["output_path"], gcp.Args["name"])
 
 	err = ioutil.WriteFile(filename, []byte(template+suffix), 0644)
 

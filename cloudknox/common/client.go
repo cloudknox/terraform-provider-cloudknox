@@ -2,11 +2,13 @@ package common
 
 import (
 	"bytes"
+	"cloudknox/terraform-provider-cloudknox/cloudknox/utils"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/http/httputil"
 )
 
 /* Private Variables */
@@ -111,14 +113,14 @@ func (c *Client) POST(url string, payload []byte) (map[string]interface{}, error
 	req.Header.Set("X-CloudKnox-Access-Token", c.AccessToken)
 	req.Header.Set("Content-Type", "application/json")
 
-	// req_dump, _ := httputil.DumpRequest(req, true)
-	// logger.Debug("req_dump", req_dump)
+	req_dump, _ := httputil.DumpRequest(req, true)
+	logger.Debug("request_dump", utils.Truncate(string(req_dump), 30))
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
 
-	// response_dump, _ := httputil.DumpResponse(resp, true)
-	// logger.Debug("response_dump", response_dump)
+	response_dump, _ := httputil.DumpResponse(resp, true)
+	logger.Debug("response_dump", utils.Truncate(string(response_dump), 30))
 
 	if err != nil {
 		logger.Error("resp", resp, "http_error", err.Error())

@@ -14,15 +14,11 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func ExitOnError(l *logrus.Logger, err error, message string) {
-	if err != nil {
-		l.Fatalf("%s![%s]", message, err.Error())
-	}
-}
-
-func LogOnError(l *logrus.Logger, err error, message string) {
-	if err != nil {
-		l.Errorf("%s![%s]", message, err.Error())
+func Truncate(str string, n int) string {
+	if len(str) < n {
+		return str
+	} else {
+		return str[0:n] + " ... <TRUNCATED>"
 	}
 }
 

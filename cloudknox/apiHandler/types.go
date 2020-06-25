@@ -8,7 +8,7 @@ type PolicyData struct {
 	IdentityType string      `json:"identityType"`
 	IdentityIds  interface{} `json:"identityIds"`
 	Filter       struct {
-		HistoryDays     int              `json:"historyDays"`
+		HistoryDays     interface{}      `json:"historyDays, omitempty"`
 		PreserveReads   bool             `json:"preserveReads"`
 		HistoryDuration *HistoryDuration `json:"historyDuration, omitempty"`
 	} `json:"filter"`

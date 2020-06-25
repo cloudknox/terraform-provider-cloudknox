@@ -3,6 +3,7 @@ package cloudknox
 import (
 	"cloudknox/terraform-provider-cloudknox/cloudknox/apiHandler"
 	"cloudknox/terraform-provider-cloudknox/cloudknox/common"
+	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
@@ -81,7 +82,6 @@ func resourcePolicy() *schema.Resource {
 					Type: schema.TypeString,
 				},
 				Optional: true,
-				Default:  nil,
 			},
 			"request_params_condition": {
 				Type:     schema.TypeString,
@@ -131,9 +131,11 @@ func resourcePolicyCreate(d *schema.ResourceData, m interface{}) error {
 	var resources interface{} = d.Get("request_params_resources")
 	var condition interface{} = d.Get("request_params_condition")
 
-	logger.Debug("scope", scope.(string), "resource", resource.(string), "resources", resources, "condition", condition.(string))
+	resourcesString := fmt.Sprintf("%v", resources)
 
-	if scope == "" && resource == "" && resources == nil && condition == "" {
+	logger.Debug("scope", scope.(string), "resource", resource.(string), "resources", resourcesString, "condition", condition.(string))
+
+	if scope == "" && resource == "" && resourcesString == "[]" && condition == "" {
 		logger.Debug("msg", "No Request Params Given")
 	} else {
 		logger.Debug("msg", "Request Params Given")
@@ -152,7 +154,13 @@ func resourcePolicyCreate(d *schema.ResourceData, m interface{}) error {
 			requestParams.Resource = resource.(string)
 		}
 
-		requestParams.Resources = resources
+		if resourcesString == "[]" {
+			logger.Debug("msg", "Resources null")
+			requestParams.Resources = nil
+		} else {
+			logger.Debug("msg", "Resources non null")
+			requestParams.Resources = resources
+		}
 
 		if condition.(string) == "" {
 			requestParams.Condition = nil
