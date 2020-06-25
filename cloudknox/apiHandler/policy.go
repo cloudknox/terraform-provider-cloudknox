@@ -34,7 +34,7 @@ func NewPolicy(platform string, name string, outputPath string, payload *PolicyD
 	policyJsonBytes, err := json.Marshal(policy["data"])
 	policyJsonString := string(policyJsonBytes)
 
-	logger.Debug("policyJsonString", utils.Truncate(policyJsonString, 30))
+	logger.Debug("policyJsonString", utils.Truncate(policyJsonString, 30, true))
 
 	if err != nil {
 		logger.Error("msg", "JSON Marshaling Error While Preparing Data", "json_error", err)

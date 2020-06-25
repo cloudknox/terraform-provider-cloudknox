@@ -51,7 +51,7 @@ func (aws PolicyContractWriter) Write() error {
 		}
 		policyJsonString := string(policyJsonBytes)
 
-		logger.Info("policyName", policy.PolicyName, "policy", utils.Truncate(policyJsonString, 30))
+		logger.Info("policyName", policy.PolicyName, "policy", utils.Truncate(policyJsonString, 30, true))
 
 		logger.Debug("msg", "Policy Character Count", "count", len(policyJsonString))
 
