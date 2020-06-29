@@ -4,24 +4,25 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/hashicorp/terraform/terraform"
 )
 
-var testAccProviders map[string]terraform.ResourceProvider
-var testAccProvider *schema.Provider
+var TestAccProviders map[string]terraform.ResourceProvider
+var TestAccProvider terraform.ResourceProvider
 
 func init() {
-	//testProvider = Provider().(*schema.Provider)
+	TestAccProvider = Provider().(terraform.ResourceProvider)
+	TestAccProviders = map[string]terraform.ResourceProvider{
+		"cloudknox": TestAccProvider,
+	}
 }
 
 func TestProvider(t *testing.T) {
-
+	if err := Provider().(*schema.Provider).InternalValidate(); err != nil {
+		t.Fatalf("err: %s", err)
+	}
 }
 
-func TestGoodCredentials(t *testing.T) {
-
-}
-
-func TestBadCredentials(t *testing.T) {
-
+func TestProvider_impl(t *testing.T) {
+	var _ = Provider()
 }

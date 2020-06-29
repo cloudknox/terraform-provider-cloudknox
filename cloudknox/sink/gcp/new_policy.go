@@ -1,10 +1,10 @@
 package gcp
 
 import (
-	"cloudknox/terraform-provider-cloudknox/cloudknox/common"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"terraform-provider-cloudknox/cloudknox/common"
 )
 
 type PolicyContractWriter struct {

@@ -1,8 +1,8 @@
 package apiHandler
 
 import (
-	"cloudknox/terraform-provider-cloudknox/cloudknox/common"
-	"cloudknox/terraform-provider-cloudknox/cloudknox/sink"
+	"terraform-provider-cloudknox/cloudknox/common"
+	"terraform-provider-cloudknox/cloudknox/sink"
 )
 
 func writeResource(resource string, platform string, args map[string]string) error {

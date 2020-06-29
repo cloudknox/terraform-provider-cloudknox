@@ -1,6 +1,6 @@
 package vcenter
 
-import "cloudknox/terraform-provider-cloudknox/cloudknox/common"
+import "terraform-provider-cloudknox/cloudknox/common"
 
 type PolicyContractWriter struct {
 	Args map[string]string

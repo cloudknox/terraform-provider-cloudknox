@@ -1,11 +1,11 @@
 # OLYMPUS
 
-# base_url: "https://olympus.aws-staging.cloudknox.io"
+base_url: "https://olympus.aws-staging.cloudknox.io"
 
-# routes:
-#   authentication: "/api/v2/service-account/authenticate"
-#   policy:
-#     create: "/api/v2/role-policy/new"
+routes:
+  authentication: "/api/v2/service-account/authenticate"
+  policy:
+    create: "/api/v2/role-policy/new"
 
 
 # ATHENA
@@ -28,12 +28,12 @@
 
 # API SERVER
 
-base_url: "http://localhost:8081"
+# base_url: "http://localhost:8081"
 
-routes:
-  authentication: "/service-account/authenticate"
-  policy:
-    create: "/role-policy/new"
+# routes:
+#   authentication: "/service-account/authenticate"
+#   policy:
+#     create: "/role-policy/new"
 
 # KRAKEND
 

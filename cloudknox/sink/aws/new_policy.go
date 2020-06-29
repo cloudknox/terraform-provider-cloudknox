@@ -1,11 +1,11 @@
 package aws
 
 import (
-	"cloudknox/terraform-provider-cloudknox/cloudknox/common"
-	"cloudknox/terraform-provider-cloudknox/cloudknox/utils"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"terraform-provider-cloudknox/cloudknox/common"
+	"terraform-provider-cloudknox/cloudknox/utils"
 )
 
 type PolicyContractWriter struct {

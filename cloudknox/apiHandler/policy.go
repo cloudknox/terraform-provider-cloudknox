@@ -1,9 +1,9 @@
 package apiHandler
 
 import (
-	"cloudknox/terraform-provider-cloudknox/cloudknox/common"
-	"cloudknox/terraform-provider-cloudknox/cloudknox/utils"
 	"encoding/json"
+	"terraform-provider-cloudknox/cloudknox/common"
+	"terraform-provider-cloudknox/cloudknox/utils"
 	"time"
 )
 

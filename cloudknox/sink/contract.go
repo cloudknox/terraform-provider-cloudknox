@@ -1,12 +1,12 @@
 package sink
 
 import (
-	"cloudknox/terraform-provider-cloudknox/cloudknox/common"
-	"cloudknox/terraform-provider-cloudknox/cloudknox/sink/aws"
-	"cloudknox/terraform-provider-cloudknox/cloudknox/sink/azure"
-	"cloudknox/terraform-provider-cloudknox/cloudknox/sink/gcp"
 	"errors"
 	"strings"
+	"terraform-provider-cloudknox/cloudknox/common"
+	"terraform-provider-cloudknox/cloudknox/sink/aws"
+	"terraform-provider-cloudknox/cloudknox/sink/azure"
+	"terraform-provider-cloudknox/cloudknox/sink/gcp"
 )
 
 type ContractWriter interface {

@@ -2,13 +2,13 @@ package common
 
 import (
 	"bytes"
-	"cloudknox/terraform-provider-cloudknox/cloudknox/utils"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/httputil"
+	"terraform-provider-cloudknox/cloudknox/utils"
 )
 
 /* Private Variables */
@@ -53,6 +53,10 @@ func buildClient(credentials *Credentials, configurationType string) {
 		return
 	}
 	defer resp.Body.Close()
+
+	// dump, _ := httputil.DumpRequest(req, true)
+
+	// logger.Info("auth dump", dump)
 
 	// Get Response
 	logger.Info("msg", "Got HTTP Response")
@@ -141,6 +145,10 @@ func (c *Client) POST(url string, payload []byte) (map[string]interface{}, error
 	// Create Map from Body of Response
 	responseMap := make(map[string]interface{})
 	err = json.Unmarshal([]byte(jsonBody), &responseMap)
+
+	if err != nil {
+		err = fmt.Errorf(string(body))
+	}
 
 	return responseMap, err
 }
