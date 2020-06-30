@@ -1,3 +1,6 @@
+PKG_NAME=datadog
+DIR=~/.terraform.d/plugins
+
 CONFIGURATION_FILE= ./cloudknox/config/terraform-provider-cloudknox-config.yaml
 CONFIGURATION_DEST= ~/opt/cloudknox/
 LOG_DEST = ~/var/log/cloudknox/
@@ -7,7 +10,11 @@ default: build
 build: main.go
 	mkdir -p $(CONFIGURATION_DEST) && cp $(CONFIGURATION_FILE)  $(CONFIGURATION_DEST)
 	mkdir -p $(LOG_DEST)
-	go build -o terraform-provider-cloudknox.exe
+	go install
+
+install: 
+	mkdir -vp $(DIR)
+	go build -o $(DIR)/terraform-provider-cloudknox
 
 test: terraform-provider-cloudknox.exe main.tf $(CONFIGURATION_DEST)terraform-provider-cloudknox-config.yaml
 	find ./ -name "*.tf*" -not -name "main.tf" -exec rm {} \;

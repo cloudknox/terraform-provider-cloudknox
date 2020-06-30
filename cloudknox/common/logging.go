@@ -7,22 +7,19 @@ import (
 
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
-	"github.com/mitchellh/go-homedir"
 )
 
 var customLogger CustomLogger
 var loggerOnce sync.Once
 
 const (
-	output = "application.log" ///var/log/cloudknox/
+	output = "info.log"
 )
 
 func getLogger() CustomLogger {
 	loggerOnce.Do(
 		func() {
 			/* Initialize Logger */
-
-			home, _ := homedir.Dir()
 
 			err := os.Remove(output)
 
@@ -33,7 +30,7 @@ func getLogger() CustomLogger {
 				customLogger.logger = log.With(customLogger.logger, "time", log.DefaultTimestampUTC)
 				customLogger.Info("msg", "Successfully Created Logger Instance!")
 			} else {
-				fmt.Println("Unable to begin logging at "+home+output, err)
+				fmt.Println("Unable to begin logging")
 			}
 
 		},
@@ -42,14 +39,7 @@ func getLogger() CustomLogger {
 }
 
 func GetLogger() CustomLogger {
-	logger := getLogger()
-
-	// file, err := os.OpenFile(output, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
-	// if err != nil {
-	// 	logger.Fatal(err)
-	// }
-	// logger.SetOutput(file)
-	return logger
+	return getLogger()
 }
 
 type CustomLogger struct {
@@ -70,4 +60,9 @@ func (clog CustomLogger) Warn(args ...interface{}) {
 
 func (clog CustomLogger) Error(args ...interface{}) {
 	level.Error(clog.logger).Log(args...)
+}
+
+func (clog CustomLogger) Fatal(args ...interface{}) {
+	level.Error(clog.logger).Log(args...)
+	os.Exit(1)
 }
