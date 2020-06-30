@@ -15,7 +15,7 @@ func TestAccPolicy_Basic(t *testing.T) {
 				Config: testAccPolicyConfig(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
-						resourceName, "name", "test_policy"
+						resourceName, "name", "test_policy",
 					),
 				),
 			},

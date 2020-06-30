@@ -13,7 +13,7 @@ var customLogger CustomLogger
 var loggerOnce sync.Once
 
 const (
-	output = "info.log"
+	output = "/var/log/cloudknox/application.log"
 )
 
 func getLogger() CustomLogger {
@@ -30,7 +30,7 @@ func getLogger() CustomLogger {
 				customLogger.logger = log.With(customLogger.logger, "time", log.DefaultTimestampUTC)
 				customLogger.Info("msg", "Successfully Created Logger Instance!")
 			} else {
-				fmt.Println("Unable to begin logging")
+				fmt.Println("Unable to begin logging", err)
 			}
 
 		},

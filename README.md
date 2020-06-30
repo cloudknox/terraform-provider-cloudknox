@@ -36,7 +36,7 @@ profiles {
 
 Will be used if a `shared_credentials_file` is not provided
 
-Place `creds.conf` in `~\.cnx\` folder or `C:\Users\%USER_PROFILE%\.cnx\`
+Place `creds.conf` in `~/.cnx/` folder or `C:\Users\%USER_PROFILE%\.cnx\`
 
 ```HOCON
 profiles {

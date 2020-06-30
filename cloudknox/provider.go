@@ -5,11 +5,10 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
-	"github.com/mitchellh/go-homedir"
 )
 
 const (
-	resourcePath = "/opt/cloudknox/terraform-provider-cloudknox-config.yaml"
+	configPath = "/opt/cloudknox/terraform-provider-cloudknox-config.yaml"
 )
 
 // Provider creates and returns a Terraform Provider with populated Schema
@@ -49,9 +48,7 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 		Profile:               d.Get("profile").(string),
 	}
 
-	home, _ := homedir.Dir()
-
-	err := common.SetConfiguration(home + resourcePath)
+	err := common.SetConfiguration(configPath)
 
 	if err != nil {
 		return nil, err
