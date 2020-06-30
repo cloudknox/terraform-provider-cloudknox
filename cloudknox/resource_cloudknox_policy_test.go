@@ -3,20 +3,21 @@ package cloudknox
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 )
 
 func TestAccPolicy_Basic(t *testing.T) {
-	//resourceName := "cloudknox_policy.test_policy"
+	resourceName := "cloudknox_policy.test_policy"
 	resource.Test(t, resource.TestCase{
-		Providers: TestAccProviders,
+		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccPolicyConfig(),
-				// Check: resource.ComposeTestCheckFunc(
-				// 	resource.TestCheckResourceAttr(
-				// 		resourceName, "name", "test_policy"),
-				// ),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(
+						resourceName, "name", "test_policy"
+					),
+				),
 			},
 		},
 	})

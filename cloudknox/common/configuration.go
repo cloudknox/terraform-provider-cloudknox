@@ -10,6 +10,7 @@ import (
 /* Private Variables */
 
 var configuration Configuration
+var configurationError error
 var configOnce sync.Once
 
 /* Public Variables */
@@ -20,7 +21,7 @@ const (
 
 /* Public Functions */
 
-func SetConfiguration(resource_path string) {
+func SetConfiguration(resource_path string) error {
 	configOnce.Do(
 		func() {
 			logger := GetLogger()
@@ -29,15 +30,17 @@ func SetConfiguration(resource_path string) {
 			yamlFile, err := ioutil.ReadFile(resource_path)
 			if err != nil {
 				logger.Debug("msg", "Error Reading Configuration File", "file_read_error", err)
+				configurationError = err
 			}
 			err = yaml.Unmarshal(yamlFile, &configuration)
 			if err != nil {
 				logger.Debug("msg", "Unable to Decode Into Struct", "yaml_decode_error", err)
+				configurationError = err
 			}
 
 		},
 	)
-
+	return configurationError
 }
 
 func GetConfiguration() Configuration {

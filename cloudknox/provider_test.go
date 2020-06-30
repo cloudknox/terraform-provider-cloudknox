@@ -4,16 +4,16 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 )
 
-var TestAccProviders map[string]terraform.ResourceProvider
-var TestAccProvider terraform.ResourceProvider
+var testAccProviders map[string]terraform.ResourceProvider
+var testAccProvider *schema.Provider
 
 func init() {
-	TestAccProvider = Provider().(terraform.ResourceProvider)
-	TestAccProviders = map[string]terraform.ResourceProvider{
-		"cloudknox": TestAccProvider,
+	testAccProvider = Provider().(*schema.Provider)
+	testAccProviders = map[string]terraform.ResourceProvider{
+		"cloudknox": testAccProvider,
 	}
 }
 
@@ -24,5 +24,5 @@ func TestProvider(t *testing.T) {
 }
 
 func TestProvider_impl(t *testing.T) {
-	var _ = Provider()
+	var _ terraform.ResourceProvider = Provider()
 }

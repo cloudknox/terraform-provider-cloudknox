@@ -7,19 +7,22 @@ import (
 
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
+	"github.com/mitchellh/go-homedir"
 )
 
 var customLogger CustomLogger
 var loggerOnce sync.Once
 
 const (
-	output = "info.log"
+	output = "application.log" ///var/log/cloudknox/
 )
 
 func getLogger() CustomLogger {
 	loggerOnce.Do(
 		func() {
 			/* Initialize Logger */
+
+			home, _ := homedir.Dir()
 
 			err := os.Remove(output)
 
@@ -30,7 +33,7 @@ func getLogger() CustomLogger {
 				customLogger.logger = log.With(customLogger.logger, "time", log.DefaultTimestampUTC)
 				customLogger.Info("msg", "Successfully Created Logger Instance!")
 			} else {
-				fmt.Println("Unable to begin logging")
+				fmt.Println("Unable to begin logging at "+home+output, err)
 			}
 
 		},
