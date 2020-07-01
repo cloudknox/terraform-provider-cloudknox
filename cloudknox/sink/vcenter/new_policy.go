@@ -8,6 +8,6 @@ type PolicyContractWriter struct {
 
 func (vCenter PolicyContractWriter) Write() error {
 	logger := common.GetLogger()
-	logger.Info("msg", "Writing vCenter Policy")
+	logger.Info("msg", "writing vCenter policy")
 	return nil
 }

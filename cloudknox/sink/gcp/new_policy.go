@@ -14,7 +14,7 @@ type PolicyContractWriter struct {
 func (gcp PolicyContractWriter) Write() error {
 
 	logger := common.GetLogger()
-	logger.Info("msg", "Writing GCP Policy")
+	logger.Info("msg", "writing GCP policy")
 
 	//Turn the given policy into a map so that we can extract even more fields
 	policy := make(map[string]interface{})
@@ -22,7 +22,7 @@ func (gcp PolicyContractWriter) Write() error {
 	err := json.Unmarshal([]byte(gcp.Args["data"]), &policy)
 
 	if err != nil {
-		logger.Error("msg", "Unable to extract response from body", "unmarshal_error", err)
+		logger.Error("msg", "unable to extract response from body", "unmarshal_error", err)
 		logger.Error("policy", gcp.Args["data"])
 		return err
 	}
@@ -57,7 +57,7 @@ func (gcp PolicyContractWriter) Write() error {
 	err = ioutil.WriteFile(filename, []byte(template+suffix), 0644)
 
 	if err != nil {
-		logger.Error("msg", "FileIO Error", "file_error", err)
+		logger.Error("msg", "fileIO error", "file_error", err)
 		return err
 	}
 	return nil

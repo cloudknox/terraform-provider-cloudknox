@@ -26,7 +26,7 @@ func credentialsToJSON(credentials *Credentials) []byte {
 /* Private Functions */
 func buildClient(credentials *Credentials, configurationType string) {
 	logger := GetLogger()
-	logger.Info("msg", "Building Client", "config_type", configurationType)
+	logger.Info("msg", "building cloudknox client object", "config_type", configurationType)
 
 	configType = configurationType
 
@@ -76,7 +76,7 @@ func buildClient(credentials *Credentials, configurationType string) {
 	err = json.Unmarshal([]byte(jsonBody), &responseMap)
 
 	if err != nil {
-		logger.Error("msg", "Unable to extract response from body", "unmarshal_error", err)
+		logger.Error("msg", "unable to extract response from body", "unmarshal_error", err)
 		logger.Error("body", body)
 		client = nil
 		clientErr = errors.New("Unable to read HTTP Response")
@@ -112,7 +112,7 @@ func GetClient() (*Client, error) {
 
 func (c *Client) POST(url string, payload []byte) (map[string]interface{}, error) {
 	logger := GetLogger()
-	logger.Info("msg", "Making API POST Request", "url", url)
+	logger.Info("msg", "making API POST request", "url", url)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(payload))
 	req.Header.Set("X-CloudKnox-Access-Token", c.AccessToken)
 	req.Header.Set("Content-Type", "application/json")

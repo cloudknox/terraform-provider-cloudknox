@@ -13,7 +13,7 @@ type PolicyContractWriter struct {
 
 func (azure PolicyContractWriter) Write() error {
 	logger := common.GetLogger()
-	logger.Info("msg", "Writing Azure Policy")
+	logger.Info("msg", "writing Azure policy")
 
 	//Turn the given policy into a map so that we can extract even more fields
 	policy := make(map[string]interface{})
@@ -21,7 +21,7 @@ func (azure PolicyContractWriter) Write() error {
 	err := json.Unmarshal([]byte(azure.Args["data"]), &policy)
 
 	if err != nil {
-		logger.Error("msg", "Unable to extract response from body", "unmarshal_error", err)
+		logger.Error("msg", "unable to extract response from body", "unmarshal_error", err)
 		logger.Error("policy", azure.Args["data"])
 		return err
 	}
@@ -88,7 +88,7 @@ func (azure PolicyContractWriter) Write() error {
 	err = ioutil.WriteFile(filename, []byte(template+suffix), 0644)
 
 	if err != nil {
-		logger.Error("msg", "FileIO Error", "file_error", err)
+		logger.Error("msg", "fileIO error", "file_error", err)
 		return err
 	}
 

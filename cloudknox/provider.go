@@ -14,7 +14,8 @@ const (
 // Provider creates and returns a Terraform Provider with populated Schema
 func Provider() terraform.ResourceProvider {
 	logger := common.GetLogger()
-	logger.Info("msg", "Building Cloudknox Terraform Provider")
+	logger.Debug("msg", "initializing cloudknox terraform provider")
+
 	provider := &schema.Provider{
 		Schema: map[string]*schema.Schema{
 
@@ -41,7 +42,7 @@ func Provider() terraform.ResourceProvider {
 
 func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	logger := common.GetLogger()
-	logger.Info("msg", "Configuring Cloudknox Terraform Provider")
+	logger.Info("msg", "setting cloudknox terraform provider parameters")
 
 	parameters := &common.ClientParameters{
 		SharedCredentialsFile: d.Get("shared_credentials_file").(string),
@@ -63,11 +64,9 @@ var descriptions map[string]string
 func init() {
 
 	logger := common.GetLogger()
-	logger.Debug("msg", "Running Initialization Function")
+	logger.Debug("msg", "running initialization function")
 	descriptions = map[string]string{
-
 		"shared_credentials_file": "Path/Filename of the HOCON credentials file.",
-
-		"profile": "Profile for (SERVICE_ACCOUNT_ID, ACCESS_KEY, SECRET_KEY) triplet you would like to use in a HOCON credentials file.",
+		"profile":                 "Profile for (SERVICE_ACCOUNT_ID, ACCESS_KEY, SECRET_KEY) triplet you would like to use in a HOCON credentials file.",
 	}
 }

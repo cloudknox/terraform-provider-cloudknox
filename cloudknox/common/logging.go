@@ -9,6 +9,7 @@ import (
 	"github.com/go-kit/kit/log/level"
 )
 
+/* Private Variables */
 var customLogger CustomLogger
 var loggerOnce sync.Once
 
@@ -16,6 +17,7 @@ const (
 	output = "/var/log/cloudknox/application.log"
 )
 
+/* Private Functions */
 func getLogger() CustomLogger {
 	loggerOnce.Do(
 		func() {
@@ -28,7 +30,7 @@ func getLogger() CustomLogger {
 				customLogger.logger = log.NewLogfmtLogger(file)
 				customLogger.logger = level.NewFilter(customLogger.logger, level.AllowAll())
 				customLogger.logger = log.With(customLogger.logger, "time", log.DefaultTimestampUTC)
-				customLogger.Info("msg", "Successfully Created Logger Instance!")
+				customLogger.Info("msg", "successfully created logger instance!")
 			} else {
 				fmt.Println("Unable to begin logging", err)
 			}
@@ -38,12 +40,11 @@ func getLogger() CustomLogger {
 	return customLogger
 }
 
+/* Public Functions */
+
+// GetLogger returns a logger wrapper that incorporates level logging
 func GetLogger() CustomLogger {
 	return getLogger()
-}
-
-type CustomLogger struct {
-	logger log.Logger
 }
 
 func (clog CustomLogger) Info(args ...interface{}) {

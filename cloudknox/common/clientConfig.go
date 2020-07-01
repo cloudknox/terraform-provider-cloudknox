@@ -16,6 +16,7 @@ import (
 var clientConfigOnce sync.Once
 var creds *Credentials
 
+/* Private Functions */
 func setClientConfiguration(parameters *ClientParameters) {
 	clientConfigOnce.Do(
 		func() {
@@ -24,9 +25,8 @@ func setClientConfiguration(parameters *ClientParameters) {
 			var configurationType string
 			creds = new(Credentials)
 			logger := GetLogger()
-			logger.Info("msg", "Identifying Configuration Type")
+			logger.Info("msg", "attempting to identifying configuration type")
 			// === Configuration Hierarchy ===
-			// Static Credentials
 			// Shared Credentials File (Profile)
 			// Shared Credentials File (Default)
 			// Default Path Credentials File (Profile)
@@ -43,13 +43,13 @@ func setClientConfiguration(parameters *ClientParameters) {
 
 			// Check Shared Credentials File
 			if parameters.SharedCredentialsFile == "" {
-				logger.Warn("msg", "Shared Credentials File Not Provided")
+				logger.Warn("msg", "shared credentials file not provided")
 			} else {
-				logger.Info("msg", "Searching for Shared Credentials File", "path", parameters.SharedCredentialsFile)
+				logger.Info("msg", "searching for shared credentials file", "path", parameters.SharedCredentialsFile)
 
 				if utils.CheckIfPathExists(parameters.SharedCredentialsFile) {
-					logger.Info("msg", "Shared Credentials File exists")
-					logger.Info("msg", "Checking Profile", "profile", parameters.Profile)
+					logger.Info("msg", "shared credentials file exists")
+					logger.Info("msg", "checking profile", "profile", parameters.Profile)
 
 					err := readHOCON(parameters.SharedCredentialsFile, parameters.Profile)
 
@@ -58,7 +58,7 @@ func setClientConfiguration(parameters *ClientParameters) {
 						buildClient(creds, configurationType)
 						return
 					} else {
-						logger.Error("msg", "Unable to Read HOCON File", "hocon_parse_error", err.Error())
+						logger.Error("msg", "unable to read HOCON file", "hocon_parse_error", err.Error())
 					}
 				}
 			}
@@ -68,8 +68,8 @@ func setClientConfiguration(parameters *ClientParameters) {
 			defaultCredentialsPath := homedir + "//.cnx//creds.conf"
 
 			if utils.CheckIfPathExists(defaultCredentialsPath) {
-				logger.Info("msg", "Default Credentials File Exists", "path", defaultCredentialsPath)
-				logger.Info("msg", "Checking Profile", "profile", parameters.Profile)
+				logger.Info("msg", "default credentials file exists", "path", defaultCredentialsPath)
+				logger.Info("msg", "checking profile", "profile", parameters.Profile)
 
 				err := readHOCON(defaultCredentialsPath, parameters.Profile)
 
@@ -78,20 +78,20 @@ func setClientConfiguration(parameters *ClientParameters) {
 					buildClient(creds, configurationType)
 					return
 				} else {
-					logger.Error("msg", "Unable to Read HOCON File", "hocon_parse_error", err.Error())
+					logger.Error("msg", "unable to read HOCON file", "hocon_parse_error", err.Error())
 				}
 			} else {
-				logger.Warn("msg", "Default Credentials File Not Provided")
-				logger.Info("msg", "Checking Environment Variables")
+				logger.Warn("msg", "default credentials file not provided")
+				logger.Info("msg", "checking environment variables")
 			}
 
 			// Check Environment Variables
 			if os.Getenv("CNX_SERVICE_ACCOUNT_ID") == "" || os.Getenv("CNX_ACCESS_KEY") == "" || os.Getenv("CNX_SECRET_KEY") == "" {
-				logger.Warn("msg", "All Enviornment Variables Not Correctly Set")
-				logger.Error("msg", "No Credentials Exist")
+				logger.Warn("msg", "all enviornment variables not correctly set")
+				logger.Error("msg", "no credentials exist")
 				return
 			} else {
-				logger.Info("msg", "Environment Variables Located")
+				logger.Info("msg", "environment variables located")
 
 				creds.ServiceAccountID = os.Getenv("CNX_SERVICE_ACCOUNT_ID")
 				creds.AccessKey = os.Getenv("CNX_ACCESS_KEY")

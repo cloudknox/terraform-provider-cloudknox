@@ -15,7 +15,7 @@ type ContractWriter interface {
 
 func BuildContractWriter(resource string, platform string, args map[string]string) (ContractWriter, error) {
 	logger := common.GetLogger()
-	logger.Info("msg", "Getting Contract")
+	logger.Info("msg", "getting contract")
 
 	resource = strings.ToLower(resource)
 	platform = strings.ToLower(platform)
@@ -25,7 +25,7 @@ func BuildContractWriter(resource string, platform string, args map[string]strin
 		logger.Info("resource", common.NewPolicy)
 		return getPolicyContract(platform, args)
 	default:
-		logger.Error("msg", "Invalid Resource", "resource", "default")
+		logger.Error("msg", "invalid resource", "resource", "default")
 	}
 
 	return nil, errors.New("Invalid Platform")
@@ -33,7 +33,7 @@ func BuildContractWriter(resource string, platform string, args map[string]strin
 
 func getPolicyContract(platform string, args map[string]string) (ContractWriter, error) {
 	logger := common.GetLogger()
-	logger.Debug("msg", "Getting contract associated with platform for policy resource")
+	logger.Debug("msg", "getting contract associated with platform for policy resource")
 	switch platform {
 	case AWS:
 		logger.Info("platform", AWS)

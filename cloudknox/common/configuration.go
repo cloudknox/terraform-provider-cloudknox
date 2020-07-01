@@ -25,16 +25,16 @@ func SetConfiguration(resource_path string) error {
 	configOnce.Do(
 		func() {
 			logger := GetLogger()
-			logger.Debug("msg", "Setting Constants")
+			logger.Debug("msg", "setting constants")
 
 			yamlFile, err := ioutil.ReadFile(resource_path)
 			if err != nil {
-				logger.Debug("msg", "Error Reading Configuration File", "file_read_error", err)
+				logger.Error("msg", "error reading configuration file", "file_read_error", err)
 				configurationError = err
 			}
 			err = yaml.Unmarshal(yamlFile, &configuration)
 			if err != nil {
-				logger.Debug("msg", "Unable to Decode Into Struct", "yaml_decode_error", err)
+				logger.Error("msg", "unable to decode into struct", "yaml_decode_error", err)
 				configurationError = err
 			}
 

@@ -19,7 +19,7 @@ type PolicyElement struct {
 
 func (aws PolicyContractWriter) Write() error {
 	logger := common.GetLogger()
-	logger.Info("msg", "Writing AWS Policy")
+	logger.Info("msg", "writing AWS policy")
 
 	var policies []PolicyElement
 	err := json.Unmarshal([]byte(aws.Args["data"]), &policies)
@@ -53,10 +53,10 @@ func (aws PolicyContractWriter) Write() error {
 
 		logger.Info("policyName", policy.PolicyName, "policy", utils.Truncate(policyJsonString, 30, true))
 
-		logger.Debug("msg", "Policy Character Count", "count", len(policyJsonString))
+		logger.Debug("msg", "policy character count", "count", len(policyJsonString))
 
 		if len(policyJsonString) > 6142 {
-			logger.Warn("msg", "Policy character count exceeds 6142 characters")
+			logger.Warn("msg", "policy character count exceeds 6142 characters")
 		}
 
 		template := fmt.Sprintf(
@@ -78,7 +78,7 @@ func (aws PolicyContractWriter) Write() error {
 	err = ioutil.WriteFile(filename, []byte(resource), 0644)
 
 	if err != nil {
-		logger.Error("msg", "FileIO Error", "file_error", err)
+		logger.Error("msg", "fileIO error", "file_error", err)
 		return err
 	}
 	return nil

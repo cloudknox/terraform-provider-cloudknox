@@ -12,14 +12,14 @@ func writeResource(resource string, platform string, args map[string]string) err
 	contract, err := sink.BuildContractWriter(resource, platform, args)
 
 	if err != nil {
-		logger.Error("msg", "Error while Building Contract", "contract_error", err)
+		logger.Error("msg", "error while building contract", "contract_error", err)
 		return err
 	}
 
 	err = contract.Write()
 
 	if err != nil {
-		logger.Error("msg", "Error while Writing Policy", "fileio_error", err)
+		logger.Error("msg", "error while writing policy", "fileio_error", err)
 		return err
 	}
 
