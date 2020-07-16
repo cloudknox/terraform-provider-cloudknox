@@ -11,34 +11,34 @@ The `cloudknox_role_policy` resource will create different outputs based on the 
 AWS
 
 1. [Activity of User(s)](./aws/resource_cloudknox_role_policy_aws_activity_users.md)
-2. [Activity of Groups(s)](./aws/resource_cloudknox_role_policy_aws_activity_groups.md)
+2. [Activity of Groups(s)](./aws/resource_cloudknox_role_policy_aws_activity_groups.md) (Not Currently Supported)
 3. [Activity of Resources(s)](./aws/resource_cloudknox_role_policy_aws_activity_resources.md)
-4. [Activity of Role](./aws/resource_cloudknox_role_policy_aws_activity_role.md)
-5. [From Existing Policy](./aws/resource_cloudknox_role_policy_aws_from_existing_policy.md)
-6. [New Policy](./aws/resource_cloudknox_role_policy_aws_new_policy.md)
+4. [Activity of Role](./aws/resource_cloudknox_role_policy_aws_activity_role.md) (Not Currently Supported)
+5. [From Existing Policy](./aws/resource_cloudknox_role_policy_aws_from_existing_policy.md) (Not Currently Supported)
+6. [New Policy](./aws/resource_cloudknox_role_policy_aws_new_policy.md) (Not Currently Supported)
 
 Azure
 
 1. [Activity of User(s)](./azure/resource_cloudknox_role_policy_azure_activity_users.md)
-2. [Activity of Groups(s)](./azure/resource_cloudknox_role_policy_azure_activity_groups.md)
-3. [Activity of App(s)](./azure/resource_cloudknox_role_policy_azure_activity_apps.md)
-4. [From Existing Role](./azure/resource_cloudknox_role_policy_azure_from_existing_role.md)
-5. [New Role](./azure/resource_cloudknox_role_policy_azure_new_role.md)
+2. [Activity of Groups(s)](./azure/resource_cloudknox_role_policy_azure_activity_groups.md) (Not Currently Supported)
+3. [Activity of App(s)](./azure/resource_cloudknox_role_policy_azure_activity_apps.md) (Not Currently Supported)
+4. [From Existing Role](./azure/resource_cloudknox_role_policy_azure_from_existing_role.md) (Not Currently Supported)
+5. [New Role](./azure/resource_cloudknox_role_policy_azure_new_role.md) (Not Currently Supported)
 
 GCP
 
 1. [Activity of User(s)](./gcp/resource_cloudknox_role_policy_gcp_activity_users.md)
-2. [Activity of Groups(s)](./gcp/resource_cloudknox_role_policy_gcp_activity_groups.md)
-3. [Activity of Service Account(s)](./gcp/resource_cloudknox_role_policy_gcp_activity_service_accounts.md)
-4. [From Existing Role](./gcp/resource_cloudknox_role_policy_gcp_from_existing_role.md)
-5. [New Role](./gcp/resource_cloudknox_role_policy_gcp_activity_new_role.md)
+2. [Activity of Groups(s)](./gcp/resource_cloudknox_role_policy_gcp_activity_groups.md) (Not Currently Supported)
+3. [Activity of Service Account(s)](./gcp/resource_cloudknox_role_policy_gcp_activity_service_accounts.md) (Not Currently Supported)
+4. [From Existing Role](./gcp/resource_cloudknox_role_policy_gcp_from_existing_role.md) (Not Currently Supported)
+5. [New Role](./gcp/resource_cloudknox_role_policy_gcp_activity_new_role.md) (Not Currently Supported)
 
 vCenter
 
-1. [Activity of User(s)](./vcenter/resource_cloudknox_role_policy_vcenter_activity_users.md)
-2. [Activity of Groups(s)](./vcenter/resource_cloudknox_role_policy_vcenter_activity_groups.md)
-3. [From Existing Role](./vcenter/resource_cloudknox_role_policy_vcenter_from_existing_role.md)
-4. [New Role](./vcenter/resource_cloudknox_role_policy_vcenter_new_role.md)
+1. [Activity of User(s)](./vcenter/resource_cloudknox_role_policy_vcenter_activity_users.md) (Not Currently Supported)
+2. [Activity of Groups(s)](./vcenter/resource_cloudknox_role_policy_vcenter_activity_groups.md) (Not Currently Supported)
+3. [From Existing Role](./vcenter/resource_cloudknox_role_policy_vcenter_from_existing_role.md) (Not Currently Supported)
+4. [New Role](./vcenter/resource_cloudknox_role_policy_vcenter_new_role.md) (Not Currently Supported)
 
 ## Properties Overview
 
@@ -58,7 +58,7 @@ These are all the properties available to set during resource declaration. The a
 - `identity_type` : Identity type of the ids
 - `identity_ids` : Provide a comma seperated list of strings containing `ids` of type `auth_system_info`
 - `filter_history_days` : Number of days in the past to look at the actions of `identity_ids` to generate a policy
-- `filter_preserve_reads` : Optional parameter for Cloudknox API
+- `filter_preserve_reads` : Boolean to indicate preserve read permissions granted before (Only on Azure)
 - `filter_history_start_time_millis` : Start time in unix time milliseconds to look at actions of `identity_ids`
 - `filter_history_end_time_millis` : End time in unix time milliseconds to look at actions of `identity_ids`
 - `request_params_scope` : Optional parameter for Cloudknox API

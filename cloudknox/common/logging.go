@@ -15,6 +15,7 @@ var loggerOnce sync.Once
 
 const (
 	output = "/var/log/cloudknox/application.log"
+	//output = "./application.log"
 )
 
 /* Private Functions */
