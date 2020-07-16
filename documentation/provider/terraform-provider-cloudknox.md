@@ -22,7 +22,7 @@ See [Authentication](./authentication/authentication.md) for details and example
 ## Available Resources
 * [cloudknox_role_policy](./resources/resource_cloudknox_role_policy/resource_cloudknox_role_policy.md)
     * [AWS](./resources/resource_cloudknox_role_policy/aws/resource_cloudknox_role_policy_aws.md)
-    * [AZURE](./resources/resource_cloudknox_role_policy/aws/resource_cloudknox_role_policy_aws.md)
-    * [GCP](./resources/resource_cloudknox_role_policy/aws/resource_cloudknox_role_policy_aws.md)
-    * [VCENTER](./resources/resource_cloudknox_role_policy/aws/resource_cloudknox_role_policy_aws.md)
+    * [AZURE](./resources/resource_cloudknox_role_policy/azure/resource_cloudknox_role_policy_azure.md)
+    * [GCP](./resources/resource_cloudknox_role_policy/gcp/resource_cloudknox_role_policy_gcp.md)
+    * [VCENTER](./resources/resource_cloudknox_role_policy/vcenter/resource_cloudknox_role_policy_vcenter.md)
 
