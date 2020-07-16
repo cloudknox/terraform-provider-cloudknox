@@ -8,12 +8,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
-func resourcePolicy() *schema.Resource {
+func resourceRolePolicy() *schema.Resource {
 	return &schema.Resource{
-		Create: resourcePolicyCreate,
-		Read:   resourcePolicyRead,
-		Update: resourcePolicyUpdate,
-		Delete: resourcePolicyDelete,
+		Create: resourceRolePolicyCreate,
+		Read:   resourceRolePolicyRead,
+		Update: resourceRolePolicyUpdate,
+		Delete: resourceRolePolicyDelete,
 
 		Schema: map[string]*schema.Schema{
 
@@ -92,11 +92,11 @@ func resourcePolicy() *schema.Resource {
 	}
 }
 
-func resourcePolicyCreate(d *schema.ResourceData, m interface{}) error {
+func resourceRolePolicyCreate(d *schema.ResourceData, m interface{}) error {
 	logger := common.GetLogger()
 	logger.Info("msg", "Building Policy Payload")
 
-	var payload apiHandler.PolicyData
+	var payload apiHandler.RolePolicyData
 
 	logger.Info("msg", "Reading Resource Data")
 
@@ -172,7 +172,7 @@ func resourcePolicyCreate(d *schema.ResourceData, m interface{}) error {
 	}
 
 	logger.Info("msg", "Payload Successfully Built")
-	err := apiHandler.NewPolicy(payload.AuthSystemInfo.Type, name, d.Get("output_path").(string), &payload)
+	err := apiHandler.CreateRolePolicy(payload.AuthSystemInfo.Type, name, d.Get("output_path").(string), &payload)
 
 	if err != nil {
 		return err
@@ -183,14 +183,14 @@ func resourcePolicyCreate(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func resourcePolicyRead(d *schema.ResourceData, m interface{}) error {
+func resourceRolePolicyRead(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func resourcePolicyUpdate(d *schema.ResourceData, m interface{}) error {
+func resourceRolePolicyUpdate(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func resourcePolicyDelete(d *schema.ResourceData, m interface{}) error {
+func resourceRolePolicyDelete(d *schema.ResourceData, m interface{}) error {
 	return nil
 }

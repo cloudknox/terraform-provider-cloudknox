@@ -1,6 +1,6 @@
 package apiHandler
 
-type PolicyData struct {
+type RolePolicyData struct {
 	AuthSystemInfo struct {
 		ID   string `json:"id"`
 		Type string `json:"type"`

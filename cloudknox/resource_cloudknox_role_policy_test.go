@@ -6,18 +6,18 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 )
 
-var resources = [...]string{"cloudknox_policy.test_aws_policy",
-	"cloudknox_policy.test_gcp_policy",
-	"cloudknox_policy.test_azure_policy"}
+var resources = [...]string{"cloudknox_role_policy.test_aws_policy",
+	"cloudknox_role_policy.test_gcp_policy",
+	"cloudknox_role_policy.test_azure_policy"}
 
-func TestAccPolicy_Basic(t *testing.T) {
+func TestAccRolePolicy_Basic(t *testing.T) {
 
 	// Test AWS
 	resource.Test(t, resource.TestCase{
 		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccPolicyConfigAWS(),
+				Config: testAccRolePolicyConfigAWS(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
 						resources[0], "name", "test_aws_policy",
@@ -32,7 +32,7 @@ func TestAccPolicy_Basic(t *testing.T) {
 		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccPolicyConfigGCP(),
+				Config: testAccRolePolicyConfigGCP(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
 						resources[1], "name", "test_gcp_policy",
@@ -47,7 +47,7 @@ func TestAccPolicy_Basic(t *testing.T) {
 		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccPolicyConfigAZURE(),
+				Config: testAccRolePolicyConfigAZURE(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
 						resources[2], "name", "test_azure_policy",
@@ -60,7 +60,7 @@ func TestAccPolicy_Basic(t *testing.T) {
 }
 
 // configs
-func testAccPolicyConfigAWS() string {
+func testAccRolePolicyConfigAWS() string {
 	return `
 resource "cloudknox_policy" "test_aws_policy" {
 	name = "test_aws_policy"
@@ -79,7 +79,7 @@ resource "cloudknox_policy" "test_aws_policy" {
 `
 }
 
-func testAccPolicyConfigGCP() string {
+func testAccRolePolicyConfigGCP() string {
 	return `
 resource "cloudknox_policy" "test_gcp_policy" {
 	name = "test_gcp_policy"
@@ -96,7 +96,7 @@ resource "cloudknox_policy" "test_gcp_policy" {
 `
 }
 
-func testAccPolicyConfigAZURE() string {
+func testAccRolePolicyConfigAZURE() string {
 	return `
 resource "cloudknox_policy" "test_azure_policy" {
 	name = "test_azure_policy"

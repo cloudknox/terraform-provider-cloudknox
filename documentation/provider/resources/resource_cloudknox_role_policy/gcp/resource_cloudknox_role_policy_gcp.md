@@ -1,0 +1,1 @@
+# CloudKnox Role-Policy Resource (GCP Usage)

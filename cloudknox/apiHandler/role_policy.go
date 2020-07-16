@@ -7,10 +7,10 @@ import (
 	"time"
 )
 
-func NewPolicy(platform string, name string, outputPath string, payload *PolicyData) error {
+func CreateRolePolicy(platform string, name string, outputPath string, payload *RolePolicyData) error {
 	logger := common.GetLogger()
 
-	logger.Info("msg", "creating new policy", "name", "cloudknox-"+platform+"-"+name+".tf", "output_path", outputPath)
+	logger.Info("msg", "creating new role-policy", "name", "cloudknox-"+platform+"-"+name+".tf", "output_path", outputPath)
 
 	client, err := common.GetClient()
 	if err != nil {
@@ -21,9 +21,9 @@ func NewPolicy(platform string, name string, outputPath string, payload *PolicyD
 	payload_bytes, _ := json.Marshal(payload)
 	// logger.Debug("msg", "Payload post-marshal", "payload", string(payload_bytes))
 
-	url := common.GetConfiguration().BaseURL + common.GetConfiguration().Routes.Policy.Create
+	url := common.GetConfiguration().BaseURL + common.GetConfiguration().Routes.RolePolicy.Create
 
-	policy, err := client.POST(url, payload_bytes)
+	rolePolicy, err := client.POST(url, payload_bytes)
 	if err != nil {
 		logger.Error("msg", "unable to complete POST request", "error", err.Error())
 		return err
@@ -31,10 +31,10 @@ func NewPolicy(platform string, name string, outputPath string, payload *PolicyD
 		logger.Info("msg", "post request successful")
 	}
 
-	policyJsonBytes, err := json.Marshal(policy["data"])
-	policyJsonString := string(policyJsonBytes)
+	rolePolicyJsonBytes, err := json.Marshal(rolePolicy["data"])
+	rolePolicyJsonString := string(rolePolicyJsonBytes)
 
-	logger.Debug("policyJsonString", utils.Truncate(policyJsonString, 30, true))
+	logger.Debug("rolePolicyJsonString", utils.Truncate(rolePolicyJsonString, 30, true))
 
 	if err != nil {
 		logger.Error("msg", "JSON marshaling error while preparing data", "json_error", err)
@@ -42,17 +42,17 @@ func NewPolicy(platform string, name string, outputPath string, payload *PolicyD
 
 	args := map[string]string{
 		"name":        name,
-		"description": "Cloudknox Generated IAM Policy for " + platform + " at " + time.Now().String(),
+		"description": "Cloudknox Generated IAM Role-Policy for " + platform + " at " + time.Now().String(),
 		"output_path": outputPath,
 		"aws_path":    "/",
-		"data":        policyJsonString,
+		"data":        rolePolicyJsonString,
 	}
 
 	logger.Info("msg", "Begin Write Sequence")
-	err = writeResource("cloudknox_policy", platform, args)
+	err = writeResource("cloudknox_role_policy", platform, args)
 
 	if err != nil {
-		logger.Error("msg", "unable to write policy", "write_error", err.Error())
+		logger.Error("msg", "unable to write role_policy", "write_error", err.Error())
 		return err
 	}
 

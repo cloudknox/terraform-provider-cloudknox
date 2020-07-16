@@ -4,7 +4,7 @@ base_url: "https://olympus.aws-staging.cloudknox.io"
 
 routes:
   authentication: "/api/v2/service-account/authenticate"
-  policy:
+  role_policy:
     create: "/api/v2/role-policy/new"
 
 

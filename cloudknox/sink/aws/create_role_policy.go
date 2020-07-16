@@ -8,7 +8,7 @@ import (
 	"terraform-provider-cloudknox/cloudknox/utils"
 )
 
-type PolicyContractWriter struct {
+type RolePolicyContractWriter struct {
 	Args map[string]string
 }
 
@@ -17,7 +17,7 @@ type PolicyElement struct {
 	Policy     interface{} `json:"policy"`
 }
 
-func (aws PolicyContractWriter) Write() error {
+func (aws RolePolicyContractWriter) Write() error {
 	logger := common.GetLogger()
 	logger.Info("msg", "writing AWS policy")
 

@@ -29,9 +29,9 @@ type Client struct {
 type Configuration struct {
 	BaseURL string `yaml:"base_url"`
 	Routes  struct {
-		Auth   string `yaml:"authentication"`
-		Policy struct {
+		Auth       string `yaml:"authentication"`
+		RolePolicy struct {
 			Create string `yaml:"create"`
-		} `yaml:"policy"`
+		} `yaml:"role_policy"`
 	} `yaml:"routes"`
 }

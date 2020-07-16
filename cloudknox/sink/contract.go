@@ -21,9 +21,9 @@ func BuildContractWriter(resource string, platform string, args map[string]strin
 	platform = strings.ToLower(platform)
 
 	switch resource {
-	case common.NewPolicy:
-		logger.Info("resource", common.NewPolicy)
-		return getPolicyContract(platform, args)
+	case common.RolePolicy:
+		logger.Info("resource", common.RolePolicy)
+		return getRolePolicyContract(platform, args)
 	default:
 		logger.Error("msg", "invalid resource", "resource", "default")
 	}
@@ -31,21 +31,21 @@ func BuildContractWriter(resource string, platform string, args map[string]strin
 	return nil, errors.New("Invalid Platform")
 }
 
-func getPolicyContract(platform string, args map[string]string) (ContractWriter, error) {
+func getRolePolicyContract(platform string, args map[string]string) (ContractWriter, error) {
 	logger := common.GetLogger()
-	logger.Debug("msg", "getting contract associated with platform for policy resource")
+	logger.Debug("msg", "getting contract associated with platform for role_policy resource")
 	switch platform {
 	case AWS:
 		logger.Info("platform", AWS)
-		var aws = aws.PolicyContractWriter{Args: args}
+		var aws = aws.RolePolicyContractWriter{Args: args}
 		return aws, nil
 	case AZURE:
 		logger.Info("platform", AZURE)
-		var azure = azure.PolicyContractWriter{Args: args}
+		var azure = azure.RolePolicyContractWriter{Args: args}
 		return azure, nil
 	case GCP:
 		logger.Info("platform", GCP)
-		var gcp = gcp.PolicyContractWriter{Args: args}
+		var gcp = gcp.RolePolicyContractWriter{Args: args}
 		return gcp, nil
 	case VCENTER:
 		logger.Info("platform", VCENTER)

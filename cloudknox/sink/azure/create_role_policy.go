@@ -7,13 +7,13 @@ import (
 	"terraform-provider-cloudknox/cloudknox/common"
 )
 
-type PolicyContractWriter struct {
+type RolePolicyContractWriter struct {
 	Args map[string]string
 }
 
-func (azure PolicyContractWriter) Write() error {
+func (azure RolePolicyContractWriter) Write() error {
 	logger := common.GetLogger()
-	logger.Info("msg", "writing Azure policy")
+	logger.Info("msg", "writing Azure role")
 
 	//Turn the given policy into a map so that we can extract even more fields
 	policy := make(map[string]interface{})
@@ -22,7 +22,7 @@ func (azure PolicyContractWriter) Write() error {
 
 	if err != nil {
 		logger.Error("msg", "unable to extract response from body", "unmarshal_error", err)
-		logger.Error("policy", azure.Args["data"])
+		logger.Error("role", azure.Args["data"])
 		return err
 	}
 

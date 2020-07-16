@@ -7,14 +7,14 @@ import (
 	"terraform-provider-cloudknox/cloudknox/common"
 )
 
-type PolicyContractWriter struct {
+type RolePolicyContractWriter struct {
 	Args map[string]string
 }
 
-func (gcp PolicyContractWriter) Write() error {
+func (gcp RolePolicyContractWriter) Write() error {
 
 	logger := common.GetLogger()
-	logger.Info("msg", "writing GCP policy")
+	logger.Info("msg", "writing GCP role")
 
 	//Turn the given policy into a map so that we can extract even more fields
 	policy := make(map[string]interface{})
@@ -23,7 +23,7 @@ func (gcp PolicyContractWriter) Write() error {
 
 	if err != nil {
 		logger.Error("msg", "unable to extract response from body", "unmarshal_error", err)
-		logger.Error("policy", gcp.Args["data"])
+		logger.Error("role", gcp.Args["data"])
 		return err
 	}
 

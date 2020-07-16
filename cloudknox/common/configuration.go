@@ -16,7 +16,7 @@ var configOnce sync.Once
 /* Public Variables */
 
 const (
-	NewPolicy string = "cloudknox_policy"
+	RolePolicy string = "cloudknox_role_policy"
 )
 
 /* Public Functions */

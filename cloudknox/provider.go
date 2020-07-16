@@ -31,7 +31,7 @@ func Provider() terraform.ResourceProvider {
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			common.NewPolicy: resourcePolicy(),
+			common.RolePolicy: resourceRolePolicy(),
 		},
 
 		ConfigureFunc: providerConfigure,

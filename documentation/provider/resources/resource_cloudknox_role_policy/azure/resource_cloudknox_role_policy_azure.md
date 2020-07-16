@@ -1,0 +1,1 @@
+# CloudKnox Role-Policy Resource (Azure Usage)
