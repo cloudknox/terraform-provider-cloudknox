@@ -51,7 +51,7 @@ func (aws RolePolicyContractWriter) Write() error {
 		}
 		policyJsonString := string(policyJsonBytes)
 
-		logger.Info("policyName", policy.PolicyName, "policy", utils.Truncate(policyJsonString, 30, true))
+		logger.Debug("policyName", policy.PolicyName, "policy", utils.Truncate(policyJsonString, 30, true))
 
 		logger.Debug("msg", "policy character count", "count", len(policyJsonString))
 

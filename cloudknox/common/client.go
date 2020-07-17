@@ -64,7 +64,7 @@ func buildClient(credentials *Credentials, configurationType string) {
 	// logger.Info("auth dump", dump)
 
 	// Get Response
-	logger.Info("msg", "Got HTTP Response")
+	logger.Debug("msg", "Got HTTP Response")
 	body, _ := ioutil.ReadAll(resp.Body)
 	if resp.StatusCode != http.StatusOK {
 		logger.Error("msg", "HTTP Response status != 200 OK", "resp", resp.Status, "credentials", "invalid")
@@ -73,7 +73,7 @@ func buildClient(credentials *Credentials, configurationType string) {
 		return
 	}
 
-	logger.Info("msg", "HTTP Response status == 200 OK", "resp", resp.Status, "credentials", "valid")
+	logger.Debug("msg", "HTTP Response status == 200 OK", "resp", resp.Status, "credentials", "valid")
 	jsonBody := string(body)
 
 	// Create Map from Body of Response
@@ -119,7 +119,7 @@ func GetClient() (*Client, error) {
 // POST uses client parameters to create a POST request to provided url
 func (c *Client) POST(url string, payload []byte) (map[string]interface{}, error) {
 	logger := GetLogger()
-	logger.Info("msg", "making API POST request", "url", url)
+	logger.Debug("msg", "making API POST request", "url", url)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(payload))
 	req.Header.Set("X-CloudKnox-Access-Token", c.AccessToken)
 	req.Header.Set("Content-Type", "application/json")
@@ -143,7 +143,7 @@ func (c *Client) POST(url string, payload []byte) (map[string]interface{}, error
 		logger.Error("msg", "HTTP Response status != 200 OK", "resp", resp.Status, "resource_attributes", "invalid")
 		return nil, errors.New("Invalid API Response | Please Check Resource Attributes")
 	}
-	logger.Info("msg", "HTTP Response status == 200 OK", "resp", resp.Status, "resource_attributes", "valid")
+	logger.Debug("msg", "HTTP Response status == 200 OK", "resp", resp.Status, "resource_attributes", "valid")
 
 	body, _ := ioutil.ReadAll(resp.Body)
 	jsonBody := string(body)

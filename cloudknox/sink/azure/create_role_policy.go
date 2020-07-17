@@ -13,7 +13,7 @@ type RolePolicyContractWriter struct {
 
 func (azure RolePolicyContractWriter) Write() error {
 	logger := common.GetLogger()
-	logger.Info("msg", "writing Azure role")
+	logger.Info("msg", "writing azure role")
 
 	//Turn the given policy into a map so that we can extract even more fields
 	policy := make(map[string]interface{})

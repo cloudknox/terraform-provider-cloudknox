@@ -45,11 +45,10 @@ func setClientConfiguration(parameters *ClientParameters) {
 			if parameters.SharedCredentialsFile == "" {
 				logger.Warn("msg", "shared credentials file not provided")
 			}
-			logger.Info("msg", "searching for shared credentials file", "path", parameters.SharedCredentialsFile)
-
+			logger.Debug("msg", "searching for shared credentials file")
 			if utils.CheckIfPathExists(parameters.SharedCredentialsFile) {
-				logger.Info("msg", "shared credentials file exists")
-				logger.Info("msg", "checking profile", "profile", parameters.Profile)
+				logger.Info("msg", "shared credentials file exists", "path", parameters.SharedCredentialsFile)
+				logger.Debug("msg", "checking profile", "profile", parameters.Profile)
 
 				err := readHOCON(parameters.SharedCredentialsFile, parameters.Profile)
 
@@ -65,10 +64,10 @@ func setClientConfiguration(parameters *ClientParameters) {
 			// Check Default Path
 			homedir, _ := homedir.Dir()
 			defaultCredentialsPath := homedir + "//.cnx//creds.conf"
-
+			logger.Debug("msg", "searching for default credentials file")
 			if utils.CheckIfPathExists(defaultCredentialsPath) {
 				logger.Info("msg", "default credentials file exists", "path", defaultCredentialsPath)
-				logger.Info("msg", "checking profile", "profile", parameters.Profile)
+				logger.Debug("msg", "checking profile", "profile", parameters.Profile)
 
 				err := readHOCON(defaultCredentialsPath, parameters.Profile)
 

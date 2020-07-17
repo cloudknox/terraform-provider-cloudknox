@@ -98,7 +98,7 @@ func resourceRolePolicyCreate(d *schema.ResourceData, m interface{}) error {
 
 	var payload routes.RolePolicyData
 
-	logger.Info("msg", "Reading Resource Data")
+	logger.Debug("msg", "Reading Resource Data")
 
 	name := d.Get("name").(string)
 
@@ -171,7 +171,7 @@ func resourceRolePolicyCreate(d *schema.ResourceData, m interface{}) error {
 		payload.RequestParams = &requestParams
 	}
 
-	logger.Info("msg", "Payload Successfully Built")
+	logger.Debug("msg", "payload successfully built", "role_policy", name)
 	err := routes.CreateRolePolicy(payload.AuthSystemInfo.Type, name, d.Get("output_path").(string), &payload)
 
 	if err != nil {

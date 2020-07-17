@@ -15,14 +15,14 @@ type ContractWriter interface {
 
 func BuildContractWriter(resource string, platform string, args map[string]string) (ContractWriter, error) {
 	logger := common.GetLogger()
-	logger.Info("msg", "getting contract")
+	logger.Debug("msg", "getting contract")
 
 	resource = strings.ToLower(resource)
 	platform = strings.ToLower(platform)
 
 	switch resource {
 	case common.RolePolicy:
-		logger.Info("resource", common.RolePolicy)
+		logger.Debug("resource", common.RolePolicy)
 		return getRolePolicyContract(platform, args)
 	default:
 		logger.Error("msg", "invalid resource", "resource", "default")
@@ -36,19 +36,19 @@ func getRolePolicyContract(platform string, args map[string]string) (ContractWri
 	logger.Debug("msg", "getting contract associated with platform for role_policy resource")
 	switch platform {
 	case AWS:
-		logger.Info("platform", AWS)
+		logger.Debug("platform", AWS)
 		var aws = aws.RolePolicyContractWriter{Args: args}
 		return aws, nil
 	case AZURE:
-		logger.Info("platform", AZURE)
+		logger.Debug("platform", AZURE)
 		var azure = azure.RolePolicyContractWriter{Args: args}
 		return azure, nil
 	case GCP:
-		logger.Info("platform", GCP)
+		logger.Debug("platform", GCP)
 		var gcp = gcp.RolePolicyContractWriter{Args: args}
 		return gcp, nil
 	case VCENTER:
-		logger.Info("platform", VCENTER)
+		logger.Debug("platform", VCENTER)
 		return nil, nil
 	}
 

@@ -17,16 +17,16 @@ const (
 func CreateRolePolicy(platform string, name string, outputPath string, payload *RolePolicyData) error {
 	logger := common.GetLogger()
 
-	logger.Info("msg", "creating new role-policy", "name", "cloudknox-"+platform+"-"+name+".tf", "output_path", outputPath)
+	logger.Info("msg", "creating new role-policy", "name", name+".tf", "output_path", outputPath)
 
 	client, err := common.GetClient()
 	if err != nil {
 		logger.Error("msg", "unable to get client access token", "client_error", err.Error())
 		return err
 	}
-	logger.Debug("msg", "Payload pre-marshal")
+	logger.Debug("msg", "payload pre-marshal")
 	payloadBytes, _ := json.Marshal(payload)
-	logger.Debug("msg", "Payload post-marshal", "payload", string(payloadBytes))
+	logger.Debug("msg", "payload post-marshal", "payload", string(payloadBytes))
 
 	url := "https://olympus.aws-staging.cloudknox.io" + RolePolicyCreateRoute
 
@@ -35,7 +35,7 @@ func CreateRolePolicy(platform string, name string, outputPath string, payload *
 		logger.Error("msg", "unable to complete POST request", "error", err.Error())
 		return err
 	}
-	logger.Info("msg", "post request successful")
+	logger.Debug("msg", "post request successful")
 
 	rolePolicyJSONBytes, err := json.Marshal(rolePolicy["data"])
 	rolePolicyJSONString := string(rolePolicyJSONBytes)
@@ -54,7 +54,7 @@ func CreateRolePolicy(platform string, name string, outputPath string, payload *
 		"data":        rolePolicyJSONString,
 	}
 
-	logger.Info("msg", "Begin Write Sequence")
+	logger.Debug("msg", "Begin Write Sequence")
 	err = helpers.WriteResource("cloudknox_role_policy", platform, args)
 
 	if err != nil {
@@ -62,7 +62,7 @@ func CreateRolePolicy(platform string, name string, outputPath string, payload *
 		return err
 	}
 
-	logger.Info("msg", "write sequence completed successfully")
+	logger.Debug("msg", "write sequence completed successfully")
 
 	return nil
 }

@@ -2,6 +2,7 @@ package common
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"sync"
 
@@ -12,10 +13,7 @@ import (
 /* Private Variables */
 var customLogger CustomLogger
 var loggerOnce sync.Once
-
-const (
-	output string = "/var/log/cloudknox/application.log"
-)
+var logLevel string
 
 /* Private Functions */
 func getLogger() CustomLogger {
@@ -23,13 +21,21 @@ func getLogger() CustomLogger {
 		func() {
 			/* Initialize Logger */
 
-			err := os.Remove(output)
+			logLevel := os.Getenv("CNX_LOG_LEVEL")
+			output := os.Getenv("CNX_LOG_OUTPUT")
 
-			file, err := os.OpenFile(output, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+			var w io.Writer
+			var err error
+
+			if logLevel == "" || logLevel == "NONE" || output == "" {
+				w = log.NewSyncWriter(os.Stderr)
+			} else {
+				err = os.Remove(output)
+				w, err = os.OpenFile(output, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+			}
+
 			if err == nil {
-				customLogger.logger = log.NewLogfmtLogger(file)
-
-				logLevel := "ALL" //Add environment variable support`
+				customLogger.logger = log.NewLogfmtLogger(w)
 
 				var levelOption level.Option
 

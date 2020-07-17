@@ -11,19 +11,32 @@
 3. Build the provider
 
 ```bash
-sudo make build
+make build
 ```
 
 * The provider will be built and stored in `~/.terraform.d/plugins`
-* Logs are stored in `/var/log/cloudknox/application.log`
-* Backend configuration file is created and stored in `/opt/cloudknox/terraform-provider-cloudknox-config.yaml`
 
+## Documentation
 
-## Using the Provider
+Detailed [documentation](./documentation/provider/terraform-provider-cloudknox.md) is provided. Please use this documentation for provider setup and usage.
 
-[Documentation](./documentation/provider/terraform-provider-cloudknox.md) is seperated by `resource` and further seperated by `Authorization System Type` and is located in `./documention`
+## Debug
 
+Logging is disabled by default. 
 
+Set the following environment variables to enable logging and set `CNX_LOG_LEVEL` is set to one of the options below. 
+
+```bash
+export CNX_LOG_LEVEL={"ALL", "DEBUG", "ERROR", "INFO", "WARN", "NONE"}
+export CNX_LOG_OUTPUT="/path/to/logs/application.log"
+```
+
+Disable logging by unsetting the environment variables
+
+```bash
+unset CNX_LOG_LEVEL
+unset CNX_LOG_OUTPUT
+```
 
 
 

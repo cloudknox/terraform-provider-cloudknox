@@ -14,7 +14,7 @@ type RolePolicyContractWriter struct {
 func (gcp RolePolicyContractWriter) Write() error {
 
 	logger := common.GetLogger()
-	logger.Info("msg", "writing GCP role")
+	logger.Info("msg", "writing gcp role")
 
 	//Turn the given policy into a map so that we can extract even more fields
 	policy := make(map[string]interface{})

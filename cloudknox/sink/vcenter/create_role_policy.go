@@ -8,6 +8,6 @@ type RolePolicyContractWriter struct {
 
 func (vCenter RolePolicyContractWriter) Write() error {
 	logger := common.GetLogger()
-	logger.Info("msg", "writing vCenter role")
+	logger.Info("msg", "writing vcenter role")
 	return nil
 }
