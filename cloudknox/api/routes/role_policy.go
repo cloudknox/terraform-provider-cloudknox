@@ -28,9 +28,7 @@ func CreateRolePolicy(platform string, name string, outputPath string, payload *
 	payloadBytes, _ := json.Marshal(payload)
 	logger.Debug("msg", "payload post-marshal", "payload", string(payloadBytes))
 
-	url := "https://olympus.aws-staging.cloudknox.io" + RolePolicyCreateRoute
-
-	rolePolicy, err := client.POST(url, payloadBytes)
+	rolePolicy, err := client.POST(RolePolicyCreateRoute, payloadBytes)
 	if err != nil {
 		logger.Error("msg", "unable to complete POST request", "error", err.Error())
 		return err

@@ -16,6 +16,9 @@ var credentials *Credentials
 var configType string
 
 const (
+	//baseURL is the url for the CloudKnox API
+	baseURL = "https://olympus.aws-staging.cloudknox.io"
+
 	// AuthenticateRoute has the route used to authenticate with the CloudKnox API
 	AuthenticateRoute = "/api/v2/service-account/authenticate"
 )
@@ -42,7 +45,7 @@ func buildClient(credentials *Credentials, configurationType string) {
 	// Parameters
 	var jsonBytes = credentialsToJSON(credentials)
 
-	url := "https://olympus.aws-staging.cloudknox.io" + AuthenticateRoute
+	url := baseURL + AuthenticateRoute
 
 	// Request Configuration
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonBytes))
@@ -116,9 +119,12 @@ func GetClient() (*Client, error) {
 
 }
 
-// POST uses client parameters to create a POST request to provided url
-func (c *Client) POST(url string, payload []byte) (map[string]interface{}, error) {
+// POST uses client parameters to create a POST request to provided route using client's baseURL
+func (c *Client) POST(route string, payload []byte) (map[string]interface{}, error) {
 	logger := GetLogger()
+
+	url := baseURL + route
+
 	logger.Debug("msg", "making API POST request", "url", url)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(payload))
 	req.Header.Set("X-CloudKnox-Access-Token", c.AccessToken)
