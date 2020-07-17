@@ -8,7 +8,7 @@ An Azure Role Definition is created based on the Activity of User(s) provided
 
 #### Terraform Resource
 
-The following block declares a `cloudknox_role_policy` named `user-activity-azure-role`. `identity_type` should be set to "USER" and all `identity_ids` should be set to a user. The policy is generated from the history of the activity of thoose users from 90 days as set in `filter_history_days`. 
+The following block declares a `cloudknox_role_policy` named `user-activity-azure-role`. `identity_type` should be set to `USER` and all `identity_ids` should be set user ids. The policy is generated from the history of the activity of those users from 90 days as set in `filter_history_days`. 
 
 `filter_preserve_reads` is set to `true` meaning that any read permissions granted before are preserved. 
 

@@ -11,38 +11,28 @@ The `cloudknox_role_policy` resource will create different outputs based on the 
 AWS
 
 1. [Activity of User(s)](./aws/resource_cloudknox_role_policy_aws_activity_users.md)
-2. [Activity of Groups(s)](./aws/resource_cloudknox_role_policy_aws_activity_groups.md) (Not Currently Supported)
-3. [Activity of Resources(s)](./aws/resource_cloudknox_role_policy_aws_activity_resources.md)
-4. [Activity of Role](./aws/resource_cloudknox_role_policy_aws_activity_role.md) (Not Currently Supported)
-5. [From Existing Policy](./aws/resource_cloudknox_role_policy_aws_from_existing_policy.md) (Not Currently Supported)
-6. [New Policy](./aws/resource_cloudknox_role_policy_aws_new_policy.md) (Not Currently Supported)
+2. [Activity of Resources(s)](./aws/resource_cloudknox_role_policy_aws_activity_resources.md)
+3. [Activity of Role](./aws/resource_cloudknox_role_policy_aws_activity_role.md)
 
 Azure
 
 1. [Activity of User(s)](./azure/resource_cloudknox_role_policy_azure_activity_users.md)
-2. [Activity of Groups(s)](./azure/resource_cloudknox_role_policy_azure_activity_groups.md) (Not Currently Supported)
-3. [Activity of App(s)](./azure/resource_cloudknox_role_policy_azure_activity_apps.md) (Not Currently Supported)
-4. [From Existing Role](./azure/resource_cloudknox_role_policy_azure_from_existing_role.md) (Not Currently Supported)
-5. [New Role](./azure/resource_cloudknox_role_policy_azure_new_role.md) (Not Currently Supported)
+2. [Activity of App(s)](./azure/resource_cloudknox_role_policy_azure_activity_apps.md)
+
 
 GCP
 
 1. [Activity of User(s)](./gcp/resource_cloudknox_role_policy_gcp_activity_users.md)
-2. [Activity of Groups(s)](./gcp/resource_cloudknox_role_policy_gcp_activity_groups.md) (Not Currently Supported)
-3. [Activity of Service Account(s)](./gcp/resource_cloudknox_role_policy_gcp_activity_service_accounts.md) (Not Currently Supported)
-4. [From Existing Role](./gcp/resource_cloudknox_role_policy_gcp_from_existing_role.md) (Not Currently Supported)
-5. [New Role](./gcp/resource_cloudknox_role_policy_gcp_activity_new_role.md) (Not Currently Supported)
+2. [Activity of Service Account(s)](./gcp/resource_cloudknox_role_policy_gcp_activity_service_accounts.md) (Not Currently Supported)
 
 vCenter
 
 1. [Activity of User(s)](./vcenter/resource_cloudknox_role_policy_vcenter_activity_users.md) (Not Currently Supported)
-2. [Activity of Groups(s)](./vcenter/resource_cloudknox_role_policy_vcenter_activity_groups.md) (Not Currently Supported)
-3. [From Existing Role](./vcenter/resource_cloudknox_role_policy_vcenter_from_existing_role.md) (Not Currently Supported)
-4. [New Role](./vcenter/resource_cloudknox_role_policy_vcenter_new_role.md) (Not Currently Supported)
+
 
 ## Properties Overview
 
-These are all the properties available to set during resource declaration. The above documentation will explain in detail what each parameter does and what they can be set to to achieve the desired result along with example resource declarations. 
+These are all the properties available to set during resource declaration. The above documentation will explain in detail what each parameter does and what they can be set as in order to achieve the desired result along with example resource declarations and outputs. 
 
 - `name` : Name of the policy, can match the terraform resource name
 - `output_path` : Directory where the terraform script will be outputted
@@ -68,6 +58,8 @@ These are all the properties available to set during resource declaration. The a
 
 ---
 **NOTE**
+
+Not all parameters are required when declaring your `cloudknox_role_policy` resource. Some parameters only apply to certain Authorization System Types
 
 Use `filter_history_days` or `filter_history_start_time_millis` and `filter_history_end_time_millis` together as only one parameter will be considered when generating a policy. 
 

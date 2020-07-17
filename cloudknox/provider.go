@@ -9,7 +9,6 @@ import (
 
 const (
 	configPath = "/opt/cloudknox/terraform-provider-cloudknox-config.yaml"
-	//configPath = "./cloudknox/config/terraform-provider-cloudknox-config.yaml"
 )
 
 // Provider creates and returns a Terraform Provider with populated Schema

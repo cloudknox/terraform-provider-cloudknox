@@ -8,7 +8,7 @@ An AWS IAM Policy is created based on the Activity of Resource(s) provided
 
 #### Terraform Resource
 
-The following block declares a `cloudknox_role_policy` named `resource-activity-aws-policy`. `identity_type` should be set to "RESOURCE" and all `identity_ids` should be set to resources such as EC2 instances in this example. The policy is generated from the history of the activity of thoose resources between the millisecond timestamps specified. 
+The following block declares a `cloudknox_role_policy` named `resource-activity-aws-policy`. `identity_type` should be set to `RESOURCE` and all `identity_ids` should be set to resources ids such as the ids of the EC2 instances in this example. The policy is generated from the history of the activity of thoose resources between the millisecond timestamps specified. 
 
 ```terraform
 resource "cloudknox_role_policy" "resource-activity-aws-policy" {

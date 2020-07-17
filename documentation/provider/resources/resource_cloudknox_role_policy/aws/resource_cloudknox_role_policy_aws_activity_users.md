@@ -8,7 +8,7 @@ An AWS IAM Policy is created based on the Activity of User(s) provided
 
 #### Terraform Resource
 
-The following block declares a `cloudknox_role_policy` named `user-activity-aws-policy`. `identity_type` should be set to "USER" and all `identity_ids` should be set to a user. The policy is generated from the history of the activity of thoose users from 90 days as set in `filter_history_days`. 
+The following block declares a `cloudknox_role_policy` named `user-activity-aws-policy`. `identity_type` should be set to `USER` and all `identity_ids` should be user ids. The policy is generated from the history of the activity of those users from 90 days as set in `filter_history_days`. 
 
 ```terraform
 resource "cloudknox_role_policy" "user-activity-large-aws-policy" {
@@ -63,7 +63,7 @@ resource "aws_iam_policy" "ck_activity_1594927282578_0" {
 				"Sid": "cloudformationDeleteActions"
 			},
 
-	        // Truncated Policy Actions
+	        // Statements Truncated
 
 			{
 				"Action": [
@@ -93,7 +93,7 @@ resource "aws_iam_policy" "ck_activity_1594927282578_1" {
 				"Action": [
 					"redshift:DescribeClusters",
 
-                    // Truncated Policy Action Items
+                    // Actions Truncated
 
 					"redshift:DescribeHsmClientCertificates"
 				],
@@ -104,7 +104,7 @@ resource "aws_iam_policy" "ck_activity_1594927282578_1" {
 				"Sid": "redshiftReadActions"
 			},
 
-            // Truncated Policy Actions
+            // Statements Truncated
 
 			{
 				"Action": [

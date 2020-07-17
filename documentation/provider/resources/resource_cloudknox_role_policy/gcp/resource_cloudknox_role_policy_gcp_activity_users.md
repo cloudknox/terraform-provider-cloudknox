@@ -8,7 +8,7 @@ A GCP Role Definition is created based on the Activity of User(s) provided
 
 #### Terraform Resource
 
-The following block declares a `cloudknox_role_policy` named `user-activity-gcp-role`. `identity_type` should be set to "USER" and all `identity_ids` should be set to a user. The policy is generated from the history of the activity of thoose users from 90 days as set in `filter_history_days`. 
+The following block declares a `cloudknox_role_policy` named `user-activity-gcp-role`. `identity_type` should be set to `USER` and all `identity_ids` should be set to a user. The policy is generated from the history of the activity of thoose users from 90 days as set in `filter_history_days`. 
 
 ```terraform
 resource "cloudknox_role_policy" "user-activity-gcp-role" {
@@ -26,7 +26,7 @@ resource "cloudknox_role_policy" "user-activity-gcp-role" {
 
 #### Output
 
-An `google_project_iam_custom_role` resource is outputted to a file `./user-activity-gcp-role.tf` containing the following Terraform Resource. Policies are named automatically according to the response from the CloudKnox API.
+A `google_project_iam_custom_role` resource is outputted to a file `./user-activity-gcp-role.tf` containing the following Terraform Resource. Policies are named automatically according to the response from the CloudKnox API.
 
 ```terraform
 resource "google_project_iam_custom_role" "user-activity-gcp-role" {
