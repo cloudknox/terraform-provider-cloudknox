@@ -14,7 +14,7 @@ var customLogger CustomLogger
 var loggerOnce sync.Once
 
 const (
-	output = "/var/log/cloudknox/application.log"
+	output string = "/var/log/cloudknox/application.log"
 )
 
 /* Private Functions */
@@ -28,7 +28,29 @@ func getLogger() CustomLogger {
 			file, err := os.OpenFile(output, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
 			if err == nil {
 				customLogger.logger = log.NewLogfmtLogger(file)
-				customLogger.logger = level.NewFilter(customLogger.logger, level.AllowInfo())
+
+				logLevel := "ALL" //Add environment variable support
+
+				var levelOption level.Option
+
+				switch logLevel {
+				case "ALL":
+					levelOption = level.AllowAll()
+				case "DEBUG":
+					levelOption = level.AllowDebug()
+				case "ERROR":
+					levelOption = level.AllowError()
+				case "INFO":
+					levelOption = level.AllowInfo()
+				case "NONE":
+					levelOption = level.AllowNone()
+				case "WARN":
+					levelOption = level.AllowWarn()
+				default:
+					levelOption = level.AllowNone()
+				}
+
+				customLogger.logger = level.NewFilter(customLogger.logger, levelOption)
 				customLogger.logger = log.With(customLogger.logger, "time", log.DefaultTimestampUTC)
 				customLogger.Info("msg", "successfully created logger instance!")
 			} else {
