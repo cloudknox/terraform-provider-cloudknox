@@ -15,6 +15,14 @@ make build
 ```
 
 * The provider will be built and stored in `~/.terraform.d/plugins`
+* The API configuration file is required and must be created in `~/.cloudknox/api.conf`
+
+The API configuration file should be populated as follows.
+```HOCON
+api {
+    base_url: "https://olympus.aws-staging.cloudknox.io"
+}
+```
 
 ## Documentation
 

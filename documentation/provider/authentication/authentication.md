@@ -29,9 +29,9 @@ There are 2 main ways to use the `Credentials` you aquired with the CloudKnox Te
 
 ##### File Setup
 
-Place `creds.conf` in `~/.cnx/`
+Place `creds.conf` in `~/.cloudknox/`
 
-* `~/.cnx/` directory is created during build process, but if it has been deleted or removed for any reason, ensure it exists. 
+* `~/.cloudknox/` directory is created during build process, but if it has been deleted or removed for any reason, ensure it exists. 
 
 ```HOCON
 profiles {
@@ -117,7 +117,7 @@ CNX_ACCESS_KEY="#####"
 CNX_SECRET_KEY="#####"
 ```
 2. Delete the `Default Credentials File`
-    * If the `Default Credentials File` is found in `~/.cnx/` then that file will be used so ensure that the file is deleted or renamed. 
+    * If the `Default Credentials File` is found in `~/.cloudknox/` then that file will be used so ensure that the file is deleted or renamed. 
 
 
 ##### Provder Setup

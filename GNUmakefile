@@ -1,14 +1,12 @@
 GOFMT_FILES?=$$(find . -name '*.go' |grep -v vendor)
 
-BASE_URL = "https://olympus.aws-staging.cloudknox.io"
-
 DIR=~/.terraform.d/plugins
 
-DEFAULT_CREDENTIALS_FOLDER= ~/.cnx/
+DEFAULT_CONFIG_FOLDER= ~/.cloudknox/
 
 default: build
 
-build: install init_credentials
+build: install init_config
 
 install: fmt
 	@printf "\n==> Installing provider to $(DIR)\n"
@@ -25,7 +23,7 @@ fmtcheck:
 	@sh -c "'$(CURDIR)/scripts/gofmtcheck.sh'"
 
 
-init_credentials:
+init_config:
 	mkdir -vp $(DEFAULT_CREDENTIALS_FOLDER)
 
 testacc: fmtcheck

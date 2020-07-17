@@ -9,6 +9,9 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"terraform-provider-cloudknox/cloudknox/utils"
+
+	config "github.com/go-akka/configuration"
+	"github.com/mitchellh/go-homedir"
 )
 
 /* Private Variables */
@@ -16,9 +19,6 @@ var credentials *Credentials
 var configType string
 
 const (
-	//baseURL is the url for the CloudKnox API
-	baseURL = "https://olympus.aws-staging.cloudknox.io"
-
 	// AuthenticateRoute has the route used to authenticate with the CloudKnox API
 	AuthenticateRoute = "/api/v2/service-account/authenticate"
 )
@@ -38,6 +38,23 @@ func buildClient(credentials *Credentials, configurationType string) {
 
 	configType = configurationType
 
+	//first read the base url
+
+	homedir, _ := homedir.Dir()
+	apiConfigurationPath := homedir + "//.cloudknox//api.conf"
+
+	baseURL, err := readAPIConfig(apiConfigurationPath)
+
+	if err != nil {
+		client = nil
+		errClient = err
+		return
+	}
+
+	client = &Client{
+		BaseURL: baseURL,
+	}
+
 	// Make POST Request for API Token
 
 	// Setup HTTP Request
@@ -45,7 +62,7 @@ func buildClient(credentials *Credentials, configurationType string) {
 	// Parameters
 	var jsonBytes = credentialsToJSON(credentials)
 
-	url := baseURL + AuthenticateRoute
+	url := client.BaseURL + AuthenticateRoute
 
 	// Request Configuration
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonBytes))
@@ -93,14 +110,27 @@ func buildClient(credentials *Credentials, configurationType string) {
 
 	var accessToken = responseMap["accessToken"].(string)
 
-	client = &Client{
-		AccessToken: accessToken,
-	}
+	client.AccessToken = accessToken
 	errClient = nil
 
-	// logger.Debug("access_token", accessToken)
-
 	return
+}
+
+func readAPIConfig(path string) (string, error) {
+	content, err := ioutil.ReadFile(path)
+	if err != nil {
+		return "", err
+	}
+
+	text := string(content)
+	conf := config.ParseString(text)
+
+	baseURL := conf.GetString("api.base_url")
+
+	if baseURL == "" {
+		return "", fmt.Errorf("Unable to read api.conf")
+	}
+	return baseURL, nil
 }
 
 /* Public Functions */
@@ -123,7 +153,7 @@ func GetClient() (*Client, error) {
 func (c *Client) POST(route string, payload []byte) (map[string]interface{}, error) {
 	logger := GetLogger()
 
-	url := baseURL + route
+	url := c.BaseURL + route
 
 	logger.Debug("msg", "making API POST request", "url", url)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(payload))

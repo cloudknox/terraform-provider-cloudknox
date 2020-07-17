@@ -1,7 +1,7 @@
 package common
 
 import (
-	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -50,7 +50,7 @@ func setClientConfiguration(parameters *ClientParameters) {
 				logger.Info("msg", "shared credentials file exists", "path", parameters.SharedCredentialsFile)
 				logger.Debug("msg", "checking profile", "profile", parameters.Profile)
 
-				err := readHOCON(parameters.SharedCredentialsFile, parameters.Profile)
+				err := readCredentialsConfig(parameters.SharedCredentialsFile, parameters.Profile)
 
 				if err == nil {
 					configurationType = "Shared Credentials File"
@@ -63,13 +63,13 @@ func setClientConfiguration(parameters *ClientParameters) {
 
 			// Check Default Path
 			homedir, _ := homedir.Dir()
-			defaultCredentialsPath := homedir + "//.cnx//creds.conf"
+			defaultCredentialsPath := homedir + "//.cloudknox//creds.conf"
 			logger.Debug("msg", "searching for default credentials file")
 			if utils.CheckIfPathExists(defaultCredentialsPath) {
 				logger.Info("msg", "default credentials file exists", "path", defaultCredentialsPath)
 				logger.Debug("msg", "checking profile", "profile", parameters.Profile)
 
-				err := readHOCON(defaultCredentialsPath, parameters.Profile)
+				err := readCredentialsConfig(defaultCredentialsPath, parameters.Profile)
 
 				if err == nil {
 					configurationType = "Default Credentials File"
@@ -106,7 +106,7 @@ func setClientConfiguration(parameters *ClientParameters) {
 	return
 }
 
-func readHOCON(path string, profile string) error {
+func readCredentialsConfig(path string, profile string) error {
 	content, err := ioutil.ReadFile(path)
 	if err != nil {
 		return err
@@ -122,7 +122,7 @@ func readHOCON(path string, profile string) error {
 	creds.SecretKey = conf.GetString("profiles." + profile + ".secret_key")
 
 	if creds.ServiceAccountID == "" || creds.AccessKey == "" || creds.SecretKey == "" {
-		return errors.New("Malformed HOCON File")
+		return fmt.Errorf("Malformed HOCON File")
 	}
 
 	return nil

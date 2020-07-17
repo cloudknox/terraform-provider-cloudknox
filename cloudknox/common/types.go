@@ -23,4 +23,5 @@ type Credentials struct {
 //Client object is used to interact with client functions using an AccessToken
 type Client struct {
 	AccessToken string
+	BaseURL     string
 }
