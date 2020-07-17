@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httputil"
-	"os"
 	"terraform-provider-cloudknox/cloudknox/utils"
 )
 
@@ -42,7 +41,7 @@ func buildClient(credentials *Credentials, configurationType string) {
 	// Parameters
 	var jsonBytes = credentialsToJSON(credentials)
 
-	url := os.Getenv("CNX_BASE_URL")
+	url := "https://olympus.aws-staging.cloudknox.io" + AuthenticateRoute
 
 	// Request Configuration
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonBytes))

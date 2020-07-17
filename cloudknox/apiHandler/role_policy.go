@@ -2,7 +2,6 @@ package apiHandler
 
 import (
 	"encoding/json"
-	"os"
 	"terraform-provider-cloudknox/cloudknox/common"
 	"terraform-provider-cloudknox/cloudknox/utils"
 	"time"
@@ -26,7 +25,7 @@ func CreateRolePolicy(platform string, name string, outputPath string, payload *
 	payload_bytes, _ := json.Marshal(payload)
 	// logger.Debug("msg", "Payload post-marshal", "payload", string(payload_bytes))
 
-	url := os.Getenv("CNX_BASE_URL") + RolePolicyCreateRoute
+	url := "https://olympus.aws-staging.cloudknox.io" + RolePolicyCreateRoute
 
 	rolePolicy, err := client.POST(url, payload_bytes)
 	if err != nil {

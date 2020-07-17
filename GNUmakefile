@@ -10,7 +10,7 @@ DEFAULT_CREDENTIALS_FOLDER= ~/.cnx/
 default: build
 
 build: install init_credentials
-	export CNX_BASE_URL = $(BASE_URL)
+	export CNX_BASE_URL=$(BASE_URL)
 	mkdir -p $(LOG_DEST)
 	@printf "\nSet Credentials -> $(DEFAULT_CREDENTIALS_FOLDER)creds.conf"
 	@printf "\nLogs -> $(LOG_DEST)application.log"
