@@ -1,12 +1,8 @@
 package common
 
-/* Private Variables */
-
 /* Public Variables */
 
 const (
-	BaseURL    string = "https://olympus.aws-staging.cloudknox.io"
+	// RolePolicy is the public facing name used for RolePolicy
 	RolePolicy string = "cloudknox_role_policy"
 )
-
-/* Public Functions */

@@ -2,7 +2,3 @@
 *.log
 *.tfstate
 *.tf
-.terraform/
-*.exe
-*.backup
-terraform.tfstate.backup

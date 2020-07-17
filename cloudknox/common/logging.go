@@ -69,22 +69,27 @@ func GetLogger() CustomLogger {
 	return getLogger()
 }
 
+// Info is a method that logs at Info level
 func (clog CustomLogger) Info(args ...interface{}) {
 	level.Info(clog.logger).Log(args...)
 }
 
+// Debug is a method that logs at Debug level
 func (clog CustomLogger) Debug(args ...interface{}) {
 	level.Debug(clog.logger).Log(args...)
 }
 
+// Warn is a method that logs at Warning level
 func (clog CustomLogger) Warn(args ...interface{}) {
 	level.Warn(clog.logger).Log(args...)
 }
 
+// Error is a method that logs at Error level
 func (clog CustomLogger) Error(args ...interface{}) {
 	level.Error(clog.logger).Log(args...)
 }
 
+// Fatal is a method that logs at Fatal level
 func (clog CustomLogger) Fatal(args ...interface{}) {
 	level.Error(clog.logger).Log(args...)
 	os.Exit(1)

@@ -3,10 +3,8 @@ module terraform-provider-cloudknox
 go 1.14
 
 require (
-	github.com/go-akka/configuration v0.0.0-20200115015912-550403a6bd87
-	github.com/go-kit/kit v0.8.0
-	github.com/go-logfmt/logfmt v0.5.0 // indirect
-	github.com/hashicorp/terraform-plugin-sdk v1.13.0
+	github.com/go-akka/configuration v0.0.0-20200606091224-a002c0330665
+	github.com/go-kit/kit v0.10.0
+	github.com/hashicorp/terraform-plugin-sdk v1.15.0
 	github.com/mitchellh/go-homedir v1.1.0
-	gopkg.in/yaml.v2 v2.2.4
 )

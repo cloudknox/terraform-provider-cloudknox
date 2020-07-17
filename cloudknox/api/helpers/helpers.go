@@ -1,11 +1,12 @@
-package apiHandler
+package helpers
 
 import (
 	"terraform-provider-cloudknox/cloudknox/common"
 	"terraform-provider-cloudknox/cloudknox/sink"
 )
 
-func writeResource(resource string, platform string, args map[string]string) error {
+//WriteResource interfaces with sinks to create desirec local output
+func WriteResource(resource string, platform string, args map[string]string) error {
 
 	logger := common.GetLogger()
 

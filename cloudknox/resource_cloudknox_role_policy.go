@@ -2,7 +2,7 @@ package cloudknox
 
 import (
 	"fmt"
-	"terraform-provider-cloudknox/cloudknox/apiHandler"
+	"terraform-provider-cloudknox/cloudknox/api/routes"
 	"terraform-provider-cloudknox/cloudknox/common"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -96,7 +96,7 @@ func resourceRolePolicyCreate(d *schema.ResourceData, m interface{}) error {
 	logger := common.GetLogger()
 	logger.Info("msg", "Building Policy Payload")
 
-	var payload apiHandler.RolePolicyData
+	var payload routes.RolePolicyData
 
 	logger.Info("msg", "Reading Resource Data")
 
@@ -118,7 +118,7 @@ func resourceRolePolicyCreate(d *schema.ResourceData, m interface{}) error {
 
 	if start != 0 && end != 0 {
 		logger.Debug("msg", "Filter History Bounds Given")
-		payload.Filter.HistoryDuration = &apiHandler.HistoryDuration{
+		payload.Filter.HistoryDuration = &routes.HistoryDuration{
 			StartTime: start,
 			EndTime:   end,
 		}
@@ -140,7 +140,7 @@ func resourceRolePolicyCreate(d *schema.ResourceData, m interface{}) error {
 	} else {
 		logger.Debug("msg", "Request Params Given")
 
-		var requestParams apiHandler.RequestParams
+		var requestParams routes.RequestParams
 
 		if scope.(string) == "" {
 			requestParams.Scope = nil
@@ -172,7 +172,7 @@ func resourceRolePolicyCreate(d *schema.ResourceData, m interface{}) error {
 	}
 
 	logger.Info("msg", "Payload Successfully Built")
-	err := apiHandler.CreateRolePolicy(payload.AuthSystemInfo.Type, name, d.Get("output_path").(string), &payload)
+	err := routes.CreateRolePolicy(payload.AuthSystemInfo.Type, name, d.Get("output_path").(string), &payload)
 
 	if err != nil {
 		return err
@@ -180,7 +180,7 @@ func resourceRolePolicyCreate(d *schema.ResourceData, m interface{}) error {
 
 	d.SetId(name)
 
-	return nil
+	return resourceRolePolicyRead(d, m)
 }
 
 func resourceRolePolicyRead(d *schema.ResourceData, m interface{}) error {
@@ -188,7 +188,8 @@ func resourceRolePolicyRead(d *schema.ResourceData, m interface{}) error {
 }
 
 func resourceRolePolicyUpdate(d *schema.ResourceData, m interface{}) error {
-	return nil
+	resourceRolePolicyCreate(d, m)
+	return resourceRolePolicyRead(d, m)
 }
 
 func resourceRolePolicyDelete(d *schema.ResourceData, m interface{}) error {
