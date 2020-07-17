@@ -3,18 +3,12 @@ GOFMT_FILES?=$$(find . -name '*.go' |grep -v vendor)
 BASE_URL = "https://olympus.aws-staging.cloudknox.io"
 
 DIR=~/.terraform.d/plugins
-LOG_DEST = ./application.log
 
 DEFAULT_CREDENTIALS_FOLDER= ~/.cnx/
 
 default: build
 
 build: install init_credentials
-	set CNX_BASE_URL=$(BASE_URL)
-	mkdir -p $(LOG_DEST)
-	@printf "==> Directories Created"
-	@printf "\n   ==>Set Credentials -> $(DEFAULT_CREDENTIALS_FOLDER)creds.conf"
-	@printf "\n   ==>Logs -> $(LOG_DEST)application.log\n"
 
 install: fmt
 	@printf "\n==> Installing provider to $(DIR)\n"
