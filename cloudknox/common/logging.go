@@ -29,7 +29,7 @@ func getLogger() CustomLogger {
 			if err == nil {
 				customLogger.logger = log.NewLogfmtLogger(file)
 
-				logLevel := "ALL" //Add environment variable support
+				logLevel := "ALL" //Add environment variable support`
 
 				var levelOption level.Option
 

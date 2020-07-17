@@ -20,7 +20,7 @@ const (
 )
 
 var client *Client
-var clientErr = errors.New("Credentials Error")
+var errClient = fmt.Errorf("Credentials Error")
 
 func credentialsToJSON(credentials *Credentials) []byte {
 	c, _ := json.Marshal(credentials)
@@ -53,7 +53,7 @@ func buildClient(credentials *Credentials, configurationType string) {
 	if err != nil {
 		logger.Error("resp", resp, "http_error", err.Error())
 		client = nil
-		clientErr = errors.New("Unable to make HTTP Client Request")
+		errClient = errors.New("Unable to make HTTP Client Request")
 		return
 	}
 	defer resp.Body.Close()
@@ -68,7 +68,7 @@ func buildClient(credentials *Credentials, configurationType string) {
 	if resp.StatusCode != http.StatusOK {
 		logger.Error("msg", "HTTP Response status != 200 OK", "resp", resp.Status, "credentials", "invalid")
 		client = nil
-		clientErr = fmt.Errorf("Error During Authentication, Server Responded With %s", resp.Status)
+		errClient = fmt.Errorf("Error During Authentication, Server Responded With %s", resp.Status)
 		return
 	} else {
 		logger.Info("msg", "HTTP Response status == 200 OK", "resp", resp.Status, "credentials", "valid")
@@ -83,7 +83,7 @@ func buildClient(credentials *Credentials, configurationType string) {
 		logger.Error("msg", "unable to extract response from body", "unmarshal_error", err)
 		logger.Error("body", body)
 		client = nil
-		clientErr = errors.New("Unable to read HTTP Response")
+		errClient = errors.New("Unable to read HTTP Response")
 		return
 	}
 
@@ -92,7 +92,7 @@ func buildClient(credentials *Credentials, configurationType string) {
 	client = &Client{
 		AccessToken: accessToken,
 	}
-	clientErr = nil
+	errClient = nil
 
 	// logger.Debug("access_token", accessToken)
 
@@ -102,14 +102,14 @@ func buildClient(credentials *Credentials, configurationType string) {
 /* Public Functions */
 func GetClient() (*Client, error) {
 
-	if clientErr == nil {
+	if errClient == nil {
 		if client != nil {
 			return client, nil
 		} else {
 			return nil, errors.New("Unexpected Error")
 		}
 	} else {
-		return nil, errors.New(clientErr.Error() + " | ConfigType: " + configType)
+		return nil, errors.New(errClient.Error() + " | ConfigType: " + configType)
 	}
 
 }
