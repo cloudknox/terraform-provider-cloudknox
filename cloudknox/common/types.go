@@ -24,14 +24,3 @@ type Credentials struct {
 type Client struct {
 	AccessToken string
 }
-
-//Configuration stores the parameters set in the configuration file
-type Configuration struct {
-	BaseURL string `yaml:"base_url"`
-	Routes  struct {
-		Auth       string `yaml:"authentication"`
-		RolePolicy struct {
-			Create string `yaml:"create"`
-		} `yaml:"role_policy"`
-	} `yaml:"routes"`
-}

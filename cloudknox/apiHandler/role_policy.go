@@ -2,9 +2,14 @@ package apiHandler
 
 import (
 	"encoding/json"
+	"os"
 	"terraform-provider-cloudknox/cloudknox/common"
 	"terraform-provider-cloudknox/cloudknox/utils"
 	"time"
+)
+
+const (
+	RolePolicyCreateRoute string = "/api/v2/role-policy/new"
 )
 
 func CreateRolePolicy(platform string, name string, outputPath string, payload *RolePolicyData) error {
@@ -21,7 +26,7 @@ func CreateRolePolicy(platform string, name string, outputPath string, payload *
 	payload_bytes, _ := json.Marshal(payload)
 	// logger.Debug("msg", "Payload post-marshal", "payload", string(payload_bytes))
 
-	url := common.GetConfiguration().BaseURL + common.GetConfiguration().Routes.RolePolicy.Create
+	url := os.Getenv("CNX_BASE_URL") + RolePolicyCreateRoute
 
 	rolePolicy, err := client.POST(url, payload_bytes)
 	if err != nil {

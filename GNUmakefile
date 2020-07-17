@@ -1,20 +1,16 @@
 #TEST?=$$(go list ./... |grep -v 'vendor')
 GOFMT_FILES?=$$(find . -name '*.go' |grep -v vendor)
 
-PKG_NAME=datadog
+BASE_URL = "https://olympus.aws-staging.cloudknox.io"
+
 DIR=~/.terraform.d/plugins
-
-CONFIGURATION_FILE= ./cloudknox/config/terraform-provider-cloudknox-config.yaml
-CONFIGURATION_DEST= /opt/cloudknox/
-
 LOG_DEST = /var/log/cloudknox/
-
 DEFAULT_CREDENTIALS_FOLDER= ~/.cnx/
 
 default: build
 
 build: install init_credentials
-	mkdir -p $(CONFIGURATION_DEST) && cp $(CONFIGURATION_FILE)  $(CONFIGURATION_DEST)
+	export CNX_BASE_URL = $(BASE_URL)
 	mkdir -p $(LOG_DEST)
 	@printf "\nSet Credentials -> $(DEFAULT_CREDENTIALS_FOLDER)creds.conf"
 	@printf "\nLogs -> $(LOG_DEST)application.log"
@@ -40,13 +36,3 @@ init_credentials:
 
 testacc: fmtcheck
 	TF_ACC=1 go test terraform-provider-cloudknox/cloudknox -v -timeout 120m
-
-test: fmtcheck
-	find ./ -name "*.tf*" -not -name "main.tf" -exec rm {} \;
-	terraform init
-	terraform apply -input=false -auto-approve -parallelism=10
-
-clean:
-	find ./ -name "*.tf" -not -name "main.tf" -exec rm {} \;
-	rm -f info.log crash.log terraform-provider-cloudknox.exe terraform.tfstate
-

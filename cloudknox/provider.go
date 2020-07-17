@@ -7,10 +7,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 )
 
-const (
-	configPath = "/opt/cloudknox/terraform-provider-cloudknox-config.yaml"
-)
-
 // Provider creates and returns a Terraform Provider with populated Schema
 func Provider() terraform.ResourceProvider {
 	logger := common.GetLogger()
@@ -47,12 +43,6 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	parameters := &common.ClientParameters{
 		SharedCredentialsFile: d.Get("shared_credentials_file").(string),
 		Profile:               d.Get("profile").(string),
-	}
-
-	err := common.SetConfiguration(configPath)
-
-	if err != nil {
-		return nil, err
 	}
 
 	common.SetClientConfiguration(parameters) //Build Client Struct using parameters

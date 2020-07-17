@@ -8,12 +8,17 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httputil"
+	"os"
 	"terraform-provider-cloudknox/cloudknox/utils"
 )
 
 /* Private Variables */
 var credentials *Credentials
 var configType string
+
+const (
+	AuthenticateRoute = "/api/v2/service-account/authenticate"
+)
 
 var client *Client
 var clientErr = errors.New("Credentials Error")
@@ -37,7 +42,7 @@ func buildClient(credentials *Credentials, configurationType string) {
 	// Parameters
 	var jsonBytes = credentialsToJSON(credentials)
 
-	url := GetConfiguration().BaseURL + GetConfiguration().Routes.Auth
+	url := os.Getenv("CNX_BASE_URL")
 
 	// Request Configuration
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonBytes))

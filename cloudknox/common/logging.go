@@ -28,7 +28,7 @@ func getLogger() CustomLogger {
 			file, err := os.OpenFile(output, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
 			if err == nil {
 				customLogger.logger = log.NewLogfmtLogger(file)
-				customLogger.logger = level.NewFilter(customLogger.logger, level.AllowAll())
+				customLogger.logger = level.NewFilter(customLogger.logger, level.AllowInfo())
 				customLogger.logger = log.With(customLogger.logger, "time", log.DefaultTimestampUTC)
 				customLogger.Info("msg", "successfully created logger instance!")
 			} else {
