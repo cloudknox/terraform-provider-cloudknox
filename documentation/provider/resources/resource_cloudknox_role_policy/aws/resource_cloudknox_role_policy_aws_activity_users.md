@@ -15,25 +15,25 @@ resource "cloudknox_role_policy" "user-activity-large-aws-policy" {
     name = "user-activity-large-aws-policy"
     output_path = "./"
     auth_system_info = {
-        id = "377596131774"
+        id = "123456789012"
         type = "AWS"
     }
     identity_type = "USER"
     identity_ids = [
-    "arn:aws:iam::377596131774:user/balaji",
-    "arn:aws:iam::377596131774:user/carl",
-    "arn:aws:iam::377596131774:user/devops",
-    "geeta+okta@cloudknox.io",
-    "arn:aws:iam::377596131774:user/geeta.alapati",
-    "arn:aws:iam::377596131774:user/geetatest2",
-    "arn:aws:iam::377596131774:user/geetauser3",
-    "guru+okta@cloudknox.io",
-    "guru+okta01@cloudknox.io",
-    "arn:aws:iam::377596131774:user/guru.ramprakash",
-    "arn:aws:iam::377596131774:user/josh",
-    "josh+okta@cloudknox.io",
-    "arn:aws:iam::377596131774:user/josh-policy-boundary-test",
-    "arn:aws:iam::377596131774:user/josh-policy-boundary-test-direct"
+    "arn:aws:iam::123456789012:user/bob",
+    "arn:aws:iam::123456789012:user/carol",
+    "arn:aws:iam::123456789012:user/david",
+    "grace+okta@cloudknox.io",
+    "arn:aws:iam::123456789012:user/grace.arthur",
+    "arn:aws:iam::123456789012:user/gracetest2",
+    "arn:aws:iam::123456789012:user/graceuser3",
+    "grace+okta@cloudknox.io",
+    "grace+okta01@cloudknox.io",
+    "arn:aws:iam::123456789012:user/grace.rupert",
+    "arn:aws:iam::123456789012:user/judy",
+    "judy+okta@cloudknox.io",
+    "arn:aws:iam::123456789012:user/judy-policy-boundary-test",
+    "arn:aws:iam::123456789012:user/judy-policy-boundary-test-direct"
   ]
 
     filter_history_days = 90
@@ -45,8 +45,8 @@ resource "cloudknox_role_policy" "user-activity-large-aws-policy" {
 An `aws_iam_policy` resource is outputted to a file `./user-activity-large-aws-policy.tf` containing the following resources. Since the AWS Policy exceeds 6144 characters, the Policy is automatically split across multiple resources denoted with the underscore in the policy name. If the Policy was less than 6144 characters, only a single resource will be created in the output file. Policies are named automatically according to the response from the CloudKnox API.
 
 ```terraform
-resource "aws_iam_policy" "ck_activity_1594927282578_0" {
-			name        = "ck_activity_1594927282578_0"
+resource "aws_iam_policy" "ck_activity_1594128371578_0" {
+			name        = "ck_activity_1594128371578_0"
 			path        = "/"
 			description = "Cloudknox Generated IAM Role-Policy for AWS at 2020-07-16 12:21:21.9465109 -0700 PDT m=+0.545391201"
 			policy = <<EOF
@@ -82,8 +82,8 @@ resource "aws_iam_policy" "ck_activity_1594927282578_0" {
 EOF
 }
 
-resource "aws_iam_policy" "ck_activity_1594927282578_1" {
-			name        = "ck_activity_1594927282578_1"
+resource "aws_iam_policy" "ck_activity_1594128371578_1" {
+			name        = "ck_activity_1594128371578_1"
 			path        = "/"
 			description = "Cloudknox Generated IAM Role-Policy for AWS at 2020-07-16 12:21:21.9465109 -0700 PDT m=+0.545391201"
 			policy = <<EOF

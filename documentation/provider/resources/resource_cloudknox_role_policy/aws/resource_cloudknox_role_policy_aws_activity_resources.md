@@ -15,15 +15,15 @@ resource "cloudknox_role_policy" "resource-activity-aws-policy" {
     name = "resource-activity-aws-policy"
     output_path = "./resource_policies/"
     auth_system_info = {
-        id = "377596131774"
+        id = "123456789012"
         type = "AWS"
     }
     identity_type = "RESOURCE"
     identity_ids = [
-        "arn:aws:ec2:us-east-1:377596131774:instance/i-0a5e0048fb0237de0",
-    	"arn:aws:ec2:us-east-1:377596131774:instance/i-03689effa30f70329"]
-    filter_history_start_time_millis = 1585071573512
-    filter_history_end_time_millis = 1592847573512
+        "arn:aws:ec2:us-east-1:123456789012:instance/i-0a5a0012f0asd7de0",
+    	"arn:aws:ec2:us-east-1:123456789012:instance/i-03asda213hjkj3329"]
+    filter_history_start_time_millis = 123456789012
+    filter_history_end_time_millis = 123456789012
 }
 ```
 
@@ -32,8 +32,8 @@ resource "cloudknox_role_policy" "resource-activity-aws-policy" {
 An `aws_iam_policy` resource is outputted to a file `./resource_policies/resource-activity-aws-policy.tf` containing the following AWS Terraform Provider Resources. If the policy exceeded 6144 characters, multiple `aws_iam_policy` policies would be generated in the same output file. Policies are named automatically according to the response from the CloudKnox API.
 
 ```terraform
-resource "aws_iam_policy" "ck_activity_1594927282453_0" {
-			name        = "ck_activity_1594927282453_0"
+resource "aws_iam_policy" "ck_activity_1593123412453_0" {
+			name        = "ck_activity_1593123412453_0"
 			path        = "/"
 			description = "Cloudknox Generated IAM Role-Policy for AWS at 2020-07-16 12:21:21.7822427 -0700 PDT m=+0.381123001"
 			policy = <<EOF

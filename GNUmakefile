@@ -12,9 +12,9 @@ default: build
 build: install init_credentials
 	export CNX_BASE_URL=$(BASE_URL)
 	mkdir -p $(LOG_DEST)
+	@printf "==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== "
 	@printf "\nSet Credentials -> $(DEFAULT_CREDENTIALS_FOLDER)creds.conf"
-	@printf "\nLogs -> $(LOG_DEST)application.log"
-	@printf "\nBackend Config -> $(CONFIGURATION_DEST)terraform-provider-cloudknox-config.yaml\n"
+	@printf "\nLogs -> $(LOG_DEST)application.log\n"
 
 install: fmtcheck
 	@printf "\nInstalling provider to $(DIR)\n"
