@@ -1,7 +1,7 @@
 package main
 
 import (
-	"cloudknox/terraform-provider-cloudknox/cloudknox"
+	"terraform-provider-cloudknox/cloudknox"
 
 	"github.com/hashicorp/terraform-plugin-sdk/plugin"
 )

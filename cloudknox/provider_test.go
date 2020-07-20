@@ -11,17 +11,18 @@ var testAccProviders map[string]terraform.ResourceProvider
 var testAccProvider *schema.Provider
 
 func init() {
-	//testProvider = Provider().(*schema.Provider)
+	testAccProvider = Provider().(*schema.Provider)
+	testAccProviders = map[string]terraform.ResourceProvider{
+		"cloudknox": testAccProvider,
+	}
 }
 
 func TestProvider(t *testing.T) {
-
+	if err := Provider().(*schema.Provider).InternalValidate(); err != nil {
+		t.Fatalf("err: %s", err)
+	}
 }
 
-func TestGoodCredentials(t *testing.T) {
-
-}
-
-func TestBadCredentials(t *testing.T) {
-
+func TestProvider_impl(t *testing.T) {
+	var _ terraform.ResourceProvider = Provider()
 }

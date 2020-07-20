@@ -1,18 +1,19 @@
 package cloudknox
 
 import (
-	"cloudknox/terraform-provider-cloudknox/cloudknox/apiHandler"
-	"cloudknox/terraform-provider-cloudknox/cloudknox/common"
+	"fmt"
+	"terraform-provider-cloudknox/cloudknox/api/routes"
+	"terraform-provider-cloudknox/cloudknox/common"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
-func resourcePolicy() *schema.Resource {
+func resourceRolePolicy() *schema.Resource {
 	return &schema.Resource{
-		Create: resourcePolicyCreate,
-		Read:   resourcePolicyRead,
-		Update: resourcePolicyUpdate,
-		Delete: resourcePolicyDelete,
+		Create: resourceRolePolicyCreate,
+		Read:   resourceRolePolicyRead,
+		Update: resourceRolePolicyUpdate,
+		Delete: resourceRolePolicyDelete,
 
 		Schema: map[string]*schema.Schema{
 
@@ -81,7 +82,6 @@ func resourcePolicy() *schema.Resource {
 					Type: schema.TypeString,
 				},
 				Optional: true,
-				Default:  nil,
 			},
 			"request_params_condition": {
 				Type:     schema.TypeString,
@@ -92,13 +92,13 @@ func resourcePolicy() *schema.Resource {
 	}
 }
 
-func resourcePolicyCreate(d *schema.ResourceData, m interface{}) error {
+func resourceRolePolicyCreate(d *schema.ResourceData, m interface{}) error {
 	logger := common.GetLogger()
 	logger.Info("msg", "Building Policy Payload")
 
-	var payload apiHandler.PolicyData
+	var payload routes.RolePolicyData
 
-	logger.Info("msg", "Reading Resource Data")
+	logger.Debug("msg", "Reading Resource Data")
 
 	name := d.Get("name").(string)
 
@@ -118,7 +118,7 @@ func resourcePolicyCreate(d *schema.ResourceData, m interface{}) error {
 
 	if start != 0 && end != 0 {
 		logger.Debug("msg", "Filter History Bounds Given")
-		payload.Filter.HistoryDuration = &apiHandler.HD{
+		payload.Filter.HistoryDuration = &routes.HistoryDuration{
 			StartTime: start,
 			EndTime:   end,
 		}
@@ -131,14 +131,16 @@ func resourcePolicyCreate(d *schema.ResourceData, m interface{}) error {
 	var resources interface{} = d.Get("request_params_resources")
 	var condition interface{} = d.Get("request_params_condition")
 
-	logger.Debug("scope", scope.(string), "resource", resource.(string), "resources", resources, "condition", condition.(string))
+	resourcesString := fmt.Sprintf("%v", resources)
 
-	if scope == "" && resource == "" && resources == nil && condition == "" {
+	logger.Debug("scope", scope.(string), "resource", resource.(string), "resources", resourcesString, "condition", condition.(string))
+
+	if scope == "" && resource == "" && resourcesString == "[]" && condition == "" {
 		logger.Debug("msg", "No Request Params Given")
 	} else {
 		logger.Debug("msg", "Request Params Given")
 
-		var requestParams apiHandler.RP
+		var requestParams routes.RequestParams
 
 		if scope.(string) == "" {
 			requestParams.Scope = nil
@@ -152,7 +154,13 @@ func resourcePolicyCreate(d *schema.ResourceData, m interface{}) error {
 			requestParams.Resource = resource.(string)
 		}
 
-		requestParams.Resources = resources
+		if resourcesString == "[]" {
+			logger.Debug("msg", "Resources null")
+			requestParams.Resources = nil
+		} else {
+			logger.Debug("msg", "Resources non null")
+			requestParams.Resources = resources
+		}
 
 		if condition.(string) == "" {
 			requestParams.Condition = nil
@@ -163,8 +171,8 @@ func resourcePolicyCreate(d *schema.ResourceData, m interface{}) error {
 		payload.RequestParams = &requestParams
 	}
 
-	logger.Info("msg", "Payload Successfully Built")
-	err := apiHandler.NewPolicy(payload.AuthSystemInfo.Type, name, d.Get("output_path").(string), &payload)
+	logger.Debug("msg", "payload successfully built", "role_policy", name)
+	err := routes.CreateRolePolicy(payload.AuthSystemInfo.Type, name, d.Get("output_path").(string), &payload)
 
 	if err != nil {
 		return err
@@ -172,17 +180,18 @@ func resourcePolicyCreate(d *schema.ResourceData, m interface{}) error {
 
 	d.SetId(name)
 
+	return resourceRolePolicyRead(d, m)
+}
+
+func resourceRolePolicyRead(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func resourcePolicyRead(d *schema.ResourceData, m interface{}) error {
-	return nil
+func resourceRolePolicyUpdate(d *schema.ResourceData, m interface{}) error {
+	resourceRolePolicyCreate(d, m)
+	return resourceRolePolicyRead(d, m)
 }
 
-func resourcePolicyUpdate(d *schema.ResourceData, m interface{}) error {
-	return nil
-}
-
-func resourcePolicyDelete(d *schema.ResourceData, m interface{}) error {
+func resourceRolePolicyDelete(d *schema.ResourceData, m interface{}) error {
 	return nil
 }

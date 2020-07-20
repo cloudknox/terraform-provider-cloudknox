@@ -1,20 +1,20 @@
 package gcp
 
 import (
-	"cloudknox/terraform-provider-cloudknox/cloudknox/common"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"terraform-provider-cloudknox/cloudknox/common"
 )
 
-type PolicyContractWriter struct {
+type RolePolicyContractWriter struct {
 	Args map[string]string
 }
 
-func (gcp PolicyContractWriter) Write() error {
+func (gcp RolePolicyContractWriter) Write() error {
 
 	logger := common.GetLogger()
-	logger.Info("msg", "Writing GCP Policy")
+	logger.Info("msg", "writing gcp role")
 
 	//Turn the given policy into a map so that we can extract even more fields
 	policy := make(map[string]interface{})
@@ -22,8 +22,8 @@ func (gcp PolicyContractWriter) Write() error {
 	err := json.Unmarshal([]byte(gcp.Args["data"]), &policy)
 
 	if err != nil {
-		logger.Error("msg", "Unable to extract response from body", "unmarshal_error", err)
-		logger.Error("policy", gcp.Args["data"])
+		logger.Error("msg", "unable to extract response from body", "unmarshal_error", err)
+		logger.Error("role", gcp.Args["data"])
 		return err
 	}
 
@@ -52,12 +52,12 @@ func (gcp PolicyContractWriter) Write() error {
 
 	//Write the template to file after filling out the fields
 
-	filename := fmt.Sprintf("%scloudknox-gcp-%s.tf", gcp.Args["output_path"], gcp.Args["name"])
+	filename := fmt.Sprintf("%s%s.tf", gcp.Args["output_path"], gcp.Args["name"])
 
 	err = ioutil.WriteFile(filename, []byte(template+suffix), 0644)
 
 	if err != nil {
-		logger.Error("msg", "FileIO Error", "file_error", err)
+		logger.Error("msg", "fileIO error", "file_error", err)
 		return err
 	}
 	return nil

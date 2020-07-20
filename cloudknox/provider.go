@@ -1,7 +1,7 @@
 package cloudknox
 
 import (
-	"cloudknox/terraform-provider-cloudknox/cloudknox/common"
+	"terraform-provider-cloudknox/cloudknox/common"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
@@ -10,7 +10,8 @@ import (
 // Provider creates and returns a Terraform Provider with populated Schema
 func Provider() terraform.ResourceProvider {
 	logger := common.GetLogger()
-	logger.Info("msg", "Building Cloudknox Terraform Provider")
+	logger.Debug("msg", "initializing cloudknox terraform provider")
+
 	provider := &schema.Provider{
 		Schema: map[string]*schema.Schema{
 
@@ -26,7 +27,7 @@ func Provider() terraform.ResourceProvider {
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"cloudknox_policy": resourcePolicy(),
+			common.RolePolicy: resourceRolePolicy(),
 		},
 
 		ConfigureFunc: providerConfigure,
@@ -37,15 +38,15 @@ func Provider() terraform.ResourceProvider {
 
 func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	logger := common.GetLogger()
-	logger.Info("msg", "Configuring Cloudknox Terraform Provider")
+	logger.Info("msg", "setting cloudknox terraform provider parameters")
 
 	parameters := &common.ClientParameters{
 		SharedCredentialsFile: d.Get("shared_credentials_file").(string),
 		Profile:               d.Get("profile").(string),
 	}
 
-	common.SetConfiguration(parameters) //Build Client Struct using parameters
-	return common.GetClient()           //Return the Client Struct and the Error
+	common.SetClientConfiguration(parameters) //Build Client Struct using parameters
+	return common.GetClient()                 //Return the Client Struct and the Error
 }
 
 var descriptions map[string]string
@@ -53,11 +54,9 @@ var descriptions map[string]string
 func init() {
 
 	logger := common.GetLogger()
-	logger.Debug("msg", "Running Initialization Function")
+	logger.Debug("msg", "running initialization function")
 	descriptions = map[string]string{
-
 		"shared_credentials_file": "Path/Filename of the HOCON credentials file.",
-
-		"profile": "Profile for (SERVICE_ACCOUNT_ID, ACCESS_KEY, SECRET_KEY) triplet you would like to use in a HOCON credentials file.",
+		"profile":                 "Profile for (SERVICE_ACCOUNT_ID, ACCESS_KEY, SECRET_KEY) triplet you would like to use in a HOCON credentials file.",
 	}
 }
