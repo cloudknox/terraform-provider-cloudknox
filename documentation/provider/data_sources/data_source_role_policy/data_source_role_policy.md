@@ -10,24 +10,20 @@ The `cloudknox_role_policy` data source will create different outputs based on t
 
 AWS
 
-1. [Activity of User(s)](./aws/data_source_cloudknox_role_policy_aws_activity_users.md)
-2. [Activity of Resources(s)](./aws/data_source_cloudknox_role_policy_aws_activity_resources.md)
-3. [Activity of Role](./aws/data_source_cloudknox_role_policy_aws_activity_role.md)
+1. [Activity of User(s)](./aws/data_source_role_policy_aws_activity_users.md)
+2. [Activity of Resources(s)](./aws/data_source_role_policy_aws_activity_resources.md)
+3. [Activity of Role](./aws/data_source_role_policy_aws_activity_role.md)
 
 Azure
 
-1. [Activity of User(s)](./azure/data_source_cloudknox_role_policy_azure_activity_users.md)
-2. [Activity of App(s)](./azure/data_source_cloudknox_role_policy_azure_activity_apps.md)
+1. [Activity of User(s)](./azure/data_source_role_policy_azure_activity_users.md)
+2. [Activity of App(s)](./azure/data_source_role_policy_azure_activity_apps.md)
 
 
 GCP
 
-1. [Activity of User(s)](./gcp/data_source_cloudknox_role_policy_gcp_activity_users.md)
-2. [Activity of Service Account(s)](./gcp/data_source_cloudknox_role_policy_gcp_activity_service_accounts.md) (Not Currently Supported)
-
-vCenter
-
-1. [Activity of User(s)](./vcenter/data_source_cloudknox_role_policy_vcenter_activity_users.md) (Not Currently Supported)
+1. [Activity of User(s)](./gcp/data_source_role_policy_gcp_activity_users.md)
+2. [Activity of Service Account(s)](./gcp/data_source_role_policy_gcp_activity_service_accounts.md) (Not Currently Supported)
 
 
 ## Properties Overview

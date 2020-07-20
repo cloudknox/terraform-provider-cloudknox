@@ -18,9 +18,12 @@ make build
 * The API configuration file is required and must be created in `~/.cloudknox/api.conf`
 
 The API configuration file should be populated as follows.
+
+* Get the `base_url` from CloudKnox integrations. ()
+
 ```HOCON
 api {
-    base_url: "https://olympus.aws-staging.cloudknox.io"
+    base_url: "http://base.url"
 }
 ```
 
