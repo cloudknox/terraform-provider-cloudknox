@@ -1,4 +1,4 @@
-# CloudKnox Role-Policy Resource (GCP Usage)
+# CloudKnox Role-Policy Data Source (GCP Usage)
 
 ## Create a Role based on Activity of User(s)
 
@@ -6,12 +6,12 @@ A GCP Role Definition is created based on the Activity of User(s) provided
 
 ### Example
 
-#### Terraform Resource
+#### Terraform Data Source
 
 The following block declares a `cloudknox_role_policy` named `user-activity-gcp-role`. `identity_type` should be set to `USER` and all `identity_ids` should be set to a user. The policy is generated from the history of the activity of thoose users from 90 days as set in `filter_history_days`. 
 
 ```terraform
-resource "cloudknox_role_policy" "user-activity-gcp-role" {
+data "cloudknox_role_policy" "user-activity-gcp-role" {
     name = "user-activity-gcp-role"
     output_path = "./"
     auth_system_info = {

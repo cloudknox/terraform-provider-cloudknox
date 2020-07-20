@@ -1,4 +1,4 @@
-# CloudKnox Role-Policy Resource (AWS Usage)
+# CloudKnox Role-Policy Data Source (AWS Usage)
 
 ## Create a Policy based on Activity of User(s)
 
@@ -6,12 +6,12 @@ An AWS IAM Policy is created based on the Activity of User(s) provided
 
 ### Example
 
-#### Terraform Resource
+#### Terraform Data Source
 
 The following block declares a `cloudknox_role_policy` named `user-activity-aws-policy`. `identity_type` should be set to `USER` and all `identity_ids` should be user ids. The policy is generated from the history of the activity of those users from 90 days as set in `filter_history_days`. 
 
 ```terraform
-resource "cloudknox_role_policy" "user-activity-large-aws-policy" {
+data "cloudknox_role_policy" "user-activity-large-aws-policy" {
     name = "user-activity-large-aws-policy"
     output_path = "./"
     auth_system_info = {

@@ -8,12 +8,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
-func resourceRolePolicy() *schema.Resource {
+func dataSourceRolePolicy() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceRolePolicyCreate,
-		Read:   resourceRolePolicyRead,
-		Update: resourceRolePolicyUpdate,
-		Delete: resourceRolePolicyDelete,
+		Read: dataSourcePolicyRead,
 
 		Schema: map[string]*schema.Schema{
 
@@ -92,7 +89,7 @@ func resourceRolePolicy() *schema.Resource {
 	}
 }
 
-func resourceRolePolicyCreate(d *schema.ResourceData, m interface{}) error {
+func dataSourcePolicyRead(d *schema.ResourceData, m interface{}) error {
 	logger := common.GetLogger()
 	logger.Info("msg", "Building Policy Payload")
 
@@ -180,18 +177,5 @@ func resourceRolePolicyCreate(d *schema.ResourceData, m interface{}) error {
 
 	d.SetId(name)
 
-	return resourceRolePolicyRead(d, m)
-}
-
-func resourceRolePolicyRead(d *schema.ResourceData, m interface{}) error {
-	return nil
-}
-
-func resourceRolePolicyUpdate(d *schema.ResourceData, m interface{}) error {
-	resourceRolePolicyCreate(d, m)
-	return resourceRolePolicyRead(d, m)
-}
-
-func resourceRolePolicyDelete(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
