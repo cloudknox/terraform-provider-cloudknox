@@ -1,7 +1,7 @@
 package sink
 
 import (
-	"errors"
+	"fmt"
 	"strings"
 	"terraform-provider-cloudknox/cloudknox/common"
 	"terraform-provider-cloudknox/cloudknox/sink/aws"
@@ -28,7 +28,7 @@ func BuildContractWriter(resource string, platform string, args map[string]strin
 		logger.Error("msg", "invalid resource", "resource", "default")
 	}
 
-	return nil, errors.New("Invalid Platform")
+	return nil, fmt.Errorf("invalid platform")
 }
 
 func getRolePolicyContract(platform string, args map[string]string) (ContractWriter, error) {

@@ -85,7 +85,7 @@ func updateCredentialsFromFile(filename string, profile string) error {
 	credentials.SecretKey = conf.GetString("profiles." + profile + ".secret_key")
 	if credentials.ServiceAccountID == "" || credentials.AccessKey == "" || credentials.SecretKey == "" {
 		err := fmt.Errorf("malformed configuration")
-		logger.Error("msg", "unable to read configuration file", err.Error())
+		logger.Error("msg", "unable to read configuration file", "error", err.Error())
 		return err
 	}
 	return nil

@@ -78,6 +78,9 @@ func (c *Client) POST(route string, payload []byte) (map[string]interface{}, err
 }
 
 func NewClient(credentials *Credentials)(*Client, error){
+	if credentials == nil {
+		return nil, fmt.Errorf("credentials not found")
+	}
 	logger := GetLogger()
 	logger.Info("msg", "building CloudKnox client object", "config_type")
 	homeDir, _ := homedir.Dir()
