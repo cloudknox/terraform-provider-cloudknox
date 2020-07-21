@@ -26,8 +26,8 @@ func Provider() terraform.ResourceProvider {
 				Description: descriptions["profile"],
 			},
 		},
-		ResourcesMap: map[string]*schema.Resource{
-			common.RolePolicy: resourceRolePolicy(),
+		DataSourcesMap: map[string]*schema.Resource{
+			common.RolePolicy: dataSourceRolePolicy(),
 		},
 
 		ConfigureFunc: providerConfigure,

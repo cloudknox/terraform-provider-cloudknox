@@ -1,4 +1,4 @@
-# CloudKnox Role-Policy Resource (Azure Usage)
+# CloudKnox Role-Policy Data Source (Azure Usage)
 
 ## Create a Role based on Activity of User(s)
 
@@ -6,7 +6,7 @@ An Azure Role Definition is created based on the Activity of User(s) provided
 
 ### Example
 
-#### Terraform Resource
+#### Terraform Data Source
 
 The following block declares a `cloudknox_role_policy` named `user-activity-azure-role`. `identity_type` should be set to `USER` and all `identity_ids` should be set user ids. The policy is generated from the history of the activity of those users from 90 days as set in `filter_history_days`. 
 
@@ -15,7 +15,7 @@ The following block declares a `cloudknox_role_policy` named `user-activity-azur
 Azure requires that the parameter `request_params_scope` be set to the scope of permission.
 
 ```terraform
-resource "cloudknox_role_policy" "user-activity-azure-role" {
+data "cloudknox_role_policy" "user-activity-azure-role" {
     name = "user-activity-azure-role"
     output_path = "./"
     auth_system_info = {

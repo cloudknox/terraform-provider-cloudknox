@@ -62,7 +62,7 @@ func TestAccRolePolicy_Basic(t *testing.T) {
 // configs
 func testAccRolePolicyConfigAWS() string {
 	return `
-resource "cloudknox_policy" "test_aws_policy" {
+data "cloudknox_policy" "test_aws_policy" {
 	name = "test_aws_policy"
 	output_path = "./"
 	auth_system_info = {
@@ -81,7 +81,7 @@ resource "cloudknox_policy" "test_aws_policy" {
 
 func testAccRolePolicyConfigGCP() string {
 	return `
-resource "cloudknox_policy" "test_gcp_policy" {
+data "cloudknox_policy" "test_gcp_role" {
 	name = "test_gcp_policy"
 	output_path = "./"
 	auth_system_info = {
@@ -98,7 +98,7 @@ resource "cloudknox_policy" "test_gcp_policy" {
 
 func testAccRolePolicyConfigAZURE() string {
 	return `
-resource "cloudknox_policy" "test_azure_policy" {
+data "cloudknox_policy" "test_azure_role" {
 	name = "test_azure_policy"
 	output_path = "./"
 	auth_system_info = {
