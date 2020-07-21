@@ -6,6 +6,7 @@ import (
 	"terraform-provider-cloudknox/cloudknox/api/helpers"
 	"terraform-provider-cloudknox/cloudknox/api/models"
 	"terraform-provider-cloudknox/cloudknox/common"
+	"terraform-provider-cloudknox/cloudknox/utils"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -116,7 +117,7 @@ func dataSourcePolicyRead(d *schema.ResourceData, meta interface{}) error {
 		logger.Error("msg", "JSON marshaling error while preparing data", "json_error", err)
 	}
 	rolePolicyDataString := string(rolePolicyDataBytes)
-	logger.Debug("msg", rolePolicyDataString)
+	logger.Debug("rolePolicyJSONString", utils.Truncate(rolePolicyDataString, 30, true))
 	args := map[string]string{
 		"name":        name,
 		"description": "Cloudknox Generated IAM Role-Policy for " + payload.AuthSystemInfo.Type + " at " + time.Now().String(),
