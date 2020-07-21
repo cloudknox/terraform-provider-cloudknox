@@ -112,11 +112,11 @@ func dataSourcePolicyRead(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 	rolePolicyDataBytes, err := json.Marshal(response["data"])
-	rolePolicyDataString := string(rolePolicyDataBytes)
 	if err != nil {
 		logger.Error("msg", "JSON marshaling error while preparing data", "json_error", err)
 	}
-
+	rolePolicyDataString := string(rolePolicyDataBytes)
+	logger.Debug("msg", rolePolicyDataString)
 	args := map[string]string{
 		"name":        name,
 		"description": "Cloudknox Generated IAM Role-Policy for " + payload.AuthSystemInfo.Type + " at " + time.Now().String(),
