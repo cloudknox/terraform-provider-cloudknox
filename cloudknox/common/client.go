@@ -13,16 +13,10 @@ import (
 	"net/url"
 )
 
-const (
-	// authenticateRoute has the route used to authenticate with the CloudKnox API
-	authenticateRoute = "api/v2/service-account/authenticate"
-)
-
 func credentialsToJSON(credentials *Credentials) []byte {
 	c, _ := json.Marshal(credentials)
 	return c
 }
-
 
 func createNewRequest(method, url string, body io.Reader, accessToken string) (*http.Request, error) {
 	req, err := http.NewRequest(method, url, body)
@@ -99,7 +93,7 @@ func NewClient(credentials *Credentials)(*Client, error){
 		httpClient:  http.DefaultClient,
 	}
 
-	response, err := client.POST(authenticateRoute, credentialsToJSON(credentials))
+	response, err := client.POST("api/v2/service-account/authenticate", credentialsToJSON(credentials))
 	if err != nil {
 		logger.Error("msg", "failed to read http response", "unmarshal_error", err)
 		return nil, err
