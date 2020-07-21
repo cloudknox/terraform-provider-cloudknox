@@ -10,11 +10,10 @@ import (
 // Provider creates and returns a Terraform Provider with populated Schema
 func Provider() terraform.ResourceProvider {
 	logger := common.GetLogger()
-	logger.Debug("msg", "initializing cloudknox terraform provider")
+	logger.Debug("msg", "initializing Cloudknox terraform provider")
 
 	provider := &schema.Provider{
 		Schema: map[string]*schema.Schema{
-
 			"shared_credentials_file": {
 				Type:        schema.TypeString,
 				Optional:    true,
@@ -29,7 +28,6 @@ func Provider() terraform.ResourceProvider {
 		DataSourcesMap: map[string]*schema.Resource{
 			common.RolePolicy: dataSourceRolePolicy(),
 		},
-
 		ConfigureFunc: providerConfigure,
 	}
 
@@ -38,25 +36,22 @@ func Provider() terraform.ResourceProvider {
 
 func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	logger := common.GetLogger()
-	logger.Info("msg", "setting cloudknox terraform provider parameters")
-
-	parameters := &common.ClientParameters{
+	logger.Info("msg", "setting Cloudknox terraform provider parameters")
+	parameters := &common.ClientParameters {
 		SharedCredentialsFile: d.Get("shared_credentials_file").(string),
 		Profile:               d.Get("profile").(string),
 	}
-
-	common.SetClientConfiguration(parameters) //Build Client Struct using parameters
-	return common.GetClient()                 //Return the Client Struct and the Error
+	credentials := common.GetCredentials(parameters) //Build Client Struct using parameters
+	return common.NewClient(credentials)                 //Return the Client Struct and the Error
 }
 
 var descriptions map[string]string
 
 func init() {
-
 	logger := common.GetLogger()
 	logger.Debug("msg", "running initialization function")
 	descriptions = map[string]string{
-		"shared_credentials_file": "Path/Filename of the HOCON credentials file.",
-		"profile":                 "Profile for (SERVICE_ACCOUNT_ID, ACCESS_KEY, SECRET_KEY) triplet you would like to use in a HOCON credentials file.",
+		"shared_credentials_file": "Path/Filename of the credentials file.",
+		"profile":                 "Profile for (SERVICE_ACCOUNT_ID, ACCESS_KEY, SECRET_KEY) triplet you would like to use in a credentials file.",
 	}
 }

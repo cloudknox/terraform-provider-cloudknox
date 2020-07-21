@@ -1,6 +1,11 @@
 package common
 
-import "github.com/go-kit/kit/log"
+import (
+	"github.com/go-kit/kit/log"
+	"net/http"
+	"net/url"
+	"strings"
+)
 
 //CustomLogger is a wrapper for go-kit's kit logger
 type CustomLogger struct {
@@ -13,6 +18,14 @@ type ClientParameters struct {
 	Profile               string
 }
 
+func (c ClientParameters) UpdateProfile(){
+	if c.Profile == "" {
+		c.Profile = "default"
+	} else {
+		c.Profile = strings.ToLower(c.Profile)
+	}
+}
+
 //Credentials holds parameters required to recieve an accessToken
 type Credentials struct {
 	ServiceAccountID string `json:"serviceAccountId"`
@@ -20,8 +33,12 @@ type Credentials struct {
 	SecretKey        string `json:"secretKey"`
 }
 
-//Client object is used to interact with client functions using an AccessToken
+type HttpClient interface {
+	Do(req *http.Request) (*http.Response, error)
+}
+
 type Client struct {
 	AccessToken string
-	BaseURL     string
+	BaseURL     *url.URL
+	httpClient  HttpClient
 }

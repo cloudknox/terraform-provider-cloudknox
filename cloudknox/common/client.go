@@ -5,192 +5,105 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
-	"net/http"
-	"net/http/httputil"
-	"terraform-provider-cloudknox/cloudknox/utils"
-
 	config "github.com/go-akka/configuration"
 	"github.com/mitchellh/go-homedir"
+	"io"
+	"io/ioutil"
+	"net/http"
+	"net/url"
 )
-
-/* Private Variables */
-var credentials *Credentials
-var configType string
 
 const (
-	// AuthenticateRoute has the route used to authenticate with the CloudKnox API
-	AuthenticateRoute = "/api/v2/service-account/authenticate"
+	// authenticateRoute has the route used to authenticate with the CloudKnox API
+	authenticateRoute = "api/v2/service-account/authenticate"
 )
-
-var client *Client
-var errClient = fmt.Errorf("Credentials Error")
 
 func credentialsToJSON(credentials *Credentials) []byte {
 	c, _ := json.Marshal(credentials)
 	return c
 }
 
-/* Private Functions */
-func buildClient(credentials *Credentials, configurationType string) {
-	logger := GetLogger()
-	logger.Info("msg", "building cloudknox client object", "config_type", configurationType)
 
-	configType = configurationType
-
-	//first read the base url
-
-	homedir, _ := homedir.Dir()
-	apiConfigurationPath := homedir + "//.cloudknox//api.conf"
-
-	baseURL, err := readAPIConfig(apiConfigurationPath)
-
+func createNewRequest(method, url string, body io.Reader, accessToken string) (*http.Request, error) {
+	req, err := http.NewRequest(method, url, body)
 	if err != nil {
-		client = nil
-		errClient = err
-		return
+		return nil, err
 	}
-
-	client = &Client{
-		BaseURL: baseURL,
+	req.Header.Add("Content-Type", "application/json")
+	if accessToken != "" {
+		req.Header.Add("X-CloudKnox-Access-Token", accessToken)
 	}
-
-	// Make POST Request for API Token
-
-	// Setup HTTP Request
-
-	// Parameters
-	var jsonBytes = credentialsToJSON(credentials)
-
-	url := client.BaseURL + AuthenticateRoute
-
-	// Request Configuration
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonBytes))
-	req.Header.Set("Content-Type", "application/json")
-
-	// Setup Client and Make Request
-	hclient := &http.Client{}
-	resp, err := hclient.Do(req)
-	if err != nil {
-		logger.Error("resp", resp, "http_error", err.Error())
-		client = nil
-		errClient = errors.New("Unable to make HTTP Client Request")
-		return
-	}
-	defer resp.Body.Close()
-
-	// dump, _ := httputil.DumpRequest(req, true)
-
-	// logger.Info("auth dump", dump)
-
-	// Get Response
-	logger.Debug("msg", "Got HTTP Response")
-	body, _ := ioutil.ReadAll(resp.Body)
-	if resp.StatusCode != http.StatusOK {
-		logger.Error("msg", "HTTP Response status != 200 OK", "resp", resp.Status, "credentials", "invalid")
-		client = nil
-		errClient = fmt.Errorf("Error During Authentication, Server Responded With %s", resp.Status)
-		return
-	}
-
-	logger.Debug("msg", "HTTP Response status == 200 OK", "resp", resp.Status, "credentials", "valid")
-	jsonBody := string(body)
-
-	// Create Map from Body of Response
-	responseMap := make(map[string]interface{})
-	err = json.Unmarshal([]byte(jsonBody), &responseMap)
-
-	if err != nil {
-		logger.Error("msg", "unable to extract response from body", "unmarshal_error", err)
-		logger.Error("body", body)
-		client = nil
-		errClient = errors.New("Unable to read HTTP Response")
-		return
-	}
-
-	var accessToken = responseMap["accessToken"].(string)
-
-	client.AccessToken = accessToken
-	errClient = nil
-
-	return
+	req.Header.Add("User-Agent", "CloudKnoxTerraformProvider/1.0.0")
+	return req, nil
 }
 
-func readAPIConfig(path string) (string, error) {
+func getBaseUrlFromConfig(path string) (*url.URL, error) {
 	content, err := ioutil.ReadFile(path)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-
 	text := string(content)
 	conf := config.ParseString(text)
-
-	baseURL := conf.GetString("api.base_url")
-
-	if baseURL == "" {
-		return "", fmt.Errorf("Unable to read api.conf")
-	}
-	return baseURL, nil
+	return url.Parse(conf.GetString("api.base_url"))
 }
 
-/* Public Functions */
-
-// GetClient returns a client pointer to allow client methods like POST
-func GetClient() (*Client, error) {
-
-	if errClient == nil {
-		if client != nil {
-			return client, nil
-		}
-		return nil, errors.New("Unexpected Error")
-
-	}
-	return nil, errors.New(errClient.Error() + " | ConfigType: " + configType)
-
+func (c *Client) getRelativeUrl(urlPath string) string {
+	relativeURL, _ := url.Parse(urlPath)
+	return c.BaseURL.ResolveReference(relativeURL).String()
 }
 
-// POST uses client parameters to create a POST request to provided route using client's baseURL
 func (c *Client) POST(route string, payload []byte) (map[string]interface{}, error) {
 	logger := GetLogger()
-
-	url := c.BaseURL + route
-
-	logger.Debug("msg", "making API POST request", "url", url)
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(payload))
-	req.Header.Set("X-CloudKnox-Access-Token", c.AccessToken)
-	req.Header.Set("Content-Type", "application/json")
-
-	reqDump, _ := httputil.DumpRequest(req, true)
-	logger.Debug("request_dump", utils.Truncate(string(reqDump), 30, true))
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-
-	responseDump, _ := httputil.DumpResponse(resp, true)
-	logger.Debug("responseDump", utils.Truncate(string(responseDump), 30, true))
-
+	postUrl := c.getRelativeUrl(route)
+	logger.Debug("msg", "making API POST request", "url", postUrl)
+	req, err := createNewRequest(
+		http.MethodPost, postUrl, bytes.NewBuffer(payload), c.AccessToken,
+	)
+	if err != nil {
+		logger.Error("Failed To Create Http Request", "http_error", err.Error())
+		return nil, errors.New("Unable to make HTTP Client Request")
+	}
+	resp, err := c.httpClient.Do(req)
 	if err != nil {
 		logger.Error("resp", resp, "http_error", err.Error())
 		return nil, errors.New("Unable to make HTTP Client Request")
 	}
 	defer resp.Body.Close()
-
 	if resp.StatusCode != http.StatusOK {
 		logger.Error("msg", "HTTP Response status != 200 OK", "resp", resp.Status, "resource_attributes", "invalid")
 		return nil, errors.New("Invalid API Response | Please Check Resource Attributes")
 	}
-	logger.Debug("msg", "HTTP Response status == 200 OK", "resp", resp.Status, "resource_attributes", "valid")
 
 	body, _ := ioutil.ReadAll(resp.Body)
-	jsonBody := string(body)
-
-	// Create Map from Body of Response
-	responseMap := make(map[string]interface{})
-	err = json.Unmarshal([]byte(jsonBody), &responseMap)
-
+	response := make(map[string]interface{})
+	err = json.Unmarshal([]byte(string(body)), &response)
 	if err != nil {
 		err = fmt.Errorf(string(body))
 	}
+	return response, err
+}
 
-	return responseMap, err
+func NewClient(credentials *Credentials)(*Client, error){
+	logger := GetLogger()
+	logger.Info("msg", "building CloudKnox client object", "config_type")
+	homeDir, _ := homedir.Dir()
+	apiConfigurationPath := homeDir + "//.cloudknox//api.conf"
+	baseURL, err := getBaseUrlFromConfig(apiConfigurationPath)
+
+	if err != nil {
+		return nil, err
+	}
+
+	client := &Client{
+		BaseURL: baseURL,
+		httpClient:  http.DefaultClient,
+	}
+
+	response, err := client.POST(authenticateRoute, credentialsToJSON(credentials))
+	if err != nil {
+		logger.Error("msg", "failed to read http response", "unmarshal_error", err)
+		return nil, err
+	}
+	client.AccessToken = response["accessToken"].(string)
+	return client, nil
 }
