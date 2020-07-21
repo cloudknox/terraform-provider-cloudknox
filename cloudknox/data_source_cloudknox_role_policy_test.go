@@ -6,9 +6,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 )
 
-var resources = [...]string{"cloudknox_role_policy.test_aws_policy",
+var resources = [...]string{
+	"cloudknox_role_policy.test_aws_policy",
 	"cloudknox_role_policy.test_gcp_policy",
-	"cloudknox_role_policy.test_azure_policy"}
+	"cloudknox_role_policy.test_azure_policy",
+}
 
 func TestAccRolePolicy_Basic(t *testing.T) {
 
@@ -62,7 +64,7 @@ func TestAccRolePolicy_Basic(t *testing.T) {
 // configs
 func testAccRolePolicyConfigAWS() string {
 	return `
-data "cloudknox_policy" "test_aws_policy" {
+data "cloudknox_role_policy" "test_aws_policy" {
 	name = "test_aws_policy"
 	output_path = "./"
 	auth_system_info = {
@@ -81,7 +83,7 @@ data "cloudknox_policy" "test_aws_policy" {
 
 func testAccRolePolicyConfigGCP() string {
 	return `
-data "cloudknox_policy" "test_gcp_role" {
+data "cloudknox_role_policy" "test_gcp_role" {
 	name = "test_gcp_policy"
 	output_path = "./"
 	auth_system_info = {
@@ -98,7 +100,7 @@ data "cloudknox_policy" "test_gcp_role" {
 
 func testAccRolePolicyConfigAZURE() string {
 	return `
-data "cloudknox_policy" "test_azure_role" {
+data "cloudknox_role_policy" "test_azure_role" {
 	name = "test_azure_policy"
 	output_path = "./"
 	auth_system_info = {
