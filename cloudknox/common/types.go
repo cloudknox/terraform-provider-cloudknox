@@ -1,10 +1,11 @@
 package common
 
 import (
-	"github.com/go-kit/kit/log"
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/go-kit/kit/log"
 )
 
 //CustomLogger is a wrapper for go-kit's kit logger
@@ -18,7 +19,7 @@ type ClientParameters struct {
 	Profile               string
 }
 
-func (c ClientParameters) UpdateProfile(){
+func (c *ClientParameters) UpdateProfile() {
 	if c.Profile == "" {
 		c.Profile = "default"
 	} else {

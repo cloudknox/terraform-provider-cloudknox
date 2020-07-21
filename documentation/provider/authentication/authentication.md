@@ -29,7 +29,7 @@ There are 2 main ways to use the `Credentials` you aquired with the CloudKnox Te
 
 ##### File Setup
 
-Place `creds.conf` in `~/.cloudknox/`
+Place `credentials.conf` in `~/.cloudknox/`
 
 * `~/.cloudknox/` directory is created during build process, but if it has been deleted or removed for any reason, ensure it exists. 
 

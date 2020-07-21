@@ -37,12 +37,12 @@ func Provider() terraform.ResourceProvider {
 func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	logger := common.GetLogger()
 	logger.Info("msg", "setting Cloudknox terraform provider parameters")
-	parameters := &common.ClientParameters {
+	parameters := &common.ClientParameters{
 		SharedCredentialsFile: d.Get("shared_credentials_file").(string),
 		Profile:               d.Get("profile").(string),
 	}
 	credentials := common.GetCredentials(parameters) //Build Client Struct using parameters
-	return common.NewClient(credentials)                 //Return the Client Struct and the Error
+	return common.NewClient(credentials)             //Return the Client Struct and the Error
 }
 
 var descriptions map[string]string

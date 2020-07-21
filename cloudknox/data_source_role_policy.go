@@ -94,8 +94,10 @@ func dataSourceRolePolicy() *schema.Resource {
 
 func dataSourcePolicyRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*common.Client)
-
 	logger := common.GetLogger()
+
+	logger.Info("msg", "creating role_policy data source")
+
 	name := d.Get("name").(string)
 	outputPath := d.Get("output_path").(string)
 	logger.Info("msg", "Building Policy Payload")
