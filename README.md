@@ -19,7 +19,7 @@ make build
 
 The API configuration file should be populated as follows.
 
-* Get the `base_url` from CloudKnox integrations. ()
+* Get the `base_url` from CloudKnox Integrations page available in your user settings on the CloudKnox Portal. 
 
 ```HOCON
 api {
