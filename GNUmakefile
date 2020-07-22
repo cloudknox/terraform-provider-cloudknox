@@ -8,7 +8,7 @@ default: build
 
 build: install init_config
 
-install: fmtcheck
+install: fmt
 	@printf "\n==> Installing provider to $(DIR)\n"
 	mkdir -vp $(DIR)
 	go build -o $(DIR)/terraform-provider-cloudknox
