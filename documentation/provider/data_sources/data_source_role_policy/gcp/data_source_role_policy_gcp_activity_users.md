@@ -19,7 +19,7 @@ data "cloudknox_role_policy" "user-activity-gcp-role" {
          type = "GCP"
      }
     identity_type = "USER"
-    identity_ids = ["grace@cloudknox.io"]
+    identity_ids = ["grace@domain.io"]
     filter_history_days = 90
 }
 ```
@@ -30,7 +30,7 @@ A `google_project_iam_custom_role` resource is outputted to a file `./user-activ
 
 ```terraform
 resource "google_project_iam_custom_role" "user-activity-gcp-role" {
-		role_id     = "ck_activity_1594421256222"
+		role_id     = "ck_activity_1234567890123"
 		title		= "user-activity-gcp-role"
 		description = "Cloudknox Generated IAM Role-Policy for GCP at 2020-07-16 14:30:55.374293 -0700 PDT m=+0.348074801"
 		permissions = [

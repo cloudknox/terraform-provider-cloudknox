@@ -29,7 +29,7 @@ There are 2 main ways to use the `Credentials` you aquired with the CloudKnox Te
 
 ##### File Setup
 
-Place `creds.conf` in `~/.cloudknox/`
+Place `credentials.conf` in `~/.cloudknox/`
 
 * `~/.cloudknox/` directory is created during build process, but if it has been deleted or removed for any reason, ensure it exists. 
 
@@ -66,7 +66,7 @@ If no `profile` is provided, the `default` profile will be used.
 
 ##### File Setup
 
-Create a a credentials file `credentials` in the directory of your choosing and ensure it is formatted as a HOCON file as shown below.
+Create a a credentials file `credentials.conf` in the directory of your choosing and ensure it is formatted as a HOCON file as shown below.
 
 ```HOCON
 profiles {
@@ -90,7 +90,7 @@ Your provider declaration should look like this in `main.tf` if you want to use 
 
 ```terraform
 provider "cloudknox" {
-    shared_credentials_file = "/path/to/credentials" //Required
+    shared_credentials_file = "/path/to/credentials.conf" //Required
     profile = "" //Optional
 }
 ```

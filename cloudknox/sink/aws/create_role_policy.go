@@ -44,7 +44,7 @@ func (aws RolePolicyContractWriter) Write() error {
 		// Correct i as the policies are put from last to first
 		i = len(policies) - i - 1
 
-		policyJsonBytes, err := json.MarshalIndent(policy.Policy, "\t", "\t")
+		policyJsonBytes, err := json.MarshalIndent(policy.Policy, "", "    ")
 		if err != nil {
 			logger.Error("error", err, "policy", i)
 			return err
@@ -65,7 +65,7 @@ func (aws RolePolicyContractWriter) Write() error {
 			path        = "%s"
 			description = "%s"
 			policy = <<EOF
-			%s`, policy.PolicyName, policy.PolicyName, aws.Args["aws_path"], aws.Args["description"], policyJsonString)
+%s`, policy.PolicyName, policy.PolicyName, aws.Args["aws_path"], aws.Args["description"], policyJsonString)
 
 		suffix := "\nEOF\n}"
 

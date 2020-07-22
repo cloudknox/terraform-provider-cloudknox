@@ -23,15 +23,11 @@ data "cloudknox_role_policy" "user-activity-large-aws-policy" {
     "arn:aws:iam::123456789012:user/bob",
     "arn:aws:iam::123456789012:user/carol",
     "arn:aws:iam::123456789012:user/david",
-    "grace+okta@cloudknox.io",
     "arn:aws:iam::123456789012:user/grace.arthur",
     "arn:aws:iam::123456789012:user/gracetest2",
     "arn:aws:iam::123456789012:user/graceuser3",
-    "grace+okta@cloudknox.io",
-    "grace+okta01@cloudknox.io",
     "arn:aws:iam::123456789012:user/grace.rupert",
     "arn:aws:iam::123456789012:user/judy",
-    "judy+okta@cloudknox.io",
     "arn:aws:iam::123456789012:user/judy-policy-boundary-test",
     "arn:aws:iam::123456789012:user/judy-policy-boundary-test-direct"
   ]
@@ -45,8 +41,8 @@ data "cloudknox_role_policy" "user-activity-large-aws-policy" {
 An `aws_iam_policy` resource is outputted to a file `./user-activity-large-aws-policy.tf` containing the following resources. Since the AWS Policy exceeds 6144 characters, the Policy is automatically split across multiple resources denoted with the underscore in the policy name. If the Policy was less than 6144 characters, only a single resource will be created in the output file. Policies are named automatically according to the response from the CloudKnox API.
 
 ```terraform
-resource "aws_iam_policy" "ck_activity_1594128371578_0" {
-			name        = "ck_activity_1594128371578_0"
+resource "aws_iam_policy" "ck_activity_1234567890123_0" {
+			name        = "ck_activity_1234567890123_0"
 			path        = "/"
 			description = "Cloudknox Generated IAM Role-Policy for AWS at 2020-07-16 12:21:21.9465109 -0700 PDT m=+0.545391201"
 			policy = <<EOF
@@ -82,8 +78,8 @@ resource "aws_iam_policy" "ck_activity_1594128371578_0" {
 EOF
 }
 
-resource "aws_iam_policy" "ck_activity_1594128371578_1" {
-			name        = "ck_activity_1594128371578_1"
+resource "aws_iam_policy" "ck_activity_1234567890123_1" {
+			name        = "ck_activity_1234567890123_1"
 			path        = "/"
 			description = "Cloudknox Generated IAM Role-Policy for AWS at 2020-07-16 12:21:21.9465109 -0700 PDT m=+0.545391201"
 			policy = <<EOF

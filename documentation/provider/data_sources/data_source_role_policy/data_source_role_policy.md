@@ -36,7 +36,7 @@ These are all the properties available to set during data source declaration. Th
 
 ```
 {
-    id : Enter the id as a string
+    id : Enter the ID as a string. AWS Account ID, GCP Project ID, or Azure Subcription ID. 
     type : Choose AWS, GCP or AZURE as a string (VCENTER NOT Currently Supported)
 }
 ```
