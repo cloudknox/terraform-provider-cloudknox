@@ -22,13 +22,6 @@ func getCredentials(parameters *ClientParameters) *Credentials {
 			/* Initialize Configuration */
 			logger := GetLogger()
 			logger.Info("msg", "attempting to identifying configuration type")
-			// === Configuration Hierarchy ===
-			// Shared Credentials File (Profile)
-			// Shared Credentials File (Default)
-			// Default Path Credentials File (Profile)
-			// Default Path Credentials File (Default)
-			// Environment Variables
-			// No Credentials Provided => Error
 
 			// Set Default Value for Profile if not provided
 			parameters.UpdateProfile()
@@ -126,7 +119,7 @@ func updateCredentialsFromFile(filename string, profile string) error {
 	return nil
 }
 
-// SetClientConfiguration is the public function used to set Client Configuration
+// GetCredentials is the public function used to get a struct containing required API credentials
 func GetCredentials(parameters *ClientParameters) *Credentials {
 	return getCredentials(parameters)
 }

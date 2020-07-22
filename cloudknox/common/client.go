@@ -13,6 +13,7 @@ import (
 	"github.com/mitchellh/go-homedir"
 )
 
+/* Private Functions */
 func credentialsToJSON(credentials *Credentials) []byte {
 	c, _ := json.Marshal(credentials)
 	return c
@@ -31,7 +32,7 @@ func createNewRequest(method, url string, body io.Reader, accessToken string) (*
 	return req, nil
 }
 
-func getBaseUrlFromConfig(path string) (*url.URL, error) {
+func getBaseURLFromConfig(path string) (*url.URL, error) {
 	content, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, err
@@ -41,18 +42,20 @@ func getBaseUrlFromConfig(path string) (*url.URL, error) {
 	return url.Parse(conf.GetString("api.base_url"))
 }
 
-func (c *Client) getRelativeUrl(urlPath string) string {
+func (c *Client) getRelativeURL(urlPath string) string {
 	relativeURL, _ := url.Parse(urlPath)
 	return c.BaseURL.ResolveReference(relativeURL).String()
 }
 
+/* Public Functions */
+
 //POST allows clients to make HTTP POST Requests
 func (c *Client) POST(route string, payload []byte) (map[string]interface{}, error) {
 	logger := GetLogger()
-	postUrl := c.getRelativeUrl(route)
-	logger.Debug("msg", "making API POST request", "url", postUrl)
+	postURL := c.getRelativeURL(route)
+	logger.Debug("msg", "making API POST request", "url", postURL)
 	req, err := createNewRequest(
-		http.MethodPost, postUrl, bytes.NewBuffer(payload), c.AccessToken,
+		http.MethodPost, postURL, bytes.NewBuffer(payload), c.AccessToken,
 	)
 	if err != nil {
 		logger.Error("Failed To Create HTTP Request", "http_error", err.Error())
@@ -78,7 +81,7 @@ func (c *Client) POST(route string, payload []byte) (map[string]interface{}, err
 	return response, err
 }
 
-//NewClient creates a CloudKnox API Client used to interface with the API
+// NewClient creates a CloudKnox API Client used to interface with the API
 func NewClient(credentials *Credentials) (*Client, error) {
 	if credentials == nil {
 		return nil, fmt.Errorf("credentials not found")
@@ -87,7 +90,7 @@ func NewClient(credentials *Credentials) (*Client, error) {
 	logger.Info("msg", "building CloudKnox client object")
 	homeDir, _ := homedir.Dir()
 	apiConfigurationPath := homeDir + "//.cloudknox//api.conf"
-	baseURL, err := getBaseUrlFromConfig(apiConfigurationPath)
+	baseURL, err := getBaseURLFromConfig(apiConfigurationPath)
 
 	if err != nil {
 		return nil, err
