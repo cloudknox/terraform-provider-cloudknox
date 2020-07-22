@@ -7,9 +7,9 @@ import (
 )
 
 var resources = [...]string{
-	"cloudknox_role_policy.test_aws_policy",
-	"cloudknox_role_policy.test_gcp_policy",
-	"cloudknox_role_policy.test_azure_policy",
+	"cloudknox_role_policy.resource-activity-aws-policy",
+	"cloudknox_role_policy.resource-activity-aws-policy",
+	"cloudknox_role_policy.user-activity-azure-role",
 }
 
 func TestAccRolePolicy_Basic(t *testing.T) {
