@@ -23,12 +23,14 @@ type RequestParams struct {
 	Condition interface{} `json:"condition,omitempty"`
 }
 
+// Filter is a struct used to encompass filter fields for the api
 type Filter struct {
 	HistoryDays     interface{}      `json:"historyDays,omitempty"`
 	PreserveReads   bool             `json:"preserveReads"`
 	HistoryDuration *HistoryDuration `json:"historyDuration,omitempty"`
 }
 
+// AuthSystemInfo is a struct used to encompass the AuthSystemInfo fields for the api
 type AuthSystemInfo struct {
 	ID   string `json:"id"`
 	Type string `json:"type"`

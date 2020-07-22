@@ -5,7 +5,7 @@ import (
 	"terraform-provider-cloudknox/cloudknox/sink"
 )
 
-//WriteResource interfaces with sinks to create desirec local output
+// WriteResource interfaces with sinks to create desirec local output
 func WriteResource(resource string, platform string, args map[string]string) error {
 	logger := common.GetLogger()
 	logger.Debug("msg", "preparing writer", "resource", resource, "platform", platform)

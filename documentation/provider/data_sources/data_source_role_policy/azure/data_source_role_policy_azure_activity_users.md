@@ -19,14 +19,14 @@ data "cloudknox_role_policy" "user-activity-azure-role" {
     name = "user-activity-azure-role"
     output_path = "./"
     auth_system_info = {
-         id = "12abcd90-95a3-123a-ab12-56f1234565ee",
+         id = "12abcd34-56e7-890f-gh12-34i5678901jk",
          type = "AZURE"
      }
     identity_type = "USER"
-    identity_ids = ["alice@cloudknoxsecurity.io"]
+    identity_ids = ["alice@domain.io"]
     filter_history_days = 90
     filter_preserve_reads = true
-    request_params_scope = "/subscriptions/12abcd90-95a3-123a-ab12-56f1234565ee"
+    request_params_scope = "/subscriptions/12abcd34-56e7-890f-gh12-34i5678901jk"
 }
 ```
 
@@ -36,8 +36,8 @@ An `azurerm_role_definition` resource is outputted to a file `./user-activity-az
 
 ```terraform
 resource "azurerm_role_definition" "user-activity-azure-role" {
-			name        = "ck_activity_1594935056278"
-			scope       = "/subscriptions/12abcd90-95a3-123a-ab12-56f1234565ee"
+			name        = "ck_activity_1234567890123"
+			scope       = "/subscriptions/12abcd34-56e7-890f-gh12-34i5678901jk"
 			description = "Cloudknox Generated IAM Role-Policy for AZURE at 2020-07-16 14:30:55.5363074 -0700 PDT m=+0.510089201"
 		  
 			permissions {
@@ -58,7 +58,7 @@ resource "azurerm_role_definition" "user-activity-azure-role" {
 			}
 		  
 			assignable_scopes = [
-				"/subscriptions/12abcd90-95a3-123a-ab12-56f1234565ee",
+				"/subscriptions/12abcd34-56e7-890f-gh12-34i5678901jk",
 
 			]
 		
