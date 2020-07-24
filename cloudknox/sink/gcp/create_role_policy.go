@@ -17,6 +17,7 @@ func (gcp RolePolicyContractWriter) Write() error {
 	logger.Info("msg", "writing gcp role")
 
 	//Turn the given policy into a map so that we can extract even more fields
+	logger.Debug("msg", "creating policy map")
 	policy := make(map[string]interface{})
 
 	err := json.Unmarshal([]byte(gcp.Args["data"]), &policy)
@@ -28,15 +29,22 @@ func (gcp RolePolicyContractWriter) Write() error {
 	}
 
 	//Extract the permissions from the policy map
+	logger.Debug("msg", "extracting permissions from policy map")
 	permissions := policy["role"].(map[string]interface{})["includedPermissions"]
 
 	//Convert permissions to an array
+	logger.Debug("msg", "converting permissions to an array", "permissions", permissions)
 	permissions_arr := make([]string, 0)
-	for _, v := range permissions.([]interface{}) {
-		permissions_arr = append(permissions_arr, v.(string))
+	if permissions == nil {
+		logger.Debug("msg", "no permissions found")
+	} else {
+		for _, v := range permissions.([]interface{}) {
+			permissions_arr = append(permissions_arr, v.(string))
+		}
 	}
 
 	//Format the permissions array into a string with new lines after every permission
+	logger.Debug("msg", "formatting permissions string")
 	permissions_str := linePrint(permissions_arr)
 
 	//Create the template for the resource
@@ -54,6 +62,7 @@ func (gcp RolePolicyContractWriter) Write() error {
 
 	filename := fmt.Sprintf("%s%s.tf", gcp.Args["output_path"], gcp.Args["name"])
 
+	logger.Debug("msg", "writing template to file")
 	err = ioutil.WriteFile(filename, []byte(template+suffix), 0644)
 
 	if err != nil {
