@@ -17,19 +17,10 @@ make build
 * The provider will be built and stored in `~/.terraform.d/plugins`
 * The API configuration file is required and must be created in `~/.cloudknox/api.conf`
 
-The API configuration file should be populated as follows.
-
-* Get the `base_url` from CloudKnox Integrations page available in your user settings on the CloudKnox Portal. 
-
-```HOCON
-api {
-    base_url: "http://base.url"
-}
-```
 
 ## Documentation
 
-Detailed [documentation](./documentation/provider/terraform-provider-cloudknox.md) is provided. Please use this documentation for provider setup and usage.
+Detailed [documentation](/docs/index.md) is provided. Please use this documentation for provider setup and usage.
 
 ## Debug
 
