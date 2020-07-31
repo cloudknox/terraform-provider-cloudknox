@@ -1,4 +1,11 @@
-# CloudKnox Terraform Provider Authentication
+---
+layout: "cloudknox"
+page_title: "CloudKnox Provider Authentication Reference"
+description: |-
+  Authentication reference for the CloudKnox provider for Terraform.
+---
+
+# CloudKnox Provider Authentication Reference
 
 ## Overview
 
@@ -49,7 +56,7 @@ profiles {
 }
 ```
 
-##### Provder Setup
+##### Provider Setup
 
 Your provider declaration should look like this in `main.tf` if you want to use the `Default Credentials File`.
 
@@ -84,7 +91,7 @@ profiles {
 }
 ```
 
-##### Provder Setup
+##### Provider Setup
 
 Your provider declaration should look like this in `main.tf` if you want to use the `Shared Credentials File`
 
@@ -107,7 +114,7 @@ Set the `profile` property in `main.tf` to the profile you would like to use in 
 
 If no configuration file is specified and the default credentials file does not exist, the following environment variables will be checked for credentials.
 
-##### Environment Variable Setup
+#### Environment Variable Setup
 
 1. Export these environment variables:
 
@@ -120,7 +127,7 @@ CNX_SECRET_KEY="#####"
     * If the `Default Credentials File` is found in `~/.cloudknox/` then that file will be used so ensure that the file is deleted or renamed. 
 
 
-##### Provder Setup
+#### Provider Setup
 
 Your provider declaration should look like this in `main.tf` if you want to use `Environemnt Variables`
 
