@@ -101,7 +101,7 @@ func NewClient(credentials *Credentials) (*Client, error) {
 		httpClient: http.DefaultClient,
 	}
 
-	response, err := client.POST("api/v2/service-account/authenticate", credentialsToJSON(credentials))
+	response, err := client.POST("/authenticate", credentialsToJSON(credentials))
 	if err != nil {
 		logger.Error("msg", "failed to read http response", "unmarshal_error", err)
 		return nil, err
