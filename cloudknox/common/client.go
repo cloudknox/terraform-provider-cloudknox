@@ -62,7 +62,7 @@ func (c *Client) POST(route string, payload []byte) (map[string]interface{}, err
 	logger := GetLogger()
 	postURL := c.getRelativeURL(route)
 	logger.Debug("msg", "making API POST request", "url", postURL)
-	
+
 	req, err := createNewRequest(http.MethodPost, postURL, bytes.NewBuffer(payload), c)
 	if err != nil {
 		logger.Error("Failed To Create HTTP Request", "http_error", err.Error())
@@ -114,5 +114,8 @@ func NewClient(credentials *Credentials) (*Client, error) {
 		return nil, err
 	}
 	client.AccessToken = response["accessToken"].(string)
+	client.AccessKey1 = response["accessKey1"].(string)
+	client.AccessKey2 = response["accessKey2"].(string)
+
 	return client, nil
 }
