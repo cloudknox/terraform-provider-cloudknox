@@ -58,7 +58,14 @@ func getLogger() CustomLogger {
 
 				customLogger.logger = level.NewFilter(customLogger.logger, levelOption)
 				customLogger.logger = log.With(customLogger.logger, "time", log.DefaultTimestampUTC)
-				customLogger.Info("msg", "successfully created logger instance", "log_level", logLevel, "log_output", output)
+				customLogger.Info(
+					"msg",
+					"successfully created logger instance",
+					"log_level",
+					logLevel,
+					"log_output",
+					output,
+				)
 			} else {
 				fmt.Println("Unable to begin logging", err)
 			}

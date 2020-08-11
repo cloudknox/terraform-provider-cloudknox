@@ -2,3 +2,5 @@
 *.log
 *.tfstate
 *.tf
+.idea
+.terraform

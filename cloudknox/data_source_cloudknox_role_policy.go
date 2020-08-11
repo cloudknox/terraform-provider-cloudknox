@@ -173,7 +173,16 @@ func getRolePolicyPayload(d *schema.ResourceData) models.RolePolicyData {
 
 	resourcesString := fmt.Sprintf("%v", resources)
 
-	logger.Debug("scope", scope.(string), "resource", resource.(string), "resources", resourcesString, "condition", condition.(string))
+	logger.Debug(
+		"scope",
+		scope.(string),
+		"resource",
+		resource.(string),
+		"resources",
+		resourcesString,
+		"condition",
+		condition.(string),
+	)
 
 	if scope == "" && resource == "" && resourcesString == "[]" && condition == "" {
 	} else {

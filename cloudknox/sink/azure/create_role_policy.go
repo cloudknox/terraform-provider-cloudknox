@@ -78,7 +78,15 @@ func (azure RolePolicyContractWriter) Write() error {
 		  
 			assignable_scopes = [%s
 			]
-		`, azure.Args["name"], policy_name, scopes_arr[0], azure.Args["description"], actions_str, not_actions_str, scopes_str)
+		`,
+		azure.Args["name"],
+		policy_name,
+		scopes_arr[0],
+		azure.Args["description"],
+		actions_str,
+		not_actions_str,
+		scopes_str,
+	)
 
 	suffix := "\r\n}"
 

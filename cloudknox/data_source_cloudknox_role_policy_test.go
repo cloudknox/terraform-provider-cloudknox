@@ -15,49 +15,55 @@ var resources = [...]string{
 func TestAccRolePolicy_Basic(t *testing.T) {
 
 	// Test AWS
-	resource.Test(t, resource.TestCase{
-		Providers: testAccProviders,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccRolePolicyConfigAWS(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(
-						resources[0], "name", "resource-activity-aws-policy",
+	resource.Test(
+		t, resource.TestCase{
+			Providers: testAccProviders,
+			Steps: []resource.TestStep{
+				{
+					Config: testAccRolePolicyConfigAWS(),
+					Check: resource.ComposeTestCheckFunc(
+						resource.TestCheckResourceAttr(
+							resources[0], "name", "resource-activity-aws-policy",
+						),
 					),
-				),
+				},
 			},
 		},
-	})
+	)
 
 	// Test GCP
-	resource.Test(t, resource.TestCase{
-		Providers: testAccProviders,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccRolePolicyConfigGCP(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(
-						resources[1], "name", "resource-activity-aws-policy",
+	resource.Test(
+		t, resource.TestCase{
+			Providers: testAccProviders,
+			Steps: []resource.TestStep{
+				{
+					Config: testAccRolePolicyConfigGCP(),
+					Check: resource.ComposeTestCheckFunc(
+						resource.TestCheckResourceAttr(
+							resources[1], "name", "resource-activity-aws-policy",
+						),
 					),
-				),
+				},
 			},
 		},
-	})
+	)
 
 	// Test AZURE
-	resource.Test(t, resource.TestCase{
-		Providers: testAccProviders,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccRolePolicyConfigAZURE(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(
-						resources[2], "name", "user-activity-azure-role",
+	resource.Test(
+		t, resource.TestCase{
+			Providers: testAccProviders,
+			Steps: []resource.TestStep{
+				{
+					Config: testAccRolePolicyConfigAZURE(),
+					Check: resource.ComposeTestCheckFunc(
+						resource.TestCheckResourceAttr(
+							resources[2], "name", "user-activity-azure-role",
+						),
 					),
-				),
+				},
 			},
 		},
-	})
+	)
 
 }
 

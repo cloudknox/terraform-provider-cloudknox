@@ -54,7 +54,8 @@ func (gcp RolePolicyContractWriter) Write() error {
 		title		= "%s"
 		description = "%s"
 		permissions = [%s
-		`, gcp.Args["name"], policy["roleId"], gcp.Args["name"], gcp.Args["description"], permissions_str)
+		`, gcp.Args["name"], policy["roleId"], gcp.Args["name"], gcp.Args["description"], permissions_str,
+	)
 
 	suffix := "]\r\n}"
 

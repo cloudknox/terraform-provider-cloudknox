@@ -65,7 +65,8 @@ func (aws RolePolicyContractWriter) Write() error {
 			path        = "%s"
 			description = "%s"
 			policy = <<EOF
-%s`, policy.PolicyName, policy.PolicyName, aws.Args["aws_path"], aws.Args["description"], policyJsonString)
+%s`, policy.PolicyName, policy.PolicyName, aws.Args["aws_path"], aws.Args["description"], policyJsonString,
+		)
 
 		suffix := "\nEOF\n}"
 
