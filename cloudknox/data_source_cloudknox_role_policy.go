@@ -107,7 +107,7 @@ func dataSourcePolicyRead(d *schema.ResourceData, meta interface{}) error {
 	logger.Info("msg", "creating new role-policy", "name", name+".tf", "output_path", outputPath)
 
 	payloadBytes, _ := json.Marshal(payload)
-	response, err := client.POST("api/v2/role-policy/new", payloadBytes)
+	response, err := client.POST("/api/v1/role-policy/new", payloadBytes)
 	if err != nil {
 		logger.Error("msg", "unable to complete POST request", "error", err.Error())
 		return err
