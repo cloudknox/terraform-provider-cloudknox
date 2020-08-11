@@ -19,15 +19,23 @@ func credentialsToJSON(credentials *Credentials) []byte {
 	return c
 }
 
-func createNewRequest(method, url string, body io.Reader, accessToken string) (*http.Request, error) {
+func createNewRequest(method, url string, body io.Reader, client *Client) (*http.Request, error) {
 	req, err := http.NewRequest(method, url, body)
 	if err != nil {
 		return nil, err
 	}
 	req.Header.Add("Content-Type", "application/json")
-	if accessToken != "" {
-		req.Header.Add("X-CloudKnox-Access-Token", accessToken)
+
+	if client.AccessToken != "" {
+		req.Header.Add("X-CloudKnox-Access-Token", client.AccessToken)
 	}
+	if client.AccessKey1 != "" {
+		req.Header.Add("X-CloudKnox-Access-Key-1", client.AccessKey1)
+	}
+	if client.AccessKey2 != "" {
+		req.Header.Add("X-CloudKnox-Access-Key-2", client.AccessKey2)
+	}
+
 	req.Header.Add("User-Agent", "CloudKnoxTerraformProvider/1.0.0")
 	return req, nil
 }
@@ -54,9 +62,8 @@ func (c *Client) POST(route string, payload []byte) (map[string]interface{}, err
 	logger := GetLogger()
 	postURL := c.getRelativeURL(route)
 	logger.Debug("msg", "making API POST request", "url", postURL)
-	req, err := createNewRequest(
-		http.MethodPost, postURL, bytes.NewBuffer(payload), c.AccessToken,
-	)
+	
+	req, err := createNewRequest(http.MethodPost, postURL, bytes.NewBuffer(payload), c)
 	if err != nil {
 		logger.Error("Failed To Create HTTP Request", "http_error", err.Error())
 		return nil, err
