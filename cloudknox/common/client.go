@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"time"
 
 	config "github.com/go-akka/configuration"
 	"github.com/mitchellh/go-homedir"
@@ -29,12 +30,14 @@ func createNewRequest(method, url string, body io.Reader, client *Client) (*http
 	if client.AccessToken != "" {
 		req.Header.Add("X-CloudKnox-Access-Token", client.AccessToken)
 	}
-	if client.AccessKey1 != "" {
-		req.Header.Add("X-CloudKnox-Access-Key-1", client.AccessKey1)
+	if client.AccessKey != "" {
+		req.Header.Add("X-CloudKnox-Access-Key", client.AccessKey)
 	}
-	if client.AccessKey2 != "" {
-		req.Header.Add("X-CloudKnox-Access-Key-2", client.AccessKey2)
+	if client.ServiceAccountID != "" {
+		req.Header.Add("X-CloudKnox-Service-Account-Id", client.ServiceAccountID)
 	}
+
+	req.Header.Add("X-CloudKnox-Timestamp", time.Now().Format(time.RFC3339))
 
 	req.Header.Add("User-Agent", "CloudKnoxTerraformProvider/1.0.0")
 	return req, nil
@@ -108,14 +111,14 @@ func NewClient(credentials *Credentials) (*Client, error) {
 		httpClient: http.DefaultClient,
 	}
 
-	response, err := client.POST("/api/v1/authenticate", credentialsToJSON(credentials))
+	response, err := client.POST("/api/v2/service-account/authenticate", credentialsToJSON(credentials))
 	if err != nil {
 		logger.Error("msg", "failed to read http response", "unmarshal_error", err)
 		return nil, err
 	}
 	client.AccessToken = response["accessToken"].(string)
-	client.AccessKey1 = response["accessKey1"].(string)
-	client.AccessKey2 = response["accessKey2"].(string)
+	client.AccessKey = response["accessKey"].(string)
+	client.ServiceAccountID = credentials.ServiceAccountID
 
 	return client, nil
 }
