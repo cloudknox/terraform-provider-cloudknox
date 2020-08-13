@@ -79,7 +79,7 @@ func (c *Client) POST(route string, payload []byte) (map[string]interface{}, err
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
 		logger.Error("msg", "HTTP Response status != 200 OK", "resp", resp.Status, "resource_attributes", "invalid")
-		return nil, fmt.Errorf("Invalid API Response | Please Check Resource Attributes")
+		return nil, fmt.Errorf("Invalid API Response | Recieved %s from API Server | Please Check Resource Attributes ", resp.Status)
 	}
 
 	body, _ := ioutil.ReadAll(resp.Body)
