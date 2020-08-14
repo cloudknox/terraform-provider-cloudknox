@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strconv"
 	"time"
 
 	config "github.com/go-akka/configuration"
@@ -37,7 +38,9 @@ func createNewRequest(method, url string, body io.Reader, client *Client) (*http
 		req.Header.Add("X-CloudKnox-Service-Account-Id", client.ServiceAccountID)
 	}
 
-	req.Header.Add("X-CloudKnox-Timestamp", time.Now().Format(time.RFC3339))
+	timestampMillis := strconv.FormatInt(time.Now().UnixNano()/int64(time.Millisecond), 10)
+
+	req.Header.Add("X-CloudKnox-Timestamp-Millis", timestampMillis)
 
 	req.Header.Add("User-Agent", "CloudKnoxTerraformProvider/1.0.0")
 	return req, nil
