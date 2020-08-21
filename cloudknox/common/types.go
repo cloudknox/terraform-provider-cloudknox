@@ -43,7 +43,7 @@ type HTTPClient interface {
 // Client is the struct used to interface with the CloudKnox API
 type Client struct {
 	AccessToken      string
-	ClientKey        string
+	APIID            string
 	ServiceAccountID string
 	BaseURL          *url.URL
 	httpClient       HTTPClient
