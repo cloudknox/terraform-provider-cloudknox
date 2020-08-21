@@ -31,8 +31,8 @@ func createNewRequest(method, url string, body io.Reader, client *Client) (*http
 	if client.AccessToken != "" {
 		req.Header.Add("X-CloudKnox-Access-Token", client.AccessToken)
 	}
-	if client.AccessKey != "" {
-		req.Header.Add("X-CloudKnox-Access-Key", client.AccessKey)
+	if client.CloudKnoxKey != "" {
+		req.Header.Add("X-CloudKnox-Key", client.CloudKnoxKey)
 	}
 	if client.ServiceAccountID != "" {
 		req.Header.Add("X-CloudKnox-Service-Account-Id", client.ServiceAccountID)
@@ -119,8 +119,10 @@ func NewClient(credentials *Credentials) (*Client, error) {
 		logger.Error("msg", "failed to read http response", "unmarshal_error", err)
 		return nil, err
 	}
+
+	// Read authentication response parameters required for resource requests.
 	client.AccessToken = response["accessToken"].(string)
-	client.AccessKey = response["accessKey"].(string)
+	client.CloudKnoxKey = response["cloudknoxKey"].(string)
 	client.ServiceAccountID = credentials.ServiceAccountID
 
 	return client, nil
