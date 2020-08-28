@@ -34,3 +34,25 @@ init_config:
 
 testacc: fmtcheck
 	TF_ACC=1 go test terraform-provider-cloudknox/cloudknox -v -timeout 120m
+
+test: 
+	provider "google" {
+  	credentials = "/Users/sravani/Downloads/devopstest-218421-3c2821f32c55.json"
+  	project     = "devopstest-218421"
+  	region      = "us-west2"
+	}	
+	data "cloudknox_role_policy" "user-activity-gcp-role" {
+    		name = "role-activity-gcp-role"
+    		output_path = "./"
+    		auth_system_info = {
+         	id = "devopstest-218421",
+         	type = "GCP"
+     	}
+	identity_type = "USER"
+    		identity_ids = [
+        	"sravani@cloudknox.io"
+	]
+
+    	filter_history_days = 90
+	}
+	
