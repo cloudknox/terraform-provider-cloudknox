@@ -37,20 +37,20 @@ testacc: fmtcheck
 
 test: 
 	provider "google" {
-  	credentials = "/Users/sravani/Downloads/devopstest-218421-3c2821f32c55.json"
-  	project     = "devopstest-218421"
-  	region      = "us-west2"
+  	credentials = "<path_to_the_json_credentials_file>"
+  	project     = "<devopstest-218421>"
+  	region      = "<us-west2>"
 	}	
-	data "cloudknox_role_policy" "user-activity-gcp-role" {
-    		name = "role-activity-gcp-role"
+	data "cloudknox_role_policy" "<user-activity-gcp-role>" {
+    		name = "<role-activity-gcp-role>"
     		output_path = "./"
     		auth_system_info = {
-         	id = "devopstest-218421",
-         	type = "GCP"
+         	id = "<devopstest-218421>",
+         	type = "<GCP>"
      	}
 	identity_type = "USER"
     		identity_ids = [
-        	"sravani@cloudknox.io"
+        	"<user_email>"
 	]
 
     	filter_history_days = 90
