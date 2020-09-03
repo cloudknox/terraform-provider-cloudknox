@@ -7,4 +7,5 @@ require (
 	github.com/go-kit/kit v0.10.0
 	github.com/hashicorp/terraform-plugin-sdk v1.15.0
 	github.com/mitchellh/go-homedir v1.1.0
+	golang.org/x/tools/gopls v0.4.4 // indirect
 )

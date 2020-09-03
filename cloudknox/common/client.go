@@ -8,6 +8,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strconv"
+	"time"
 
 	config "github.com/go-akka/configuration"
 	"github.com/mitchellh/go-homedir"
@@ -29,12 +31,16 @@ func createNewRequest(method, url string, body io.Reader, client *Client) (*http
 	if client.AccessToken != "" {
 		req.Header.Add("X-CloudKnox-Access-Token", client.AccessToken)
 	}
-	if client.AccessKey1 != "" {
-		req.Header.Add("X-CloudKnox-Access-Key-1", client.AccessKey1)
+	if client.APIID != "" {
+		req.Header.Add("X-CloudKnox-API-Id", client.APIID)
 	}
-	if client.AccessKey2 != "" {
-		req.Header.Add("X-CloudKnox-Access-Key-2", client.AccessKey2)
+	if client.ServiceAccountID != "" {
+		req.Header.Add("X-CloudKnox-Service-Account-Id", client.ServiceAccountID)
 	}
+
+	timestampMillis := strconv.FormatInt(time.Now().UnixNano()/int64(time.Millisecond), 10)
+
+	req.Header.Add("X-CloudKnox-Timestamp-Millis", timestampMillis)
 
 	req.Header.Add("User-Agent", "CloudKnoxTerraformProvider/1.0.0")
 	return req, nil
@@ -76,7 +82,7 @@ func (c *Client) POST(route string, payload []byte) (map[string]interface{}, err
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
 		logger.Error("msg", "HTTP Response status != 200 OK", "resp", resp.Status, "resource_attributes", "invalid")
-		return nil, fmt.Errorf("Invalid API Response | Please Check Resource Attributes")
+		return nil, fmt.Errorf("Invalid API Response | Recieved %s from API Server | Please Check Resource Attributes ", resp.Status)
 	}
 
 	body, _ := ioutil.ReadAll(resp.Body)
@@ -108,14 +114,16 @@ func NewClient(credentials *Credentials) (*Client, error) {
 		httpClient: http.DefaultClient,
 	}
 
-	response, err := client.POST("/api/v1/authenticate", credentialsToJSON(credentials))
+	response, err := client.POST("/api/v2/service-account/authenticate", credentialsToJSON(credentials))
 	if err != nil {
 		logger.Error("msg", "failed to read http response", "unmarshal_error", err)
 		return nil, err
 	}
+
+	// Read authentication response parameters required for resource requests.
 	client.AccessToken = response["accessToken"].(string)
-	client.AccessKey1 = response["accessKey1"].(string)
-	client.AccessKey2 = response["accessKey2"].(string)
+	client.APIID = response["apiId"].(string)
+	client.ServiceAccountID = credentials.ServiceAccountID
 
 	return client, nil
 }
