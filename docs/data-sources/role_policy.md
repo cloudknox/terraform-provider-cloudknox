@@ -10,7 +10,7 @@ description: |-
 
 Creates a `<name>.tf` file containing a Cloud Provider Terraform Resource with a Least-Privilege Role-Policy for AWS, GCP or Azure for the provided identities.
 
-The `cloudknox_role_policy` data source will create different outputs based on the authorization system. Parameters can be set based on authorization system type to support functionality available through the [CloudKnox Portal](app.cloudknox.io)'s JEP Controller.
+The `cloudknox_role_policy` data source will create different outputs based on the authorization system. Parameters can be set based on authorization system type to support functionality available through the [CloudKnox Portal](https://app.cloudknox.io)'s JEP Controller.
 
 ## Example Usage (AWS)
 

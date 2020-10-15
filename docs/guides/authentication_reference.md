@@ -13,7 +13,7 @@ The CloudKnox Terraform Provider is a client that interacts CloudKnox's API, the
 
 ## Credential Aquisition
 
-1. Login to the [CloudKnox Portal](app.cloudknox.io)
+1. Login to the [CloudKnox Portal](https://app.cloudknox.io)
 2. Click on your user account settings in the top right hand corner
 3. Choose `Service Accounts` where you will be presented with a view of all active service accounts
 4. Click on `Add Service Account` in the upper right hand corner, enter a `Name` and `Description` and click `Save`
