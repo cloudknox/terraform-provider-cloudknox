@@ -58,6 +58,7 @@ builds:
   - CGO_ENABLED=0
   lang: go
   mod_timestamp: '{{ .CommitTimestamp }}'
+  gobinary: go
 archives:
 - id: default
   builds:
@@ -73,6 +74,7 @@ archives:
   - README*
   - changelog*
   - CHANGELOG*
+  allow_different_binary_count: false
 snapshot:
   name_template: '{{ .Tag }}-SNAPSHOT-{{ .ShortCommit }}'
 checksum:
