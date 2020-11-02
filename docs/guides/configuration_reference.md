@@ -22,6 +22,6 @@ api {
 
 ### Authentication
 
-See the [Authentication](/docs/guides/authentication_reference.md) guide to learn more.
+See the [Authentication](/providers/cloudknox/cloudknox/latest/docs/guides/authentication_reference.md) guide to learn more.
 
 
