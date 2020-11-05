@@ -20,7 +20,7 @@ make build
 
 ## Documentation
 
-Detailed [documentation](/docs/index.md) is provided. Please use this documentation for provider setup and usage.
+Detailed [documentation](https://registry.terraform.io/providers/cloudknox/cloudknox/latest/docs) is provided. Please use this documentation for provider setup and usage.
 
 ## Debug
 
