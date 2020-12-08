@@ -36,6 +36,7 @@ export CNX_LOG_OUTPUT="/path/to/logs/application.log"
 Disable logging by unsetting the environment variables
 
 
+
 ```bash
 unset CNX_LOG_LEVEL
 unset CNX_LOG_OUTPUT
