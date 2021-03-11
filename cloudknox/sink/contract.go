@@ -2,11 +2,11 @@ package sink
 
 import (
 	"fmt"
+	"github.com/cloudknox/terraform-provider-cloudknox/cloudknox/common"
+	"github.com/cloudknox/terraform-provider-cloudknox/cloudknox/sink/aws"
+	"github.com/cloudknox/terraform-provider-cloudknox/cloudknox/sink/azure"
+	"github.com/cloudknox/terraform-provider-cloudknox/cloudknox/sink/gcp"
 	"strings"
-	"terraform-provider-cloudknox/cloudknox/common"
-	"terraform-provider-cloudknox/cloudknox/sink/aws"
-	"terraform-provider-cloudknox/cloudknox/sink/azure"
-	"terraform-provider-cloudknox/cloudknox/sink/gcp"
 )
 
 type ContractWriter interface {

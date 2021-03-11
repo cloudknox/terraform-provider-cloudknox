@@ -33,4 +33,4 @@ init_config:
 	@printf "\n    ==> Config folder created\n"
 
 testacc: fmtcheck
-	TF_ACC=1 go test terraform-provider-cloudknox/cloudknox -v -timeout 120m
+	TF_ACC=1 go test github.com/cloudknox/terraform-provider-cloudknox/cloudknox -v -timeout 120m

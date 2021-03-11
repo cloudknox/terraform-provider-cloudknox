@@ -3,8 +3,8 @@ package gcp
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/cloudknox/terraform-provider-cloudknox/cloudknox/common"
 	"io/ioutil"
-	"terraform-provider-cloudknox/cloudknox/common"
 )
 
 type RolePolicyContractWriter struct {
