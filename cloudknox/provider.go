@@ -1,7 +1,7 @@
 package cloudknox
 
 import (
-	"terraform-provider-cloudknox/cloudknox/common"
+	"github.com/cloudknox/terraform-provider-cloudknox/cloudknox/common"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"

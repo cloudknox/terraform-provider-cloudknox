@@ -1,8 +1,8 @@
 package helpers
 
 import (
-	"terraform-provider-cloudknox/cloudknox/common"
-	"terraform-provider-cloudknox/cloudknox/sink"
+	"github.com/cloudknox/terraform-provider-cloudknox/cloudknox/common"
+	"github.com/cloudknox/terraform-provider-cloudknox/cloudknox/sink"
 )
 
 // WriteResource interfaces with sinks to create desirec local output

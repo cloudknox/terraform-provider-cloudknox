@@ -3,9 +3,9 @@ package aws
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/cloudknox/terraform-provider-cloudknox/cloudknox/common"
+	"github.com/cloudknox/terraform-provider-cloudknox/cloudknox/utils"
 	"io/ioutil"
-	"terraform-provider-cloudknox/cloudknox/common"
-	"terraform-provider-cloudknox/cloudknox/utils"
 )
 
 type RolePolicyContractWriter struct {

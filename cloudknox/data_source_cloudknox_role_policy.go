@@ -3,10 +3,10 @@ package cloudknox
 import (
 	"encoding/json"
 	"fmt"
-	"terraform-provider-cloudknox/cloudknox/api/helpers"
-	"terraform-provider-cloudknox/cloudknox/api/models"
-	"terraform-provider-cloudknox/cloudknox/common"
-	"terraform-provider-cloudknox/cloudknox/utils"
+	"github.com/cloudknox/terraform-provider-cloudknox/cloudknox/api/helpers"
+	"github.com/cloudknox/terraform-provider-cloudknox/cloudknox/api/models"
+	"github.com/cloudknox/terraform-provider-cloudknox/cloudknox/common"
+	"github.com/cloudknox/terraform-provider-cloudknox/cloudknox/utils"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"

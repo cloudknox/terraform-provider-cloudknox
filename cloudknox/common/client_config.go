@@ -2,10 +2,10 @@ package common
 
 import (
 	"fmt"
+	"github.com/cloudknox/terraform-provider-cloudknox/cloudknox/utils"
 	"io/ioutil"
 	"os"
 	"sync"
-	"terraform-provider-cloudknox/cloudknox/utils"
 
 	config "github.com/go-akka/configuration"
 	"github.com/mitchellh/go-homedir"
