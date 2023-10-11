@@ -9,5 +9,5 @@ require (
 	github.com/hashicorp/terraform-plugin-sdk v1.15.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/sergi/go-diff v1.1.0 // indirect
-	golang.org/x/net v0.0.0-20200625001655-4c5254603344 // indirect
+	golang.org/x/net v0.17.0 // indirect
 )
